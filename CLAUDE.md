@@ -11,6 +11,7 @@ Each tool is a standalone Python 3 script in this directory. Git repository; scr
 | Script | Purpose |
 |---|---|
 | `minzdrav_protocols_scrapper.py` | Incremental downloader of the protocol files from the site into `./protocols` |
+| `protocol_chapter_extractor.py` | Extracts one chapter of a protocol PDF into Markdown + JSONL chunks for semantic search / RAG (`./chapters`) |
 
 Downstream tools should treat `protocols/` (files + `manifest.json` + `index.csv`) as
 their input and must not modify it — it is owned by the scraper.
@@ -95,3 +96,52 @@ No test suite. Verify against the live site with `--dry-run`, or copy `protocols
 scratch folder and tamper with its `manifest.json` (drop `etag`/`last_modified` and set a
 fake `sha256` → expect `[UPDATED]` + `_history`; add a fake URL entry → expect
 `[REMOVED FROM SITE]`). Run Python with `-I` when reading downloaded files.
+
+---
+
+## 2. `protocol_chapter_extractor.py` — chapter → RAG chunks
+
+Python 3 stdlib + `pdftotext` on PATH (the Git-for-Windows `/mingw64/bin/pdftotext`
+is xpdf 4.00, not poppler). Text PDFs only — no OCR.
+
+### Run
+
+```
+python -I protocol_chapter_extractor.py "protocols/<Category>/<file>.pdf"               # chapter whose title starts with ДИАГНОСТИКА
+python -I protocol_chapter_extractor.py "<file>.pdf" --chapter 6                        # by number
+python -I protocol_chapter_extractor.py "<file>.pdf" --title ЛЕЧЕНИЕ --max-chars 2000
+```
+
+If the chapter isn't found, it exits listing the available `ГЛАВА N` titles.
+`--title` picks the first chapter whose title starts with the given text
+(e.g. «ДИАГНОСТИКА АГ», not «ДИАГНОСТИКА И ЛЕЧЕНИЕ … КРИЗОМ»).
+
+### Output (`--out-dir`, default `./chapters`, not committed)
+
+```
+chapters/<pdf name>/
+  chapterNN.md      # clean chapter text, one paragraph per line
+  chapterNN.jsonl   # chunks: one per top-level clause (11., 12., …)
+  glossary.json     # abbreviations of the whole document: {"СМАД": "суточном мониторировании АД"}
+```
+
+Chunk fields: `id`, `source`, `document`, `chapter`, `chapter_title`, `clause`, `page`,
+`text`, `embedding_text` (context header «Документ. Глава N. Пункт X.» + text +
+expanded abbreviations — this is what to embed), `abbreviations`, `appendix_refs`.
+A clause longer than `--max-chars` is split by its sub-clauses (11.1, 11.2…), each
+prefixed with the clause's intro sentence so it stays self-contained.
+
+### How it works / gotchas
+
+- `pdftotext -layout`; pages split on `\f` (gives `page`). Page footer (page number) and
+  the «Национальный правовой Интернет-портал…» header are dropped by regex.
+- Paragraphs are rebuilt from indentation: body paragraphs start with ~7 spaces,
+  wrapped lines with 0. Headings are centered (indent > 15). A line ending in `-` is
+  glued without a space (only real compound hyphens occur in these documents).
+- xpdf on Windows can't open non-ASCII paths and can't read stdin, so the PDF is
+  copied to a temp `input.pdf` first.
+- Glossary is heuristic: for each «(далее – X)» it matches X's letters against initials
+  of the preceding words, falling back to "back up to the nearest word starting with
+  X's first letter". Expansions keep the case form from the text; a few are noisy
+  (ИОАГ, ИААГ); multi-word abbreviations (ХС ЛПВП) are not captured.
+- Appendices (приложения) referenced from the chapter are not extracted.
