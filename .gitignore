@@ -1,0 +1,6 @@
+# Script output (minzdrav_protocols_scrapper.py)
+/protocols/
+
+__pycache__/
+*.pyc
+*.part
