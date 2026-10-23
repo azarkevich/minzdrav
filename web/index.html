@@ -33,6 +33,7 @@ ul.lst{margin:4px 0 8px;padding-left:22px}ul.lst li{margin:2px 0}ul.lst:empty{di
 .ti-excluded b{color:var(--bad)}.ti-probable b{color:var(--warn)}.ti-limited b,.ti-covered b{color:var(--ok)}
 .tab.ti-excluded[aria-selected=true],.tab.ti-probable[aria-selected=true],.tab.ti-limited[aria-selected=true],.tab.ti-covered[aria-selected=true]{box-shadow:inset 0 3px 0 var(--ins)}
 .pane>.card:first-child{border-top-left-radius:0}
+#fb{border:2px solid var(--acc)}#fb .stars{margin:4px 0 0}
 details summary{cursor:pointer;color:var(--mut);font-size:13px}pre{white-space:pre-wrap;font-size:13px}
 </style></head><body><div class="wrap">
 <h1>Проверка диагностики по клиническим протоколам МЗ РБ и правилам страхования <span class="meta" style="font-weight:400">версия __VERSION__</span></h1>
@@ -136,15 +137,15 @@ function render(a){
 const ITAB={excluded:"Не страховой случай",probable:"Вероятно не страховой случай",limited:"Страховой случай (с ограничениями)",covered:"Страховой случай"};
 function tabs(a,prot){
  const i=a.insurance;
- if(!i)return prot+feedback(a);
+ if(!i)return feedback(a)+prot;
  const insFirst=i.verdict_level=="excluded"||i.verdict_level=="probable";
  const pv=a.mode=="list"?"перечень":(a.results||[]).length?(a.results[0].verdict_level?"предусмотрено":"не предусмотрено"):"протокол не найден";
  const tab=(t,on,cls,label)=>`<button role="tab" class="tab ${cls}" data-tab="${t}" aria-selected="${on}">${label}</button>`;
- return `<div class="tabs" role="tablist">`
+ return feedback(a)+`<div class="tabs" role="tablist">`
   +tab("ins",insFirst,"ti-"+i.verdict_level,`Правила страхования: <b>${esc(ITAB[i.verdict_level])}</b>`)
   +tab("prot",!insFirst,"",`Клинические протоколы: <b>${esc(pv)}</b>`)+`</div>`
   +`<div class="pane" data-pane="ins"${insFirst?"":" hidden"}>${insurance(i)}</div>`
-  +`<div class="pane" data-pane="prot"${insFirst?" hidden":""}>${prot}</div>`+feedback(a);
+  +`<div class="pane" data-pane="prot"${insFirst?" hidden":""}>${prot}</div>`;
 }
 function tail(a){
  let h="";
@@ -155,6 +156,7 @@ function tail(a){
 }
 function feedback(a){
  return `<div class="card" id="fb" data-id="${esc(a.answer_id)}"><b>Оцените ответ</b>
+  <div class="meta">Оценка очень важна для развития инструмента — особенно если ответ вас не устроил: отметьте, что не так, и напишите комментарий.</div>
   <div class="stars" id="stars">${[1,2,3].map(i=>`<span data-s="${i}" title="${["Плохо","Приемлемо","Хорошо"][i-1]}">★</span>`).join("")}</div>
   <div id="fbmore" hidden>
    <div class="row" id="tags">${["диагноз распознан неверно","услуга распознана неверно","вердикт неверный","цитата не по теме","страховой вердикт неверный","не нашёл, а в протоколе есть"].map(t=>`<label class="tag"><input type="checkbox" value="${t}"> ${t}</label>`).join("")}</div>

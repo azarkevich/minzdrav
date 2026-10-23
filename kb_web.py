@@ -19,7 +19,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import kb  # noqa: E402
 
-VERSION = "1.4"  # shown on the page; bump on user-visible changes
+VERSION = "1.5"  # shown on the page; bump on user-visible changes
 PAGE = (Path(__file__).resolve().parent / "web" / "index.html").read_text(encoding="utf-8").replace("__VERSION__", VERSION)
 LOCK = threading.Lock()
 FEEDBACK_LOG = Path(__file__).resolve().parent / "kb" / "feedback.jsonl"
