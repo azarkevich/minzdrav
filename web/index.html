@@ -35,9 +35,19 @@ ul.lst{margin:4px 0 8px;padding-left:22px}ul.lst li{margin:2px 0}ul.lst:empty{di
 .pane>.card:first-child{border-top-left-radius:0}
 #fb{border:2px solid var(--acc);padding:8px 14px}.fbhead{display:flex;align-items:center;gap:12px}#fb .stars{margin:0;font-size:26px}
 b.bad{color:var(--bad)}b.warn{color:var(--warn)}b.ok{color:var(--ok)}
+h1.top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}#setlink{font-size:14px;font-weight:400;white-space:nowrap}
+#settings label{cursor:pointer}
 details summary{cursor:pointer;color:var(--mut);font-size:13px}pre{white-space:pre-wrap;font-size:13px}
 </style></head><body><div class="wrap">
-<h1>Проверка диагностики по клиническим протоколам МЗ РБ и правилам страхования <span class="meta" style="font-weight:400">версия __VERSION__</span></h1>
+<h1 class="top"><span>Проверка диагностики по клиническим протоколам МЗ РБ и правилам страхования <span class="meta" style="font-weight:400">версия __VERSION__</span></span><a href="#" id="setlink" class="meta">⚙ Настройки</a></h1>
+<div class="card" id="settings" hidden><b>Настройки</b> <span class="meta">(сохраняются в этом браузере)</span>
+ <div class="row" style="flex-direction:column;align-items:flex-start;gap:6px">
+  <div class="meta"><b>Как открывать документы (PDF)</b></div>
+  <label><input type="radio" name="pdfmode" value="viewer"> во встроенном просмотрщике — переход к странице и подсветка цитаты</label>
+  <label><input type="radio" name="pdfmode" value="orig"> на сайте Минздрава / страховщика — обычный просмотр браузера, только переход к странице</label>
+  <div class="meta">Если встроенный просмотрщик медленно открывает документы или выдаёт ошибку, переключитесь на второй вариант.</div>
+ </div>
+</div>
 <div class="card">
  <textarea id="q" placeholder="Диагноз – аутоиммунный тиреоидит, разрешён ли анализ мочи по Нечипоренко&#10;или: сахарный диабет, перечень лабораторных анализов&#10;или только диагноз: псориаз"></textarea>
  <div class="row">
@@ -52,6 +62,9 @@ details summary{cursor:pointer;color:var(--mut);font-size:13px}pre{white-space:p
 </div>
 <script>
 const $=id=>document.getElementById(id);
+// «<pdf>#page=N» → our viewer: scrolls to the page and highlights the quote
+let pdfMode="viewer";try{pdfMode=localStorage.getItem("pdfmode")||"viewer"}catch(e){}
+const view=(u,q)=>{if(pdfMode=="orig")return u;const m=String(u||"").match(/^(https:[^#]*\.pdf)#page=(\d+)/i);return m?`/view?u=${encodeURIComponent(m[1])}&p=${m[2]}&q=${encodeURIComponent((q||"").slice(0,600))}`:u};
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const EX=["Диагноз – аутоиммунный тиреоидит, разрешён ли анализ мочи по Нечипоренко","Диагноз – псориаз, разрешено ли определение СОЭ","Диагноз – болезнь Аддисона, разрешен ли тест с инсулиновой гипогликемией","Диагноз E06.3, ТТГ","Сахарный диабет 2 типа, определение гликированного гемоглобина","Сахарный диабет, перечень лабораторных анализов","Ангиомиолипома, какой вид КТ используется для диагностики","Сахарный диабет 2 типа"];
 $("examples").innerHTML=EX.map((e,i)=>`<span class="ex" data-i="${i}">${esc(e.length>48?e.slice(0,48)+"…":e)}</span>`).join("");
@@ -64,20 +77,20 @@ function insurance(i){
  const rows=(title,ms,q=true)=>ms.length?`<div class="ev"><div class="meta"><b>${title}</b></div>`+ms.map(m=>`<div style="margin-top:6px"><b>п. ${esc(m.clause)}</b> — ${esc(m.short)} <span class="tag">${esc(m.how)}</span>`
    +(m.unless?`<div class="meta">Оговорка: ${esc(m.unless)}</div>`:"")
    +(m.examples?`<div class="meta">В перечне: ${esc(m.examples.slice(0,3).join("; "))}${m.examples.length>3?` и ещё ${m.examples.length-3}`:""}</div>`:"")
-   +(q?`<blockquote>${esc(m.quote)}</blockquote>`:"")+a(m.url,`Правила, стр. ${m.page}`)+`</div>`).join("")+`</div>`:"";
+   +(q?`<blockquote>${esc(m.quote)}</blockquote>`:"")+a(view(m.url,m.quote),`Правила, стр. ${m.page}`)+`</div>`).join("")+`</div>`:"";
  let h=`<div class="card ins"><div class="meta">${a(i.url,i.rules)}</div>`;
  if(i.variants){
   const S={excluded:"не страховой",probable:"вероятно не страховой",limited:"страховой, с ограничениями",covered:"страховой"};
   h+=`<div class="verdict v-warn">Уточните диагноз — «${esc(a0(i))}» может означать разные заболевания с разным страховым решением</div><ul class="lst">`
    +i.variants.map(v=>`<li><b>${esc(v.code)}</b> ${esc(v.name)} — <b class="${v.verdict_level=="excluded"?"bad":v.verdict_level=="probable"?"warn":"ok"}">${S[v.verdict_level]}</b>`
-     +v.clauses.map(m=>` ${a(m.url,"п. "+m.clause)}`).join("")+`</li>`).join("")+`</ul><div class="meta">Задайте вопрос с уточнённым диагнозом или кодом МКБ-10.</div>`;
+     +v.clauses.map(m=>` ${a(view(m.url,""),"п. "+m.clause)}`).join("")+`</li>`).join("")+`</ul><div class="meta">Задайте вопрос с уточнённым диагнозом или кодом МКБ-10.</div>`;
  }else h+=`<div class="verdict ${ilvl[i.verdict_level]}">${esc(i.verdict)}</div>`;
  h+=rows("Исключение:",i.excluded)+rows("Не исключено (оговорка пункта):",i.exceptions)
    +rows("Ограничения по услугам для этого заболевания:",i.limited)+rows("Лимиты и исключения по услуге (Программа «А»):",i.service_limits);
  const c=i.circumstances;
- if(c.length)h+=`<div class="ev meta">Травма не оплачивается, если получена (п. ${esc(c[0].clause)}–${esc(c.at(-1).clause)}): ${esc(c.map(m=>m.short.replace(/^травма /,"")).join("; "))}. ${a(c[0].url,"стр. "+c[0].page)}</div>`;
- if(i.person.length)h+=`<div class="ev meta">Договор не заключается с лицами этой группы (п. 1.4): ${esc(i.person.map(m=>m.how).join(", "))}. ${a(i.person[0].url,"стр. "+i.person[0].page)}</div>`;
- i.notes.forEach(n=>h+=`<div class="ev"><div class="meta"><b>п. ${esc(n.clause)}:</b> ${esc(n.why)}</div><blockquote>${esc(n.quote)}</blockquote>${a(n.url,"Правила, стр. "+n.page)}</div>`);
+ if(c.length)h+=`<div class="ev meta">Травма не оплачивается, если получена (п. ${esc(c[0].clause)}–${esc(c.at(-1).clause)}): ${esc(c.map(m=>m.short.replace(/^травма /,"")).join("; "))}. ${a(view(c[0].url,c[0].quote),"стр. "+c[0].page)}</div>`;
+ if(i.person.length)h+=`<div class="ev meta">Договор не заключается с лицами этой группы (п. 1.4): ${esc(i.person.map(m=>m.how).join(", "))}. ${a(view(i.person[0].url,i.person[0].quote),"стр. "+i.person[0].page)}</div>`;
+ i.notes.forEach(n=>h+=`<div class="ev"><div class="meta"><b>п. ${esc(n.clause)}:</b> ${esc(n.why)}</div><blockquote>${esc(n.quote)}</blockquote>${a(view(n.url,n.quote),"Правила, стр. "+n.page)}</div>`);
  return h+`<div class="meta" style="margin-top:10px">Программа конкретного договора (Приложения 11–13 Правил) может расширять или сужать объём — сверяйте с договором.</div></div>`;
 }
 const lvl={mandatory:"v-ok",additional:"v-ok",listed:"v-warn",differential:"v-warn",monitoring:"v-warn",text:"v-warn",manual:"v-warn"};
@@ -104,12 +117,12 @@ function renderList(a){
    s.items.forEach(e=>{
     if(e.level!=lv){lv=e.level;h+=`</ul><div class="meta"><b>${esc(e.level_label)}</b></div><ul class="lst">`}
     const p=e.pdf_pages.length>1?`${e.pdf_pages[0]}–${e.pdf_pages.at(-1)}`:e.pdf_pages[0];
-    h+=`<li>${e.condition?`<span class="meta">[${esc(e.condition)}]</span> `:""}${esc(e.text)} <a href="${esc(e.url)}" target="_blank" rel="noopener" class="meta">${e.clause?"п. "+esc(e.clause)+", ":""}стр. ${esc(p)}</a></li>`;
+    h+=`<li>${e.condition?`<span class="meta">[${esc(e.condition)}]</span> `:""}${esc(e.text)} <a href="${esc(view(e.url,e.quote||e.text))}" target="_blank" rel="noopener" class="meta">${e.clause?"п. "+esc(e.clause)+", ":""}стр. ${esc(p)}</a></li>`;
    });
    h+=`</ul></div>`;
   });
  });
- (a.text_only||[]).forEach(t=>h+=`<div class="verdict v-warn">В тексте, не перечнем (проверьте по главе): <a href="${esc(t.url)}" target="_blank">${esc(t.protocol)}, ${t.chapter!=null?"глава "+esc(t.chapter)+" «"+esc(t.chapter_title)+"»":esc(t.chapter_title)}</a></div>`);
+ (a.text_only||[]).forEach(t=>h+=`<div class="verdict v-warn">В тексте, не перечнем (проверьте по главе): <a href="${esc(view(t.url,''))}" target="_blank">${esc(t.protocol)}, ${t.chapter!=null?"глава "+esc(t.chapter)+" «"+esc(t.chapter_title)+"»":esc(t.chapter_title)}</a></div>`);
  return h;
 }
 function render(a){
@@ -132,11 +145,11 @@ function render(a){
    h+=`<div class="ev"><b>[${i+1}] ${esc(e.protocol)}</b><div class="meta">${w} — ${esc(e.level_label)}`
      +(e.match=="segment"?`<span class="tag">совпадение по строке списка</span>`:"")+(chk?`<span class="tag">${chk}</span>`:"")+`</div>`
      +(e.condition?`<div class="meta">Условие: ${esc(e.condition)}</div>`:"")
-     +`<blockquote>${esc(e.quote)}</blockquote><a href="${esc(e.url)}" target="_blank" rel="noopener">Открыть протокол, стр. PDF ${esc(p)}</a>`
+     +`<blockquote>${esc(e.quote)}</blockquote><a href="${esc(view(e.url,e.quote))}" target="_blank" rel="noopener">Открыть протокол, стр. PDF ${esc(p)}</a>`
      +(e.printed_page?` <span class="meta">(печатная ${esc(e.printed_page)})</span>`:"")+`</div>`;
   });
   if(!r.evidence.length&&(r.checked||[]).length)h+=`<details><summary>Проверенные разделы</summary>`+r.checked.map(c=>`<div class="meta"><a href="${esc(c.url)}" target="_blank">${esc(c.protocol)}</a>: ${esc(c.chapters.join("; "))}</div>`).join("")+`</details>`;
-  (r.notes||[]).forEach(n=>h+=`<div class="meta">Оговорка (п. ${esc(n.clause)}): «${esc(n.quote)}» <a href="${esc(n.url)}" target="_blank">ссылка</a></div>`);
+  (r.notes||[]).forEach(n=>h+=`<div class="meta">Оговорка (п. ${esc(n.clause)}): «${esc(n.quote)}» <a href="${esc(view(n.url,n.quote))}" target="_blank">ссылка</a></div>`);
  });
  return tabs(a,h+tail(a));
 }
@@ -181,7 +194,7 @@ async function ask(){
  const tick=setInterval(()=>{const el=$("el");if(el)el.textContent=Math.round((Date.now()-t0)/1000)+" с"},1000);
  try{
   const r=await fetch("/api/ask",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({question:q,population:$("pop").value})});
-  const a=await r.json();$("out").innerHTML=render(a);if(!a.error)saveHist(q);
+  const a=await r.json();last=a;$("out").innerHTML=render(a);if(!a.error)saveHist(q);
  }catch(e){$("out").innerHTML=render({error:String(e)})}
  clearInterval(tick);busy=false;$("go").disabled=false;$("go").textContent="Проверить";
 }
@@ -204,5 +217,15 @@ $("out").addEventListener("click",async e=>{
 });
 $("go").onclick=ask;
 $("q").addEventListener("keydown",e=>{if(e.key=="Enter"&&!e.shiftKey&&!e.isComposing){e.preventDefault();ask()}});
+let last=null;
+$("setlink").onclick=e=>{e.preventDefault();$("settings").hidden=!$("settings").hidden};
+document.querySelectorAll("[name=pdfmode]").forEach(r=>{r.checked=r.value==pdfMode;r.onchange=()=>{
+ pdfMode=r.value;try{localStorage.setItem("pdfmode",pdfMode)}catch(e){}
+ if(last&&!last.error){ // links of the shown answer follow the new choice; the rating panel keeps its state
+  const keep=$("fb"),tab=(document.querySelector("[data-tab][aria-selected=true]")||{}).dataset;
+  $("out").innerHTML=render(last);if(keep)$("fb").replaceWith(keep);
+  if(tab){const b=document.querySelector(`[data-tab=${tab.tab}]`);if(b)b.click()}
+ }
+}});
 drawHist();
 </script></body></html>

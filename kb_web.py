@@ -6,12 +6,15 @@ Stdlib only. Listens on 127.0.0.1. History is kept in the browser (localStorage)
 """
 import argparse
 import base64
+import hashlib
 import hmac
 import json
 import os
 import sys
 import threading
 import time
+import urllib.parse
+import urllib.request
 import uuid
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -20,9 +23,15 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import kb  # noqa: E402
 from sheet_log import SheetLog, mask  # noqa: E402
 
-VERSION = "1.7"  # shown on the page; bump on user-visible changes
+VERSION = "2.1"  # shown on the page; bump on user-visible changes
 PAGE = (Path(__file__).resolve().parent / "web" / "index.html").read_text(encoding="utf-8").replace("__VERSION__", VERSION)
+VIEWER = (Path(__file__).resolve().parent / "web" / "viewer.html").read_text(encoding="utf-8")
 LOCK = threading.Lock()
+# /pdf proxy: the viewer (PDF.js) can't read other sites' PDFs from the browser, so the server fetches them
+PDF_HOSTS = {"minzdrav.gov.by", "www.minzdrav.gov.by", "task.by", "www.task.by"}
+PDF_CACHE = Path(__file__).resolve().parent / "kb" / "pdfcache"
+PDF_MAX = 80 * 2**20
+PDF_LOCKS: dict = {}
 FEEDBACK_LOG = Path(__file__).resolve().parent / "kb" / "feedback.jsonl"
 ANSWERS: dict = {}  # recent answers by id, so a rating is stored together with what was answered
 SHEET = SheetLog()  # $KB_SHEET_URL: questions and ratings → Google Sheet (personal data masked)
@@ -38,6 +47,26 @@ def summary(question, ans):
             "population": ans.get("population"), "verdict_level": ans.get("verdict_level"),
             "verdict": ans.get("verdict"), "evidence": ev, "method": ans.get("method"),
             "insurance": {k: (ans.get("insurance") or {}).get(k) for k in ("verdict_level", "verdict")}}
+
+
+def fetch_pdf(url, attempts=3):
+    """The PDF bytes from an allowed host; the ministry's site drops a connection now and then."""
+    for i in range(attempts):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "minzdrav-kb/" + VERSION})
+            with urllib.request.urlopen(req, timeout=60) as r:
+                if urllib.parse.urlsplit(r.geturl()).hostname not in PDF_HOSTS:
+                    raise ValueError("redirect to another host")
+                data = r.read(PDF_MAX + 1)
+            if len(data) > PDF_MAX or not data.startswith(b"%PDF"):
+                raise ValueError("not a PDF or too large")
+            return data
+        except ValueError:
+            raise
+        except Exception:  # noqa: BLE001 — network: retry
+            if i == attempts - 1:
+                raise
+            time.sleep(2 * (i + 1))
 
 
 def make_handler(engine):
@@ -72,10 +101,41 @@ def make_handler(engine):
                 return self._send(200, "ok", "text/plain")
             if not self._authorized():
                 return
-            if self.path in ("/", "/index.html"):
+            path, _, query = self.path.partition("?")
+            if path in ("/", "/index.html"):
                 self._send(200, PAGE, "text/html")
+            elif path == "/view":
+                self._send(200, VIEWER, "text/html")
+            elif path == "/pdf":
+                self._pdf(urllib.parse.parse_qs(query).get("u", [""])[0])
             else:
                 self._send(404, "not found", "text/plain")
+
+        def _pdf(self, url):
+            """A protocol / rules PDF from an allowed host, cached on disk."""
+            u = urllib.parse.urlsplit(url)
+            if u.scheme != "https" or u.hostname not in PDF_HOSTS:
+                return self._send(400, "host not allowed", "text/plain")
+            f = PDF_CACHE / (hashlib.sha1(url.encode()).hexdigest() + ".pdf")
+            with LOCK:
+                lock = PDF_LOCKS.setdefault(url, threading.Lock())
+            with lock:  # one download per file even when several viewers open it at once
+                if not f.exists():
+                    try:
+                        data = fetch_pdf(url)
+                        PDF_CACHE.mkdir(parents=True, exist_ok=True)
+                        tmp = f.with_suffix(".part")
+                        tmp.write_bytes(data)
+                        tmp.replace(f)
+                    except Exception as ex:  # noqa: BLE001
+                        return self._send(502, f"cannot fetch the PDF: {type(ex).__name__}: {ex}", "text/plain")
+            data = f.read_bytes()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/pdf")
+            self.send_header("Content-Length", str(len(data)))
+            self.send_header("Cache-Control", "private, max-age=86400")
+            self.end_headers()
+            self.wfile.write(data)
 
         def do_POST(self):
             if not self._authorized():

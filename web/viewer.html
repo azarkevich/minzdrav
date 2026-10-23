@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Просмотр документа</title>
+<style>
+:root{--bg:#525659;--bar:#1f2329;--fg:#e6e9ef;--acc:#7aa7f0;--hl:rgba(255,196,0,.45);--hlb:#f2b01e}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font:14px/1.4 system-ui,Segoe UI,sans-serif;color:var(--fg)}
+.bar{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:8px 14px;background:var(--bar)}
+.bar a{color:var(--acc)}.bar .t{font-weight:600;flex:1;min-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar button{font:inherit;padding:4px 10px;border-radius:6px;border:1px solid #444;background:#2c323b;color:var(--fg);cursor:pointer}
+#st{color:#c9ced6;font-size:13px}
+#pages{padding:16px 0}
+.page{position:relative;margin:0 auto 14px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.page canvas{display:block;width:100%;height:100%}
+.num{position:absolute;right:-46px;top:0;color:#ccc;font-size:12px}
+.textLayer{position:absolute;inset:0;overflow:hidden;line-height:1;text-size-adjust:none;forced-color-adjust:none}
+.textLayer span,.textLayer br{color:transparent;position:absolute;white-space:pre;cursor:text;transform-origin:0 0}
+.textLayer .hl{background:var(--hl);box-shadow:0 0 0 1px var(--hlb);border-radius:2px}
+.textLayer ::selection{background:rgba(0,90,255,.3)}
+@media(max-width:700px){.num{display:none}}
+</style></head><body>
+<div class="bar"><span class="t" id="title">Документ</span><span id="st">Загрузка…</span>
+ <button id="next" hidden>Следующее совпадение</button><a id="orig" target="_blank" rel="noopener">Открыть оригинал</a></div>
+<div id="pages"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+// /view?u=<pdf url>&p=<page>&q=<quote>: scroll to the page, highlight the quote (parts split by «…»)
+const P=new URLSearchParams(location.search),url=P.get("u")||"",page0=Math.max(1,+P.get("p")||1),quote=P.get("q")||"";
+const $=id=>document.getElementById(id);
+$("orig").href=url+"#page="+page0;
+$("title").textContent=decodeURIComponent(url.split("/").pop()||"").replace(/\.pdf$/i,"").replace(/_/g," ");
+pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+const norm=s=>s.toLowerCase().replace(/ё/g,"е").replace(/[^a-zа-я0-9]/g,"");
+// quote parts: «10. Обязательные …: … общий анализ крови» → the intro and the member, each searched on its own
+const parts=quote.split(/…|\.\.\./).map(norm).filter(s=>s.length>=6);
+let pdf,scale=1.5,hits=[],hitAt=0;
+const rendered=new Map();
+
+async function renderPage(n){
+ if(rendered.has(n))return rendered.get(n);
+ const job=(async()=>{
+  const pg=await pdf.getPage(n),vp=pg.getViewport({scale}),box=$("p"+n);
+  const c=document.createElement("canvas"),dpr=window.devicePixelRatio||1;
+  c.width=vp.width*dpr;c.height=vp.height*dpr;box.prepend(c);
+  await pg.render({canvasContext:c.getContext("2d"),viewport:vp,transform:dpr!==1?[dpr,0,0,dpr,0,0]:null}).promise;
+  const tl=document.createElement("div");tl.className="textLayer";tl.style.setProperty("--scale-factor",vp.scale);box.append(tl);
+  const tc=await pg.getTextContent(),divs=[];
+  await pdfjsLib.renderTextLayer({textContentSource:tc,textContent:tc,container:tl,viewport:vp,textDivs:divs}).promise;
+  return {items:tc.items,divs};
+ })();
+ rendered.set(n,job);return job;
+}
+
+// find each quote part in the page text (whitespace, hyphens and line breaks ignored); a part not found whole
+// is searched by its longest prefix that is (≥ 20 letters): extraction and the PDF text differ at the edges
+function highlight(n,t){
+ let s="",own=[];
+ t.items.forEach((it,i)=>{const x=norm(it.str||"");s+=x;for(let k=0;k<x.length;k++)own.push(i)});
+ const found=[];
+ for(const part of parts){
+  let at=s.indexOf(part),len=part.length;
+  for(let L=Math.min(part.length,120);at<0&&L>=20;L=Math.floor(L*0.7)){at=s.indexOf(part.slice(0,L));len=L}
+  if(at<0)continue;
+  const ids=new Set(own.slice(at,at+len));
+  ids.forEach(i=>t.divs[i]&&t.divs[i].classList.add("hl"));
+  const first=t.divs[Math.min(...ids)];if(first)found.push(first);
+ }
+ return found;
+}
+
+(async()=>{
+ try{
+  pdf=await pdfjsLib.getDocument({url:"/pdf?u="+encodeURIComponent(url)}).promise;
+  const first=await pdf.getPage(1);
+  scale=Math.min(1.5,(Math.min(innerWidth,1100)-40)/first.getViewport({scale:1}).width);
+  const v=first.getViewport({scale});
+  for(let n=1;n<=pdf.numPages;n++){
+   const d=document.createElement("div");d.className="page";d.id="p"+n;d.style.width=v.width+"px";d.style.height=v.height+"px";
+   d.innerHTML=`<span class="num">${n}</span>`;$("pages").append(d);
+  }
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)renderPage(+e.target.id.slice(1))}),{rootMargin:"800px"});
+  document.querySelectorAll(".page").forEach(d=>io.observe(d));
+  const target=Math.min(page0,pdf.numPages);
+  $("p"+target).scrollIntoView();
+  $("st").textContent=`стр. ${target} из ${pdf.numPages}`;
+  if(!parts.length)return;
+  // the quote may run onto the next page
+  for(const n of [target,target+1,target-1].filter(n=>n>=1&&n<=pdf.numPages)){
+   const t=await renderPage(n);
+   hits.push(...highlight(n,t));
+   if(hits.length&&n!==target)break;
+  }
+  if(hits.length){
+   // the last part is the service itself («… общий анализ крови»), the first one the clause intro
+   hitAt=hits.length-1;hits[hitAt].scrollIntoView({block:"center"});
+   $("st").textContent=`стр. ${target} из ${pdf.numPages} · цитата подсвечена`;
+   if(hits.length>1){$("next").hidden=false;$("next").onclick=()=>{hitAt=(hitAt+1)%hits.length;hits[hitAt].scrollIntoView({block:"center"})}}
+  }else $("st").textContent=`стр. ${target} из ${pdf.numPages} · цитату на странице найти не удалось (скан или таблица) — смотрите страницу`;
+ }catch(e){
+  $("st").textContent="Не удалось открыть документ: "+(e.message||e);
+ }
+})();
+</script></body></html>

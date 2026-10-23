@@ -290,7 +290,7 @@ JSON lines into it.
 `text` = `kb.render`). The page shows diagnosis/service recognition, a coloured verdict per
 population, each excerpt with a `url#page=N` link, and the plain-text form for copying; query
 history is in the browser's localStorage. The page header shows `VERSION` from `kb_web.py`
-(substituted for `__VERSION__` in `web/index.html`; 1.1 = list mode, 1.2 = Enter sends / Shift+Enter new line, spinner, 1.3 = insurance block, 1.4 = insurance / protocols tabs, 1.5 = rating panel between the question and the answer, 1.6 = «уточните диагноз», Google Sheet log, 1.7 = diagnosis-only question → all diagnostic measures, compact rating panel) — bump it on user-visible changes. Binds to 127.0.0.1 only (no auth). `--llm` needs
+(substituted for `__VERSION__` in `web/index.html`; 1.1 = list mode, 1.2 = Enter sends / Shift+Enter new line, spinner, 1.3 = insurance block, 1.4 = insurance / protocols tabs, 1.5 = rating panel between the question and the answer, 1.6 = «уточните диагноз», Google Sheet log, 1.7 = diagnosis-only question → all diagnostic measures, compact rating panel, 2.0 = own PDF viewer, 2.1 = ⚙ settings: open PDFs in the viewer or on the original site) — bump it on user-visible changes. Binds to 127.0.0.1 only (no auth). `--llm` needs
 `KB_OPENROUTER_API_KEY` in the environment of the server process.
 
 Feedback: under each answer the page shows a 3-star rating, tags (диагноз/услуга распознаны неверно, вердикт неверный, цитата не по теме, не нашёл) and a comment. `POST /api/feedback` appends one line to `kb/feedback.jsonl` with the rating and a summary of the answer (diagnosis, service, verdict, evidence links) — low-rated lines are candidates for `eval/` cases.
@@ -354,3 +354,15 @@ typo, lower / upper case. 2026-10-23: first run 95 / 94 / 92 / 86 % → after fi
 procedure words, «Пациент, …» stripped, a misspelt check verb «разреешна ли» dropped from the service). Left:
 chapter_name failures are wrong codes in the KB (stomatology chapters bound to J05/D01); perturb failures are typos
 that change a service stem («молочынх») or a list word («лаборатонрых», «преечень»).
+
+### PDF viewer (`web/viewer.html`, 2.0)
+
+Every «стр. N» link of the page goes to `/view?u=<pdf url>&p=<page>&q=<quote>`: PDF.js 3.11.174 (cdnjs) renders
+the document lazily, scrolls to the page and highlights the quote — split on «…» into the clause intro and the
+member, each matched in the page text with whitespace / hyphens / line breaks ignored, falling back to its longest
+prefix (≥ 20 letters); the next page is searched too. A scan or column-soup table page shows «цитату найти не
+удалось». The browser can't fetch the ministry's PDFs itself (CORS), so `/pdf?u=` downloads them on the server
+(hosts minzdrav.gov.by / task.by only, ≤ 80 MB, 3 tries) into `kb/pdfcache/` (throwaway on Render — refilled on
+demand). Check 2026-10-23: 23 of 24 evidence links from eval answers highlighted (the miss was a site timeout).
+The text answer and the MCP server keep the original `url#page=N` links. ⚙ Настройки on the page (localStorage
+`pdfmode`: `viewer` / `orig`) switches the page's links back to the original site — a fallback if the proxy is slow on Render.
