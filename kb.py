@@ -23,6 +23,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # `python -I` drops the script dir
 from kb_text import GENERIC, Normalizer, close, contains, trigram_sim
 from kb_build import Catalogue
+import insurance
 
 LEVELS = {  # priority order and wording for the answer
     "mandatory": (1, "обязательная диагностика"),
@@ -223,6 +224,8 @@ class Engine:
             for sec in json.loads(cc.read_text(encoding="utf-8"))["sections"].values():
                 self.crosscheck.update(sec["items"])
         self.norm = Normalizer()
+        # insurance rules (insurance.py build) — answers get a separate «insured event?» block
+        self.insurance = insurance.Insurance(norm=self.norm) if insurance.BUILT.exists() else None
         self.cat = Catalogue(ref / "services.json", self.norm)
         self.icd = {c["code"]: c["name"] for c in json.loads((ref / "icd10.json").read_text(encoding="utf-8"))["codes"]}
         self.covered = {c for s in self.kb["sections"] for c in s["icd10"]}
@@ -504,6 +507,10 @@ class Engine:
                           "kind": self.kb["documents"][d]["kind"]} for d in unparsed],
             "method": ("правила + перекрёстная проверка LLM" if self.crosscheck else "правила (без перекрёстной проверки LLM)")
                       + (f"; {llm_used}" if llm_used else ""),
+            # «not provided for» only when a protocol was checked: п. 4.1.50 of the insurance rules
+            "insurance": self.insurance.check(chosen["code"], chosen["name"], diagnosis, service,
+                                              protocol_level=main["verdict_level"] if results else "-")
+                         if self.insurance else None,
         }
 
     def list_services(self, question: str | None, diagnosis: str, category: str | None = None,
@@ -600,6 +607,9 @@ class Engine:
             else "В перечнях диагностики протоколов для этого диагноза ничего не найдено" if sections
             else "ПРОТОКОЛ НЕ НАЙДЕН для этого диагноза",
             evidence=results[0]["evidence"] if results else [], results=results, text_only=text_only,
+            insurance=self.insurance.check(chosen["code"], chosen["name"], diagnosis, service,
+                                           items=list(dict.fromkeys(e["text"] for r in results for e in r["evidence"])))
+                      if self.insurance else None,
             unparsed=[{"protocol": self.kb["documents"][d]["title"], "url": self.kb["documents"][d]["url"],
                        "kind": self.kb["documents"][d]["kind"]} for d in unparsed],
             method=("правила + перекрёстная проверка LLM" if self.crosscheck else "правила (без перекрёстной проверки LLM)")
@@ -655,8 +665,11 @@ def render_list(a: dict) -> str:
 def render(a: dict) -> str:
     if a.get("error"):
         return "Ошибка: " + a["error"]
-    if a.get("mode") == "list":
-        return render_list(a)
+    text = render_list(a) if a.get("mode") == "list" else render_check(a)
+    return text + ("\n" + insurance.render(a["insurance"]) if a.get("insurance") else "")
+
+
+def render_check(a: dict) -> str:
     out = []
     d = a["diagnosis"]
     out.append(f"Диагноз: {d['code']} {d['name']}   (из «{a['diagnosis_text']}»)")
@@ -715,6 +728,15 @@ def run_eval(engine: Engine, path: Path):
     ok = 0
     for c in cases:
         a = engine.ask(c["question"])
+        if c.get("insurance"):  # insurance verdict: level and the excluding clause
+            ins = a.get("insurance") or {}
+            got = [m["clause"] for m in ins.get("excluded", [])]
+            good = ins.get("verdict_level") == c["insurance"] and (not c.get("clause") or c["clause"] in got)
+            ok += good
+            print(f"{'OK  ' if good else 'FAIL'} {c['question']}")
+            if not good:
+                print(f"       expected {c['insurance']} п.{c.get('clause')}; got {ins.get('verdict_level')} п.{got}  {a.get('error', '')}")
+            continue
         if c.get("mode") == "list":  # list question: diagnosis, category and items that must be listed
             texts = [e["text"].lower() for r in a.get("results", []) for e in r["evidence"]]
             missing = [t for t in c.get("contains", []) if not any(t.lower() in x for x in texts)]

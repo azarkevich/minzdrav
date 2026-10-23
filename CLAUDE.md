@@ -16,6 +16,7 @@ Each tool is a standalone Python 3 script in this directory. Git repository; scr
 | `protocol_parser.py` | Expert system stage 1: every protocol PDF → JSON tree with pages, clauses, МКБ-10 codes (`./parsed`) |
 | `kb_build.py`, `kb.py`, `kb_text.py`, `table_extract.py`, `kb_llm.py` | Expert system: knowledge base (`./kb_all`, `./kb`), question answering CLI + eval, LLM cross-check |
 | `kb_mcp.py` | MCP server (stdio, stdlib) exposing the expert system to Claude Desktop / Claude Code |
+| `insurance.py` | Insurance rules (Правила №20 ЗАСО «ТАСК»): is the diagnosis an insured event — a separate block in every answer |
 
 Downstream tools should treat `protocols/` (files + `manifest.json` + `index.csv`) as
 their input and must not modify it — it is owned by the scraper.
@@ -287,7 +288,7 @@ JSON lines into it.
 `text` = `kb.render`). The page shows diagnosis/service recognition, a coloured verdict per
 population, each excerpt with a `url#page=N` link, and the plain-text form for copying; query
 history is in the browser's localStorage. The page header shows `VERSION` from `kb_web.py`
-(substituted for `__VERSION__` in `web/index.html`; 1.1 = list mode, 1.2 = Enter sends / Shift+Enter new line, spinner) — bump it on user-visible changes. Binds to 127.0.0.1 only (no auth). `--llm` needs
+(substituted for `__VERSION__` in `web/index.html`; 1.1 = list mode, 1.2 = Enter sends / Shift+Enter new line, spinner, 1.3 = insurance block, 1.4 = insurance / protocols tabs) — bump it on user-visible changes. Binds to 127.0.0.1 only (no auth). `--llm` needs
 `KB_OPENROUTER_API_KEY` in the environment of the server process.
 
 Feedback: under each answer the page shows a 3-star rating, tags (диагноз/услуга распознаны неверно, вердикт неверный, цитата не по теме, не нашёл) and a comment. `POST /api/feedback` appends one line to `kb/feedback.jsonl` with the rating and a summary of the answer (diagnosis, service, verdict, evidence links) — low-rated lines are candidates for `eval/` cases.
@@ -304,3 +305,27 @@ server use the idx form by default. To deploy, copy only `kb.idx.json` + `kb.ite
 ### Hosting (Render)
 
 `render.yaml` + `requirements.txt` + `deploy/` (`make_deploy.py` copies the packed KB and the two reference JSONs there) — see `DEPLOY_RENDER.md`. `kb_web.py`: `--host`, `$PORT`, optional basic auth from `$KB_WEB_PASSWORD`, unauthenticated `/healthz`, ratings also printed as `FEEDBACK {json}` to stdout (the free plan's disk is throwaway). No git remote is configured yet.
+
+## 8. `insurance.py` — insurance rules (Правила №20 ДСМР ЗАСО «ТАСК»)
+
+```
+python -I insurance.py build                      # rules PDF (reference/raw/task20_rules.pdf, downloaded once) → data/insurance/task20.json
+python -I insurance.py check E06.3 --service ТТГ  # one diagnosis code
+python -I kb.py eval eval/insurance.jsonl --kb kb_all/kb.idx.json
+```
+
+The clause ↔ МКБ-10 mapping is hand-written in `data/insurance/task20.rules.json`; `build` adds each
+clause's verbatim text and PDF page (pdftotext, numbered clauses «4.1.17», the repeated «4.1.5» becomes
+«4.1.5#2»). Both JSONs are committed — the website needs only `task20.json`, no rebuild on deploy.
+Clause kinds: `disease` (п. 4.1.x; `named` codes = examples named in the clause → «НЕ СТРАХОВОЙ»,
+`class` = only the group it names, e.g. L00–L99 for «кожные заболевания» → «ВЕРОЯТНО НЕ СТРАХОВОЙ»,
+a parent rubric of an excluded subcode — E06 vs E06.3 — also «вероятно»; `except_codes` = exceptions of
+the exclusion, e.g. маточные кровотечения in 4.1.34; `dx_words` for clauses without codes), `partial`
+(operations not paid: 4.1.39–4.1.44), `program` (teeth 4.1.55), `circumstance` (injuries 4.1.6–4.1.10),
+`person` (п. 1.4, contracts not concluded), `service` (4.1.36/45/46…, Программа «А» limits 4.3.x matched by
+stems of the service or of list items). Notes: п. 4.2 (paid until the final diagnosis), п. 3.1, п. 4.1.1
+when the diagnosis says «хронический», п. 4.1.50 when the protocol does not provide for the service.
+`Engine.ask` / `list_services` put the result under `insurance`; `kb.render` appends it, the page shows
+it in two tabs: «Правила страхования: <verdict>» and «Клинические протоколы»; a non-insured
+(excluded / probable) case opens on the rules tab, an insured one on the protocols tab. Appendices 11–13 (program contents) are not in
+the PDF — the answer says to check the contract's program.

@@ -19,7 +19,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import kb  # noqa: E402
 
-VERSION = "1.2"  # shown on the page; bump on user-visible changes
+VERSION = "1.4"  # shown on the page; bump on user-visible changes
 PAGE = (Path(__file__).resolve().parent / "web" / "index.html").read_text(encoding="utf-8").replace("__VERSION__", VERSION)
 LOCK = threading.Lock()
 FEEDBACK_LOG = Path(__file__).resolve().parent / "kb" / "feedback.jsonl"
@@ -34,7 +34,8 @@ def summary(question, ans):
             "diagnosis": (ans.get("diagnosis") or {}).get("code"), "service_text": ans.get("service_text"),
             "service": [s["code"] for s in (ans.get("service_catalogue") or [])[:2]],
             "population": ans.get("population"), "verdict_level": ans.get("verdict_level"),
-            "verdict": ans.get("verdict"), "evidence": ev, "method": ans.get("method")}
+            "verdict": ans.get("verdict"), "evidence": ev, "method": ans.get("method"),
+            "insurance": {k: (ans.get("insurance") or {}).get(k) for k in ("verdict_level", "verdict")}}
 
 
 def make_handler(engine):

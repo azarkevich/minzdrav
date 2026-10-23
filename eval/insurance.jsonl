@@ -1,0 +1,13 @@
+# insurance verdicts (Правила №20 ЗАСО «ТАСК», insurance.py): level excluded / probable / limited / covered and the excluding clause
+{"question": "Диагноз – аутоиммунный тиреоидит, разрешён ли анализ мочи по Ничипоренко", "insurance": "excluded", "clause": "4.1.23"}
+{"question": "Диагноз – псориаз, разрешено ли определение СОЭ", "insurance": "excluded", "clause": "4.1.17"}
+{"question": "андрогения перечень лабораторных анализов", "insurance": "excluded", "clause": "4.1.34"}
+{"question": "Диагноз – эпилепсия, разрешена ли ЭЭГ", "insurance": "excluded", "clause": "4.1.5"}
+{"question": "Диагноз – железодефицитная анемия, разрешено ли определение ферритина", "insurance": "excluded", "clause": "4.1.14"}
+{"question": "Диагноз – сахарный диабет 1 типа, разрешено ли определение HbA1c", "insurance": "excluded", "clause": "4.1.23"}
+{"question": "Диагноз – остеопороз, разрешена ли денситометрия", "insurance": "excluded", "clause": "4.1.22"}
+{"question": "Диагноз – синдром Тернера, разрешено ли определение кариотипа", "insurance": "excluded", "clause": "4.1.29"}
+{"question": "Диагноз – сахарный диабет 2 типа, разрешено ли определение HbA1c", "insurance": "covered"}
+{"question": "Диагноз – острый панкреатит, разрешено ли УЗИ органов брюшной полости", "insurance": "covered"}
+{"question": "Диагноз – артериальная гипертензия, разрешена ли ЭКГ", "insurance": "covered"}
+{"question": "Диагноз – острый холецистит, разрешено ли УЗИ", "insurance": "covered"}
