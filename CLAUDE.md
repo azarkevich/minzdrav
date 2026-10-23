@@ -265,3 +265,12 @@ text with excerpts and links), `find_diagnosis(text)`, `list_diagnostics(diagnos
 Hand-written newline-delimited JSON-RPC over stdio (no `mcp` package); KB from `$KB_PATH`, else
 `kb_all/kb.json`, else `kb/kb.json`. Smoke test: pipe `initialize`, `tools/list`, `tools/call`
 JSON lines into it.
+
+## 7. `kb_web.py` + `web/index.html` — local website
+
+`python -I kb_web.py --kb kb_all/kb.json --llm --port 8000` → http://127.0.0.1:8000/. Stdlib
+`http.server`, one POST endpoint `/api/ask` (`{question, population?}` → `Engine.ask` JSON plus
+`text` = `kb.render`). The page shows diagnosis/service recognition, a coloured verdict per
+population, each excerpt with a `url#page=N` link, and the plain-text form for copying; query
+history is in the browser's localStorage. Binds to 127.0.0.1 only (no auth). `--llm` needs
+`KB_OPENROUTER_API_KEY` in the environment of the server process.

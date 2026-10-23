@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Проверка диагностики по протоколам</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--fg:#1c2330;--mut:#667085;--bd:#dde1e8;--ok:#117a3d;--okbg:#e6f5ec;--warn:#9a6700;--warnbg:#fff4d6;--bad:#b42318;--badbg:#fde8e6;--acc:#1f5fbf}
+@media(prefers-color-scheme:dark){:root{--bg:#14171c;--card:#1d2128;--fg:#e6e9ef;--mut:#98a1b0;--bd:#2f3541;--ok:#5fd18a;--okbg:#17301f;--warn:#e5b94a;--warnbg:#33290f;--bad:#ff8a80;--badbg:#3a1b19;--acc:#7aa7f0}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,Segoe UI,sans-serif}
+.wrap{max-width:960px;margin:0 auto;padding:16px}
+h1{font-size:20px;margin:8px 0 16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:14px;margin-bottom:14px}
+textarea{width:100%;min-height:70px;font:inherit;padding:10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--fg);resize:vertical}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}
+button{font:inherit;padding:8px 16px;border-radius:8px;border:1px solid var(--acc);background:var(--acc);color:#fff;cursor:pointer}
+button:disabled{opacity:.6}select{font:inherit;padding:7px;border-radius:8px;border:1px solid var(--bd);background:var(--card);color:var(--fg)}
+.ex{color:var(--acc);cursor:pointer;font-size:13px;margin-right:12px;text-decoration:underline dotted}
+.verdict{padding:10px 12px;border-radius:8px;font-weight:600;margin:8px 0}
+.v-ok{background:var(--okbg);color:var(--ok)}.v-warn{background:var(--warnbg);color:var(--warn)}.v-bad{background:var(--badbg);color:var(--bad)}
+.meta{color:var(--mut);font-size:13px}.meta b{color:var(--fg)}
+blockquote{margin:6px 0;padding:8px 12px;border-left:3px solid var(--acc);background:var(--bg);white-space:pre-wrap}
+.ev{border-top:1px solid var(--bd);padding-top:10px;margin-top:10px}
+.tag{display:inline-block;font-size:12px;padding:1px 8px;border-radius:99px;background:var(--bg);border:1px solid var(--bd);margin-left:4px}
+a{color:var(--acc)}.hist div{padding:4px 0;cursor:pointer;border-bottom:1px solid var(--bd);font-size:14px}.hist div:hover{color:var(--acc)}
+details summary{cursor:pointer;color:var(--mut);font-size:13px}pre{white-space:pre-wrap;font-size:13px}
+</style></head><body><div class="wrap">
+<h1>Проверка диагностики по клиническим протоколам МЗ РБ</h1>
+<div class="card">
+ <textarea id="q" placeholder="Диагноз – аутоиммунный тиреоидит, разрешён ли анализ мочи по Нечипоренко"></textarea>
+ <div class="row">
+  <button id="go">Проверить</button>
+  <select id="pop"><option value="">возраст: определить</option><option value="adult">взрослые</option><option value="child">дети</option></select>
+  <span id="st" class="meta">Ctrl+Enter — отправить</span>
+ </div>
+ <div class="row" id="examples"></div>
+</div>
+<div id="out"></div>
+<div class="card hist" id="hcard" hidden><div class="meta" style="margin-bottom:6px">История запросов <a href="#" id="hclear">очистить</a></div><div id="hist"></div></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const EX=["Диагноз – аутоиммунный тиреоидит, разрешён ли анализ мочи по Нечипоренко","Диагноз – болезнь Аддисона, разрешен ли тест с инсулиновой гипогликемией","Диагноз E06.3, ТТГ","Сахарный диабет 2 типа, определение гликированного гемоглобина"];
+$("examples").innerHTML=EX.map((e,i)=>`<span class="ex" data-i="${i}">${esc(e.length>48?e.slice(0,48)+"…":e)}</span>`).join("");
+$("examples").onclick=e=>{if(e.target.dataset.i){$("q").value=EX[e.target.dataset.i];ask()}};
+const lvl={mandatory:"v-ok",additional:"v-ok",listed:"v-warn",differential:"v-warn",monitoring:"v-warn",text:"v-warn",manual:"v-warn"};
+let hist=[];try{hist=JSON.parse(localStorage.getItem("hist")||"[]")}catch(e){}
+function saveHist(q){hist=[q,...hist.filter(x=>x!==q)].slice(0,30);try{localStorage.setItem("hist",JSON.stringify(hist))}catch(e){}drawHist()}
+function drawHist(){$("hcard").hidden=!hist.length;$("hist").innerHTML=hist.map((h,i)=>`<div data-i="${i}">${esc(h)}</div>`).join("")}
+$("hist").onclick=e=>{if(e.target.dataset.i){$("q").value=hist[e.target.dataset.i];ask()}};
+$("hclear").onclick=e=>{e.preventDefault();hist=[];try{localStorage.removeItem("hist")}catch(e){}drawHist()};
+function render(a){
+ if(a.error)return `<div class="card"><div class="verdict v-bad">${esc(a.error)}</div></div>`;
+ const d=a.diagnosis||{},svc=a.service_catalogue||[];
+ let h=`<div class="card"><div class="meta"><b>Диагноз:</b> ${esc(d.code||"")} ${esc(d.name||"")} <span class="tag">из «${esc(a.diagnosis_text)}»</span>`;
+ (a.diagnosis_alternatives||[]).forEach(x=>h+=`<br>или? ${esc(x.code)} ${esc(x.name)}`);
+ h+=`<br><b>Услуга:</b> «${esc(a.service_text)}»`+(svc[0]?` → пост. №123: ${esc(svc[0].code)} ${esc(svc[0].name)}`:"");
+ svc.slice(1).forEach(x=>h+=`<br>или? ${esc(x.code)} ${esc(x.name)}`);
+ if(a.population)h+=`<br><b>Население:</b> ${a.population=="child"?"дети":"взрослые"}`;
+ h+=`</div>`;
+ if(!(a.results||[]).length)h+=`<div class="verdict v-bad">ВЕРДИКТ: ${esc(a.verdict)}</div>`;
+ (a.results||[]).forEach(r=>{
+  h+=`<div class="verdict ${lvl[r.verdict_level]||"v-bad"}">${esc(r.population.toUpperCase())}: ${esc(r.verdict)}</div>`;
+  r.evidence.forEach((e,i)=>{
+   const w=e.chapter!=null?`Глава ${esc(e.chapter)} «${esc(e.chapter_title)}», п. ${esc(e.clause)}`:esc(e.chapter_title||"")+(e.clause?`, п. ${esc(e.clause)}`:"");
+   const p=e.pdf_pages.length>1?`${e.pdf_pages[0]}–${e.pdf_pages.at(-1)}`:e.pdf_pages[0];
+   const chk={verified:"подтверждено LLM",uncertain:"правила и LLM расходятся — проверьте"}[e.check];
+   h+=`<div class="ev"><b>[${i+1}] ${esc(e.protocol)}</b><div class="meta">${w} — ${esc(e.level_label)}`
+     +(e.match=="segment"?`<span class="tag">совпадение по строке списка</span>`:"")+(chk?`<span class="tag">${chk}</span>`:"")+`</div>`
+     +(e.condition?`<div class="meta">Условие: ${esc(e.condition)}</div>`:"")
+     +`<blockquote>${esc(e.quote)}</blockquote><a href="${esc(e.url)}#page=${esc(e.pdf_pages[0])}" target="_blank" rel="noopener">Открыть протокол, стр. PDF ${esc(p)}</a>`
+     +(e.printed_page?` <span class="meta">(печатная ${esc(e.printed_page)})</span>`:"")+`</div>`;
+  });
+  if(!r.evidence.length&&(r.checked||[]).length)h+=`<details><summary>Проверенные разделы</summary>`+r.checked.map(c=>`<div class="meta"><a href="${esc(c.url)}" target="_blank">${esc(c.protocol)}</a>: ${esc(c.chapters.join("; "))}</div>`).join("")+`</details>`;
+  (r.notes||[]).forEach(n=>h+=`<div class="meta">Оговорка (п. ${esc(n.clause)}): «${esc(n.quote)}» <a href="${esc(n.url)}" target="_blank">ссылка</a></div>`);
+ });
+ (a.unparsed||[]).forEach(u=>h+=`<div class="verdict v-warn">Не разобран автоматически (${u.kind=="table"?"таблицы":"скан"}), проверьте вручную: <a href="${esc(u.url)}" target="_blank">${esc(u.protocol)}</a></div>`);
+ h+=`<div class="meta">Метод: ${esc(a.method)}.</div>`;
+ h+=`<details><summary>Текстовый вид (для копирования)</summary><pre>${esc(a.text)}</pre></details></div>`;
+ return h;
+}
+async function ask(){
+ const q=$("q").value.trim();if(!q)return;
+ $("go").disabled=true;$("st").textContent="Проверяю…";
+ try{
+  const r=await fetch("/api/ask",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({question:q,population:$("pop").value})});
+  const a=await r.json();$("out").innerHTML=render(a);if(!a.error)saveHist(q);
+ }catch(e){$("out").innerHTML=render({error:String(e)})}
+ $("go").disabled=false;$("st").textContent="Ctrl+Enter — отправить";
+}
+$("go").onclick=ask;
+$("q").addEventListener("keydown",e=>{if(e.key=="Enter"&&(e.ctrlKey||e.metaKey))ask()});
+drawHist();
+</script></body></html>
