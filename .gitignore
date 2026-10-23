@@ -7,3 +7,13 @@ __pycache__/
 
 # Output of protocol_chapter_extractor.py
 /chapters/
+
+# Output of reference_builder.py (downloaded sources + dictionaries)
+/reference/
+
+# Output of protocol_parser.py
+/parsed/
+
+# Output of kb_build.py / kb_llm.py
+/kb/
+/kb_all/

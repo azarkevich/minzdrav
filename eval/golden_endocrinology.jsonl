@@ -1,0 +1,37 @@
+# Golden questions for the endocrinology prototype. Expected answers come from reading the
+# protocol lists (kb/kb.json dump). level: mandatory|additional|differential|monitoring|text|manual|null
+# icd: expected МКБ-10 code (omit when several codes of the chapter are equally right); clause: top-level clause of the evidence.
+{"question": "Диагноз - аутоимунный тереоидит, разрешён ли анализ мочи по Ничипоренко", "icd": "E06.3", "level": null}
+{"question": "Диагноз – аутоиммунный тиреоидит, разрешено ли УЗИ щитовидной железы", "icd": "E06.3", "level": "mandatory", "clause": 73}
+{"question": "Диагноз – тиреоидит Хашимото, разрешен ли анализ на ТТГ", "icd": "E06.3", "level": "mandatory", "clause": 73}
+{"question": "Диагноз – аутоиммунный тиреоидит, разрешена ли сцинтиграфия щитовидной железы", "icd": "E06.3", "level": "additional", "clause": 74}
+{"question": "Диагноз E06.3, можно ли общий анализ крови", "icd": "E06.3", "level": "additional", "clause": 74}
+{"question": "Диагноз – аутоиммунный тиреоидит, разрешена ли МРТ головного мозга", "icd": "E06.3", "level": null}
+{"question": "Диагноз – подострый тиреоидит де Кервена, разрешено ли определение С-реактивного белка", "icd": "E06.1", "level": "additional", "clause": 74}
+{"question": "Диагноз – узловой зоб, разрешена ли тонкоигольная аспирационная биопсия", "level": "additional", "clause": 13}
+{"question": "Диагноз – гипотиреоз, разрешена ли МРТ гипофиза", "level": "additional", "clause": 28}
+{"question": "Диагноз – тиреотоксикоз, разрешена ли экзофтальмометрия", "level": "additional", "clause": 45}
+{"question": "Диагноз – тиреотоксикоз, разрешено ли ЭКГ", "level": "mandatory", "clause": 44}
+{"question": "Диагноз – диффузный нетоксический зоб, разрешена ли колоноскопия", "icd": "E04.0", "level": null}
+{"question": "Диагноз – гипопаратиреоз, разрешено ли исследование паратгормона ПТГ", "level": "mandatory", "clause": 8}
+{"question": "Диагноз – первичный гиперпаратиреоз, разрешена ли сцинтиграфия паращитовидных желез", "icd": "E21.0", "level": "additional", "clause": 24}
+{"question": "Диагноз – первичный гиперпаратиреоз, разрешена ли рентгеноденситометрия", "icd": "E21.0", "level": "mandatory", "clause": 23}
+{"question": "Диагноз – вторичный гиперпаратиреоз, разрешена ли ЭГДС", "icd": "E21.1", "level": "additional", "clause": 48}
+{"question": "Диагноз – акромегалия, разрешена ли МРТ гипофиза", "icd": "E22.0", "level": "mandatory", "clause": 35}
+{"question": "Диагноз – акромегалия, разрешена ли колоноскопия", "icd": "E22.0", "level": "additional", "clause": 36}
+{"question": "Диагноз – акромегалия, разрешено ли УЗИ щитовидной железы", "icd": "E22.0", "level": "additional", "clause": 36}
+{"question": "Разрешено ли определение гликированного гемоглобина при акромегалии", "icd": "E22.0", "level": "mandatory", "clause": 35}
+{"question": "Диагноз – несахарный диабет, разрешен ли анализ мочи по Зимницкому", "icd": "E23.2", "level": "mandatory", "clause": 49}
+{"question": "Диагноз – несахарный диабет, разрешен ли тест с десмопрессином", "icd": "E23.2", "level": "additional", "clause": 50}
+{"question": "Диагноз – синдром Кушинга, разрешено ли определение кортизола в слюне", "level": "mandatory", "clause": 100}
+{"question": "Диагноз – синдром Кушинга, разрешен ли селективный забор крови из нижних каменистых синусов", "level": "additional", "clause": 101}
+{"question": "Диагноз – феохромоцитома, разрешено ли определение метанефринов", "icd": "E27.5", "level": "mandatory", "clause": 133}
+{"question": "Диагноз – феохромоцитома, разрешена ли цистоскопия", "icd": "E27.5", "level": "additional", "clause": 134}
+{"question": "Диагноз – синдром поликистозных яичников, разрешено ли УЗИ органов малого таза", "icd": "E28.2", "level": "mandatory", "clause": 208}
+{"question": "Диагноз – синдром поликистозных яичников, разрешен ли анализ мочи по Нечипоренко", "icd": "E28.2", "level": null}
+{"question": "Диагноз – ожирение, разрешена ли полисомнография", "level": "additional", "clause": 11}
+{"question": "Диагноз – остеопороз, разрешена ли рентгеноденситометрия", "level": "mandatory", "clause": 8}
+{"question": "Диагноз – остеопороз, разрешено ли определение кариотипа", "level": "additional", "clause": 9}
+{"question": "Диагноз – сахарный диабет 2 типа, разрешено ли определение гликированного гемоглобина", "icd": "E11", "level": "monitoring", "clause": 45}
+{"question": "Диагноз – сахарный диабет 2 типа, разрешена ли электронейромиография", "icd": "E11", "level": "additional"}
+{"question": "Ребенок, диагноз – аутоиммунный тиреоидит, разрешен ли анализ на ТТГ", "icd": "E06.3", "level": "manual"}
