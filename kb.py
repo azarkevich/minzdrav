@@ -50,6 +50,7 @@ SPLIT_RES = [
 # plain «гипотиреоз», «Другие формы гипотиреоза» is not more specific than it.
 DX_NEUTRAL = {"неуточнен", "уточнен", "друг", "форм", "состоян", "болезн", "синдром", "класс", "рубрик"}
 MIN_DX_SCORE = 0.6
+LLM_DX_SCORE = 0.95  # with --llm: below this the LLM is asked (exact name matches score ≥ 1.0)
 CHILD_RE = re.compile(r"\b(?:реб[её]н|дет[еи]й?|детск|новорожд|подрост|младен)\w*", re.I)
 ADULT_RE = re.compile(r"\bвзросл\w*", re.I)
 
@@ -143,8 +144,11 @@ class Engine:
         return [{"code": c, "name": self.icd.get(c, n), "score": round(s, 3)} for c, (s, n) in ranked if s >= 0.35]
 
     def _weak(self, diagnosis: str) -> bool:
+        """Worth asking the LLM: no exact name match (≥ LLM_DX_SCORE) — «болезнь Аддисона»
+        lands on «Аддисонов криз» with 0.8 — or two different diagnoses score alike.
+        Exact matches (typos included) stay rule-only and free."""
         dx = self.resolve_diagnosis(diagnosis)
-        return not dx or dx[0]["score"] < MIN_DX_SCORE or (
+        return not dx or dx[0]["score"] < LLM_DX_SCORE or (
             len(dx) > 1 and dx[1]["score"] >= dx[0]["score"] - 0.03 and dx[1]["code"][:3] != dx[0]["code"][:3])
 
     # ---------------------------------------------------------------- sections
@@ -254,11 +258,15 @@ class Engine:
         if question and not (diagnosis and service):
             d, s = split_question(question)
             diagnosis, service = diagnosis or d, service or s
+        asked_diagnosis = diagnosis  # the user's wording, shown even when the LLM supplies the code
         if self.llm and question and (not diagnosis or not service or self._weak(diagnosis)):
             from kb_llm import parse_question  # needs the anthropic package and credentials
             parsed = parse_question(question)
             codes = [c["code"].translate(CYR2LAT) for c in parsed["icd10"] if c["code"].translate(CYR2LAT) in self.icd]
-            diagnosis = codes[0] if codes else parsed["diagnosis"]
+            # prefer the LLM's code that the protocols cover (E27.1 over E27.2 for Аддисон)
+            covered = [c for c in codes if c in self.covered
+                       or any(x.startswith(c + ".") or c.startswith(x + ".") for x in self.covered)]
+            diagnosis = (covered or codes or [parsed["diagnosis"]])[0]
             service = service or parsed["service"]
             if population is None and parsed["population"] != "unknown":
                 population = parsed["population"]
@@ -334,7 +342,7 @@ class Engine:
                     "verdict": "ТРЕБУЕТ РУЧНОЙ ПРОВЕРКИ — протокол для этого диагноза есть, но не разобран автоматически"}
         return {
             "question": question,
-            "diagnosis_text": diagnosis,
+            "diagnosis_text": asked_diagnosis or diagnosis,
             "diagnosis": chosen,
             "diagnosis_alternatives": dx[1:4] if ambiguous else [],
             "service_text": service,

@@ -215,7 +215,7 @@ python -I kb.py ask "Диагноз – аутоиммунный тиреоид�
 python -I kb.py ask --diagnosis E06.3 --service ТТГ --json
 python -I kb.py eval [eval/<set>.jsonl] [--kb kb_all/kb.json]
 python -I table_extract.py "protocols/Урология/<file>.pdf"   # inspect table rows of one PDF
-python -I kb_llm.py crosscheck --dry-run               # LLM cross-check (needs anthropic + API key)
+python -I kb_llm.py crosscheck --dry-run               # LLM cross-check: KB_OPENROUTER_API_KEY | KB_ANTHROPIC_API_KEY | KB_LLM_PROVIDER=claude-cli; models KB_LLM_MODEL / KB_LLM_QUESTION_MODEL
 python -I kb.py ask "…" --llm                          # LLM fallback for unrecognized diagnoses
 ```
 
@@ -250,8 +250,10 @@ python -I kb.py ask "…" --llm                          # LLM fallback for unre
 - Eval (2026-10-23), `kb.py eval`: golden 34/34 (written while tuning); endocrinology held-out
   17/20 blind → 19/20; cross-specialty `holdout_all` 11/20 blind → 20/20; `holdout_all2` 13/14
   blind → 14/14. Every blind miss was diagnosis recognition, not service matching. Remaining
-  miss: «болезнь Аддисона» (eponym absent from protocols and МКБ names) — the `--llm` fallback's job.
-  LLM code is untested end-to-end (no API key in this environment).
+  miss: «болезнь Аддисона» (eponym absent from protocols and МКБ names). With `--llm` (OpenRouter,
+  Haiku 5.5): all 88 eval questions correct; the LLM is asked only when the diagnosis is not an exact
+  name match (score < LLM_DX_SCORE = 0.95) — 6 calls of 88, ~$0.00016 per call; among its codes the
+  one covered by protocols wins. Every call is logged to kb/llm_usage.jsonl.
 - Coverage on all 400 docs: 23.5k list items, 96% reachable by an МКБ-10 code; 50 parsed docs
   still have no lists found (other wordings / appendices «согласно приложению N» not extracted).
 

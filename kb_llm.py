@@ -10,7 +10,15 @@ system works without them:
         uncertain — only one side found it, or the levels differ.
      Result: kb/crosscheck.json, read by kb.py to label the evidence.
 
-Needs `pip install anthropic` and credentials (ANTHROPIC_API_KEY, or `ant auth login`).
+Provider ($KB_LLM_PROVIDER, or chosen by which key is set):
+  openrouter  — KB_OPENROUTER_API_KEY, via `requests`;
+  anthropic   — KB_ANTHROPIC_API_KEY (else the SDK's own ANTHROPIC_API_KEY / `ant auth login`),
+                `pip install anthropic`;
+  claude-cli  — `claude -p`, runs on the Claude Code subscription limits.
+The KB_ names keep the system off the user's other keys (a plain OPENROUTER_API_KEY is ignored).
+Models: cross-check — --model / $KB_LLM_MODEL (default claude-opus-5-5); question parsing at
+runtime — $KB_LLM_QUESTION_MODEL (default claude-haiku-5-5). Anthropic ids are mapped to
+OpenRouter ids (claude-haiku-5-5 → anthropic/claude-haiku-5.5); OpenRouter ids pass through.
 
 Usage:
     python -I kb_llm.py crosscheck [--limit 5] [--dry-run]      # cross-check kb/kb.json
@@ -19,13 +27,17 @@ Usage:
 import argparse
 import hashlib
 import json
+import os
 import re
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # `python -I` drops the script dir
 
-MODEL = "claude-opus-5-5"
+MODEL = os.environ.get("KB_LLM_MODEL", "claude-opus-5-5")  # knowledge-base cross-check
+# runtime question parsing: a short, simple task — a cheap model is enough
+QUESTION_MODEL = os.environ.get("KB_LLM_QUESTION_MODEL", "claude-haiku-5-5")
+OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 LEVELS = ["mandatory", "additional", "differential", "monitoring"]
 
 QUESTION_SCHEMA = {
@@ -85,12 +97,106 @@ def client():
         import anthropic
     except ImportError:
         sys.exit("pip install anthropic")
-    return anthropic.Anthropic()
+    key = os.environ.get("KB_ANTHROPIC_API_KEY")
+    return anthropic.Anthropic(api_key=key) if key else anthropic.Anthropic()
 
 
 def call(prompt: str, schema: dict, model: str, effort: str, max_tokens: int = 16000) -> dict:
-    """One structured-output request. Server-side refusal fallback is on (Opus 5.5 default)."""
-    import anthropic
+    """One structured-output request: OpenRouter if KB_OPENROUTER_API_KEY is set (and no
+    KB_ANTHROPIC_API_KEY), else the Anthropic API — unless KB_LLM_PROVIDER says otherwise."""
+    provider = os.environ.get("KB_LLM_PROVIDER") or (
+        "openrouter" if os.environ.get("KB_OPENROUTER_API_KEY") and not os.environ.get("KB_ANTHROPIC_API_KEY")
+        else "anthropic")
+    if provider == "claude-cli":
+        return call_claude_cli(prompt, schema, model, effort)
+    if provider == "openrouter":
+        return call_openrouter(prompt, schema, model, effort, max_tokens)
+    return call_anthropic(prompt, schema, model, effort, max_tokens)
+
+
+USAGE_LOG = Path("kb/llm_usage.jsonl")
+RATE_LIMITS = Path.home() / ".claude" / "rate-limits.json"  # written by the statusline
+
+
+def log_usage(rec: dict):
+    """One line per LLM call in kb/llm_usage.jsonl — what the runtime actually spends."""
+    import time
+    USAGE_LOG.parent.mkdir(parents=True, exist_ok=True)
+    with USAGE_LOG.open("a", encoding="utf-8") as f:
+        f.write(json.dumps({"t": int(time.time()), **rec}, ensure_ascii=False) + "\n")
+
+
+def rate_limits() -> dict:
+    try:
+        return json.loads(RATE_LIMITS.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+
+
+def call_claude_cli(prompt: str, schema: dict, model: str, effort: str) -> dict:
+    """Claude Code in headless mode (`claude -p`): runs on the user's subscription limits
+    instead of an API key. No tools, no MCP, no session saved; prompt goes via stdin."""
+    import subprocess
+    import time
+    alias = {"claude-opus-5-5": "opus", "claude-sonnet-5-5": "sonnet", "claude-haiku-5-5": "haiku"}.get(model, model)
+    cmd = ["claude", "-p", "--output-format", "json", "--model", alias, "--effort", effort,
+           "--tools", "", "--strict-mcp-config", "--no-session-persistence",
+           "--system-prompt", "Ты извлекаешь данные из текста. Отвечай только по заданной JSON-схеме.",
+           "--json-schema", json.dumps(schema, ensure_ascii=False)]
+    t0 = time.time()
+    r = subprocess.run(cmd, input=prompt.encode("utf-8"), capture_output=True, timeout=1800)
+    if r.returncode != 0:
+        raise RuntimeError(f"claude -p failed ({r.returncode}): {r.stderr.decode('utf-8', 'replace')[:500]}")
+    out = json.loads(r.stdout.decode("utf-8"))
+    if out.get("is_error"):
+        raise RuntimeError(f"claude -p error: {out.get('result')}")
+    u = out.get("usage", {})
+    log_usage({"provider": "claude-cli", "sec": round(time.time() - t0, 1), "model": alias,
+               "input": u.get("input_tokens", 0) + u.get("cache_creation_input_tokens", 0)
+               + u.get("cache_read_input_tokens", 0),
+               "output": u.get("output_tokens", 0), "cost_usd_list": out.get("total_cost_usd"),
+               "five_hour": rate_limits().get("five_hour", {}).get("used_percentage")})
+    data = out.get("structured_output")
+    if isinstance(data, str):
+        data = json.loads(data)
+    return data if data is not None else json.loads(out["result"])
+
+
+def call_openrouter(prompt: str, schema: dict, model: str, effort: str, max_tokens: int) -> dict:
+    """OpenAI-compatible chat completions with a strict JSON schema. Model ids are
+    OpenRouter's («anthropic/claude-opus-5.5»); a bare Anthropic id is mapped to it."""
+    import requests
+    if "/" not in model:  # claude-opus-5-5 → anthropic/claude-opus-5.5
+        model = "anthropic/" + re.sub(r"-(\d+)-(\d+)$", r"-\1.\2", model)
+    r = requests.post(
+        OPENROUTER_URL,
+        headers={"Authorization": f"Bearer {os.environ['KB_OPENROUTER_API_KEY']}",
+                 "X-Title": "minzdrav protocols expert system"},
+        json={"model": model, "max_tokens": max_tokens,
+              "reasoning": {"effort": effort}, "usage": {"include": True},
+              "messages": [{"role": "user", "content": prompt}],
+              "response_format": {"type": "json_schema",
+                                  "json_schema": {"name": "result", "strict": True, "schema": schema}}},
+        timeout=600,
+    )
+    if r.status_code != 200:
+        raise RuntimeError(f"OpenRouter {r.status_code}: {r.text[:500]}")
+    data = r.json()
+    if data.get("error"):
+        raise RuntimeError(f"OpenRouter error: {data['error']}")
+    u = data.get("usage") or {}
+    log_usage({"provider": "openrouter", "model": data.get("model", model), "input": u.get("prompt_tokens"),
+               "output": u.get("completion_tokens"), "cost_usd": u.get("cost")})
+    choice = data["choices"][0]
+    if choice.get("finish_reason") == "length":
+        raise RuntimeError("output truncated (max_tokens)")
+    text = choice["message"]["content"] or ""
+    text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text.strip())  # in case a model wraps it
+    return json.loads(text)
+
+
+def call_anthropic(prompt: str, schema: dict, model: str, effort: str, max_tokens: int) -> dict:
+    """Anthropic API. Server-side refusal fallback is on (Opus 5.5 default)."""
     resp = client().beta.messages.create(
         model=model,
         max_tokens=max_tokens,
@@ -107,7 +213,7 @@ def call(prompt: str, schema: dict, model: str, effort: str, max_tokens: int = 1
     return json.loads(text)
 
 
-def parse_question(question: str, model: str = MODEL) -> dict:
+def parse_question(question: str, model: str = QUESTION_MODEL) -> dict:
     return call(QUESTION_PROMPT.format(question=question), QUESTION_SCHEMA, model, effort="low", max_tokens=4000)
 
 
@@ -172,10 +278,11 @@ def main():
     c.add_argument("--out", type=Path, default=Path("kb/crosscheck.json"))
     c.add_argument("--limit", type=int, help="only the first N chapters (trial run)")
     c.add_argument("--dry-run", action="store_true", help="show what would be sent and a token estimate")
+    c.add_argument("--stop-at", type=float, help="stop when the 5-hour limit (~/.claude/rate-limits.json) reaches this %%")
     p = sub.add_parser("parse")
     p.add_argument("question")
-    for x in (c, p):
-        x.add_argument("--model", default=MODEL)
+    c.add_argument("--model", default=MODEL)
+    p.add_argument("--model", default=QUESTION_MODEL)
     args = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8")
 
@@ -200,6 +307,10 @@ def main():
     for i, s in enumerate(secs, 1):
         if s["id"] in done["sections"]:
             continue
+        five = rate_limits().get("five_hour", {}).get("used_percentage")
+        if args.stop_at is not None and five is not None and five >= args.stop_at:
+            print(f"stopped: 5-hour limit at {five}% (>= {args.stop_at}%)")
+            break
         try:
             done["sections"][s["id"]] = crosscheck_section(s, args.model)
         except Exception as e:  # keep what's done; rerun resumes
