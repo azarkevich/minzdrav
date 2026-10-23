@@ -1,7 +1,7 @@
 # Deploying the website to Render (free)
 
 Files involved: `render.yaml` (blueprint), `requirements.txt`, `deploy/` (the runtime knowledge base,
-~28 MB, made by `make_deploy.py`), `kb_web.py` (`--host`, `$PORT`, `$KB_WEB_PASSWORD`, `/healthz`).
+~155 MB incl. `deploy/pdf/` — the protocol PDFs for the viewer, since minzdrav.gov.by does not answer Render; made by `make_deploy.py`), `kb_web.py` (`--host`, `$PORT`, `$KB_WEB_PASSWORD`, `/healthz`).
 
 ## One time
 

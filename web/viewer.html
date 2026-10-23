@@ -34,6 +34,13 @@ const norm=s=>s.toLowerCase().replace(/ё/g,"е").replace(/[^a-zа-я0-9]/g,"");
 const parts=quote.split(/…|\.\.\./).map(norm).filter(s=>s.length>=6);
 let pdf,scale=1.5,hits=[],hitAt=0;
 const rendered=new Map();
+let gone=false;
+function fallback(why){
+ if(pdf){$("st").textContent="Ошибка просмотра: "+why;return}
+ if(gone)return;gone=true;
+ $("st").textContent=`Встроенный просмотр: ${why}. Открываю оригинал на стр. ${page0}…`;
+ setTimeout(()=>location.replace(url+"#page="+page0),1500);
+}
 
 async function renderPage(n){
  if(rendered.has(n))return rendered.get(n);
@@ -69,7 +76,10 @@ function highlight(n,t){
 
 (async()=>{
  try{
+  // the server may fail to get the PDF: then open the original at the page instead of waiting
+  const timer=setTimeout(()=>fallback("документ долго не загружается"),25000);
   pdf=await pdfjsLib.getDocument({url:"/pdf?u="+encodeURIComponent(url)}).promise;
+  clearTimeout(timer);
   const first=await pdf.getPage(1);
   scale=Math.min(1.5,(Math.min(innerWidth,1100)-40)/first.getViewport({scale:1}).width);
   const v=first.getViewport({scale});
@@ -96,7 +106,7 @@ function highlight(n,t){
    if(hits.length>1){$("next").hidden=false;$("next").onclick=()=>{hitAt=(hitAt+1)%hits.length;hits[hitAt].scrollIntoView({block:"center"})}}
   }else $("st").textContent=`стр. ${target} из ${pdf.numPages} · цитату на странице найти не удалось (скан или таблица) — смотрите страницу`;
  }catch(e){
-  $("st").textContent="Не удалось открыть документ: "+(e.message||e);
+  console.error(e);fallback(pdf?String(e.message||e):"сервер не смог получить файл");
  }
 })();
 </script></body></html>

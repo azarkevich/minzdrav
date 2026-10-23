@@ -23,13 +23,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import kb  # noqa: E402
 from sheet_log import SheetLog, mask  # noqa: E402
 
-VERSION = "2.1"  # shown on the page; bump on user-visible changes
+VERSION = "2.2"  # shown on the page; bump on user-visible changes
 PAGE = (Path(__file__).resolve().parent / "web" / "index.html").read_text(encoding="utf-8").replace("__VERSION__", VERSION)
 VIEWER = (Path(__file__).resolve().parent / "web" / "viewer.html").read_text(encoding="utf-8")
 LOCK = threading.Lock()
 # /pdf proxy: the viewer (PDF.js) can't read other sites' PDFs from the browser, so the server fetches them
 PDF_HOSTS = {"minzdrav.gov.by", "www.minzdrav.gov.by", "task.by", "www.task.by"}
 PDF_CACHE = Path(__file__).resolve().parent / "kb" / "pdfcache"
+PDF_LOCAL = [Path(__file__).resolve().parent / "deploy" / "pdf"]  # make_deploy.py; + <kb dir>/pdf from --kb
 PDF_MAX = 80 * 2**20
 PDF_LOCKS: dict = {}
 FEEDBACK_LOG = Path(__file__).resolve().parent / "kb" / "feedback.jsonl"
@@ -49,12 +50,16 @@ def summary(question, ans):
             "insurance": {k: (ans.get("insurance") or {}).get(k) for k in ("verdict_level", "verdict")}}
 
 
-def fetch_pdf(url, attempts=3):
+def pdf_key(url: str) -> str:
+    return hashlib.sha1(url.encode()).hexdigest()[:16]
+
+
+def fetch_pdf(url, attempts=2):
     """The PDF bytes from an allowed host; the ministry's site drops a connection now and then."""
     for i in range(attempts):
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "minzdrav-kb/" + VERSION})
-            with urllib.request.urlopen(req, timeout=60) as r:
+            with urllib.request.urlopen(req, timeout=20) as r:
                 if urllib.parse.urlsplit(r.geturl()).hostname not in PDF_HOSTS:
                     raise ValueError("redirect to another host")
                 data = r.read(PDF_MAX + 1)
@@ -116,7 +121,9 @@ def make_handler(engine):
             u = urllib.parse.urlsplit(url)
             if u.scheme != "https" or u.hostname not in PDF_HOSTS:
                 return self._send(400, "host not allowed", "text/plain")
-            f = PDF_CACHE / (hashlib.sha1(url.encode()).hexdigest() + ".pdf")
+            # shipped with the deploy (minzdrav.gov.by doesn't answer the hosting's data centres), else cached
+            f = next((d / f"{pdf_key(url)}.pdf" for d in PDF_LOCAL if (d / f"{pdf_key(url)}.pdf").exists()),
+                     PDF_CACHE / f"{pdf_key(url)}.pdf")
             with LOCK:
                 lock = PDF_LOCKS.setdefault(url, threading.Lock())
             with lock:  # one download per file even when several viewers open it at once
@@ -217,6 +224,7 @@ def main():
     args = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8")  # logs and FEEDBACK lines contain Cyrillic; hosts may default to ASCII
     sys.stderr.reconfigure(encoding="utf-8")
+    PDF_LOCAL.insert(0, args.kb.resolve().parent / "pdf")
     engine = kb.Engine(args.kb, args.reference, llm=args.llm)
     srv = ThreadingHTTPServer((args.host, args.port), make_handler(engine))
     print(f"http://{args.host}:{args.port}/  (version {VERSION}, LLM {'on' if args.llm else 'off'}, sheet {'on' if SHEET.url else 'off'}, KB {args.kb})", flush=True)

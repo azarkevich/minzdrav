@@ -290,7 +290,7 @@ JSON lines into it.
 `text` = `kb.render`). The page shows diagnosis/service recognition, a coloured verdict per
 population, each excerpt with a `url#page=N` link, and the plain-text form for copying; query
 history is in the browser's localStorage. The page header shows `VERSION` from `kb_web.py`
-(substituted for `__VERSION__` in `web/index.html`; 1.1 = list mode, 1.2 = Enter sends / Shift+Enter new line, spinner, 1.3 = insurance block, 1.4 = insurance / protocols tabs, 1.5 = rating panel between the question and the answer, 1.6 = «уточните диагноз», Google Sheet log, 1.7 = diagnosis-only question → all diagnostic measures, compact rating panel, 2.0 = own PDF viewer, 2.1 = ⚙ settings: open PDFs in the viewer or on the original site) — bump it on user-visible changes. Binds to 127.0.0.1 only (no auth). `--llm` needs
+(substituted for `__VERSION__` in `web/index.html`; 1.1 = list mode, 1.2 = Enter sends / Shift+Enter new line, spinner, 1.3 = insurance block, 1.4 = insurance / protocols tabs, 1.5 = rating panel between the question and the answer, 1.6 = «уточните диагноз», Google Sheet log, 1.7 = diagnosis-only question → all diagnostic measures, compact rating panel, 2.0 = own PDF viewer, 2.1 = ⚙ settings: open PDFs in the viewer or on the original site, 2.2 = PDFs shipped in deploy/pdf) — bump it on user-visible changes. Binds to 127.0.0.1 only (no auth). `--llm` needs
 `KB_OPENROUTER_API_KEY` in the environment of the server process.
 
 Feedback: under each answer the page shows a 3-star rating, tags (диагноз/услуга распознаны неверно, вердикт неверный, цитата не по теме, не нашёл) and a comment. `POST /api/feedback` appends one line to `kb/feedback.jsonl` with the rating and a summary of the answer (diagnosis, service, verdict, evidence links) — low-rated lines are candidates for `eval/` cases.
@@ -306,7 +306,7 @@ server use the idx form by default. To deploy, copy only `kb.idx.json` + `kb.ite
 
 ### Hosting (Render)
 
-`render.yaml` + `requirements.txt` + `deploy/` (`make_deploy.py` copies the packed KB and the two reference JSONs there) — see `DEPLOY_RENDER.md`. `kb_web.py`: `--host`, `$PORT`, optional basic auth from `$KB_WEB_PASSWORD`, unauthenticated `/healthz`, ratings also printed as `FEEDBACK {json}` to stdout (the free plan's disk is throwaway). No git remote is configured yet.
+`render.yaml` + `requirements.txt` + `deploy/` (`make_deploy.py` copies the packed KB, the two reference JSONs and the PDFs there) — see `DEPLOY_RENDER.md`. `kb_web.py`: `--host`, `$PORT`, optional basic auth from `$KB_WEB_PASSWORD`, unauthenticated `/healthz`, ratings also printed as `FEEDBACK {json}` to stdout (the free plan's disk is throwaway). No git remote is configured yet.
 
 ## 8. `insurance.py` — insurance rules (Правила №20 ДСМР ЗАСО «ТАСК»)
 
@@ -361,8 +361,10 @@ Every «стр. N» link of the page goes to `/view?u=<pdf url>&p=<page>&q=<quot
 the document lazily, scrolls to the page and highlights the quote — split on «…» into the clause intro and the
 member, each matched in the page text with whitespace / hyphens / line breaks ignored, falling back to its longest
 prefix (≥ 20 letters); the next page is searched too. A scan or column-soup table page shows «цитату найти не
-удалось». The browser can't fetch the ministry's PDFs itself (CORS), so `/pdf?u=` downloads them on the server
-(hosts minzdrav.gov.by / task.by only, ≤ 80 MB, 3 tries) into `kb/pdfcache/` (throwaway on Render — refilled on
-demand). Check 2026-10-23: 23 of 24 evidence links from eval answers highlighted (the miss was a site timeout).
+удалось». The browser can't fetch the ministry's PDFs itself (CORS), so `/pdf?u=` serves them: first from `deploy/pdf/`
+(`<kb dir>/pdf`, then `deploy/pdf`; file name `kb_web.pdf_key(url)` = sha1[:16]; `make_deploy.py` copies all 400 KB
+PDFs + the insurance rules, ~127 MB), else downloads (hosts minzdrav.gov.by / task.by only, ≤ 80 MB, 20 s × 2) into
+`kb/pdfcache/`. minzdrav.gov.by does not answer Render's data centres (a request hung 188 s → 502, task.by 2.6 s),
+hence the shipped copies. If the PDF doesn't load in 25 s or fails, the viewer redirects to the original `url#page=N`. Check 2026-10-23: 23 of 24 evidence links from eval answers highlighted (the miss was a site timeout).
 The text answer and the MCP server keep the original `url#page=N` links. ⚙ Настройки on the page (localStorage
 `pdfmode`: `viewer` / `orig`) switches the page's links back to the original site — a fallback if the proxy is slow on Render.
