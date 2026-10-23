@@ -56,6 +56,8 @@ SPLIT_RES = [
 DX_NEUTRAL = {"неуточнен", "уточнен", "друг", "форм", "состоян", "болезн", "синдром", "класс", "рубрик"}
 MIN_DX_SCORE = 0.6
 LLM_DX_SCORE = 0.95  # with --llm: below this the LLM is asked (exact name matches score ≥ 1.0)
+# stems of procedure names: «трахеоскопия», «флебография», «капилляроскопия», «инъекция», «катетеризация»
+SERVICE_STEM_RE = re.compile(r"(?:скоп|графи?|метри?|терапи?|грамм?)$|центез$|^(?:инъекц|катетериз|введен|получен|применен|сканирован|стимуляц|снимк|сбор$|пункц|биопс|рентген|гамма|ультразвук|узи$|кт$|мрт$|экг$)")
 CHILD_RE = re.compile(r"\b(?:реб[её]н|дет[еи]й?|детск|новорожд|подрост|младен)\w*", re.I)
 ADULT_RE = re.compile(r"\bвзросл\w*", re.I)
 
@@ -73,12 +75,17 @@ def pop_label(pop) -> str:
 
 
 def _clean_dx(d: str) -> str:
-    d = re.sub(r"^диагноз\w*\s*[:\-–—]?\s*", "", d.strip(" ,.;:–-"), flags=re.I)
-    return re.sub(r"^(?:у\s+)?(?:пациента?|ребенка|ребёнка|взрослого)\s+(?:с\s+)?", "", d, flags=re.I)
+    # «Пациент, диагноз – …», «у ребенка с …», «пациентка: …»
+    d = re.sub(r"^(?:у\s+)?(?:пациент(?:а|ка|ки|у)?|ребенка?|ребёнка?|взрослого)(?:[\s,:–—-]+(?:с\s+)?|$)", "",
+               d.strip(" ,.;:–-"), flags=re.I)
+    return re.sub(r"^диагноз\w*\s*[:\-–—]?\s*", "", d.strip(" ,.;:–-"), flags=re.I).strip(" ,.;:–-")
+
+
+WHO_RE = re.compile(r"^(?:у\s+)?(?:пациент(?:а|ка|ки|у)?|ребенка?|ребёнка?|застрахованн\w*)\s*[,:–—-]\s*", re.I)
 
 
 def split_question(q: str):
-    q = q.strip()
+    q = WHO_RE.sub("", q.strip())  # «Пациент, …»
     for rx in SPLIT_RES:
         m = rx.match(q)
         if m:
@@ -89,7 +96,8 @@ def split_question(q: str):
         d, _, s = q.partition(",")
         if not s.strip():
             return None, None
-    s = re.sub(r"^(?:ли\s+)?(?:проведение|выполнение|назначение|делать|сделать|провести|определить|определение|выполнить|назначить|сдать|исследовать|измерить)\s+", "", s.strip(" ,.;:?"), flags=re.I)
+    s = re.sub(r"^[а-яё]+\s+ли\s+", "", s.strip(" ,.;:?"), flags=re.I)  # a misspelt verb: «разреешна ли УЗИ»
+    s = re.sub(r"^(?:ли\s+)?(?:проведение|выполнение|назначение|делать|сделать|провести|определить|определение|выполнить|назначить|сдать|исследовать|измерить)\s+", "", s, flags=re.I)
     return _clean_dx(d), s
 
 
@@ -114,7 +122,7 @@ def parse_list_question(q: str):
     """«андрогения перечень лабораторных анализов» → ("андрогения", "lab", None);
     «ангиомиолипома, какой вид кт используется для диагностики» → ("ангиомиолипома", None, "кт");
     None when the question is not a request for a list."""
-    q = q.strip().rstrip("?")
+    q = WHO_RE.sub("", q.strip().rstrip("?"))
     m = LIST_RE.search(q)
     if not m:
         return None
@@ -263,6 +271,7 @@ class Engine:
             if code in self.icd:
                 return [{"code": code, "name": self.icd[code], "score": 1.0}]
         q = text.lower()
+        q_norm = re.sub(r"\s+", " ", re.sub(r"[^а-яa-z0-9 ]", "", q.replace("ё", "е"))).strip()
         qs = [s for s in self.norm.stems(text) if s not in GENERIC and s not in DX_NEUTRAL]
         best = {}
         for code, name in self.names:
@@ -276,6 +285,8 @@ class Engine:
                 sim = max(sim, 0.6 * hit + 0.4 * cover)
             if code in self.covered:
                 sim += 0.05  # prefer diagnoses the protocols actually cover
+            if q_norm == re.sub(r"\s+", " ", re.sub(r"[^а-яa-z0-9 ]", "", name.lower().replace("ё", "е"))).strip():
+                sim += 0.08  # the very name beats a sibling with the same stems («ларингит» / «ларинготрахеит»)
             if sim > best.get(code, (0,))[0]:
                 best[code] = (sim, name)
         ranked = sorted(best.items(), key=lambda kv: kv[1][0], reverse=True)[:top]
@@ -467,7 +478,7 @@ class Engine:
                 # diagnostic measure of the protocols
                 cand = _clean_dx(question.strip(" ?."))
                 # «анализ крови», «УЗИ щитовидной железы» name a service, not a diagnosis
-                is_service = any(x in GENERIC or x in METHOD for x in self.norm.stems(cand))
+                is_service = any(x in GENERIC or x in METHOD or SERVICE_STEM_RE.search(x) for x in self.norm.stems(cand))
                 dx = self.resolve_diagnosis(cand) if cand and not is_service else []
                 if dx and dx[0]["score"] >= (LLM_DX_SCORE if self.llm else MIN_DX_SCORE):
                     return dict(self.list_services(question, cand, population=population), diagnosis_only=True)

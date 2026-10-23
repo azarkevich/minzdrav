@@ -122,14 +122,16 @@ class Normalizer:
 
 
 def close(a: str, b: str) -> bool:
-    """Equal stems, or one typo (edit distance 1) in stems of 6+ letters:
-    «ничипоренк» ~ «нечипоренк», «тереоид» ~ «тиреоид» (missing letter)."""
+    """Equal stems, or one typo in stems of 6+ letters: a wrong, missing or extra letter, or two
+    neighbours swapped — «ничипоренк» ~ «нечипоренк», «тереоид» ~ «тиреоид», «посриаз» ~ «псориаз»."""
     if a == b:
         return True
     if min(len(a), len(b)) < 6 or abs(len(a) - len(b)) > 1:
         return False
     if len(a) == len(b):
-        return sum(x != y for x, y in zip(a, b)) == 1
+        diff = [i for i, (x, y) in enumerate(zip(a, b)) if x != y]
+        return len(diff) == 1 or (len(diff) == 2 and diff[1] == diff[0] + 1
+                                  and a[diff[0]] == b[diff[1]] and a[diff[1]] == b[diff[0]])
     if len(a) > len(b):
         a, b = b, a
     for i in range(len(b)):

@@ -16,6 +16,7 @@ Each tool is a standalone Python 3 script in this directory. Git repository; scr
 | `protocol_parser.py` | Expert system stage 1: every protocol PDF → JSON tree with pages, clauses, МКБ-10 codes (`./parsed`) |
 | `kb_build.py`, `kb.py`, `kb_text.py`, `table_extract.py`, `kb_llm.py` | Expert system: knowledge base (`./kb_all`, `./kb`), question answering CLI + eval, LLM cross-check |
 | `kb_mcp.py` | MCP server (stdio, stdlib) exposing the expert system to Claude Desktop / Claude Code |
+| `kb_probe.py` | Invariant probes over thousands of dictionary inputs (no labels, no LLM) — run before engine changes |
 | `insurance.py` | Insurance rules (Правила №20 ЗАСО «ТАСК»): is the diagnosis an insured event — a separate block in every answer |
 
 Downstream tools should treat `protocols/` (files + `manifest.json` + `index.csv`) as
@@ -341,3 +342,15 @@ the PDF — the answer says to check the contract's program.
 «пациент», phones, e-mail, dates, passport / personal numbers, «полис № …», long numbers) in everything stored —
 the engine still gets the raw question. Personal data in the question also break the diagnosis / service split
 («…, HbA1c, Ковалёва А.В» → service «HbA1c, Ковалёва»), so operators should type only the diagnosis and the service.
+
+## 10. `kb_probe.py` — invariant probes
+
+`python -I kb_probe.py [--n 400] [--seed 1] [--only icd_name,service_not_dx,chapter_name,perturb]` (~5 min at n=300),
+failures → `kb/probe_report.json`. Probes: a service name of пост. №123 is not taken for a diagnosis; an МКБ-10 rubric
+name resolves to that rubric (names with a code inside or «…в других рубриках» skipped); a protocol chapter title
+resolves to a code of the chapter; eval questions keep diagnosis / verdicts with «?», «Пациент, …», a swapped-letter
+typo, lower / upper case. 2026-10-23: first run 95 / 94 / 92 / 86 % → after fixes 99–100 / 100 / 92 / 96 %
+(fixes: transposition typos in `kb_text.close`, exact-name bonus in `resolve_diagnosis`, `SERVICE_STEM_RE` for
+procedure words, «Пациент, …» stripped, a misspelt check verb «разреешна ли» dropped from the service). Left:
+chapter_name failures are wrong codes in the KB (stomatology chapters bound to J05/D01); perturb failures are typos
+that change a service stem («молочынх») or a list word («лаборатонрых», «преечень»).
