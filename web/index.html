@@ -23,6 +23,9 @@ a{color:var(--acc)}.hist div{padding:4px 0;cursor:pointer;border-bottom:1px soli
 .stars{font-size:30px;line-height:1;margin:6px 0;cursor:pointer;user-select:none}.stars span{color:var(--bd)}.stars span.on{color:#f2b01e}.stars span:hover{color:#f2b01e}
 .tag input{vertical-align:middle}label.tag{cursor:pointer}
 ul.lst{margin:4px 0 8px;padding-left:22px}ul.lst li{margin:2px 0}ul.lst:empty{display:none}
+.spin{display:inline-block;width:16px;height:16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:sp .8s linear infinite;vertical-align:-3px}
+.busy{display:flex;gap:12px;align-items:center;color:var(--mut)}.busy .spin{width:26px;height:26px;border-width:3px;color:var(--acc)}
+@keyframes sp{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.spin{animation-duration:2.4s}}
 details summary{cursor:pointer;color:var(--mut);font-size:13px}pre{white-space:pre-wrap;font-size:13px}
 </style></head><body><div class="wrap">
 <h1>Проверка диагностики по клиническим протоколам МЗ РБ <span class="meta" style="font-weight:400">версия __VERSION__</span></h1>
@@ -31,7 +34,7 @@ details summary{cursor:pointer;color:var(--mut);font-size:13px}pre{white-space:p
  <div class="row">
   <button id="go">Проверить</button>
   <select id="pop"><option value="">возраст: определить</option><option value="adult">взрослые</option><option value="child">дети</option></select>
-  <span id="st" class="meta">Ctrl+Enter — отправить</span>
+  <span id="st" class="meta">Enter — отправить, Shift+Enter — новая строка</span>
  </div>
  <div class="row" id="examples"></div>
 </div>
@@ -95,7 +98,7 @@ function render(a){
    h+=`<div class="ev"><b>[${i+1}] ${esc(e.protocol)}</b><div class="meta">${w} — ${esc(e.level_label)}`
      +(e.match=="segment"?`<span class="tag">совпадение по строке списка</span>`:"")+(chk?`<span class="tag">${chk}</span>`:"")+`</div>`
      +(e.condition?`<div class="meta">Условие: ${esc(e.condition)}</div>`:"")
-     +`<blockquote>${esc(e.quote)}</blockquote><a href="${esc(e.url)}#page=${esc(e.pdf_pages[0])}" target="_blank" rel="noopener">Открыть протокол, стр. PDF ${esc(p)}</a>`
+     +`<blockquote>${esc(e.quote)}</blockquote><a href="${esc(e.url)}" target="_blank" rel="noopener">Открыть протокол, стр. PDF ${esc(p)}</a>`
      +(e.printed_page?` <span class="meta">(печатная ${esc(e.printed_page)})</span>`:"")+`</div>`;
   });
   if(!r.evidence.length&&(r.checked||[]).length)h+=`<details><summary>Проверенные разделы</summary>`+r.checked.map(c=>`<div class="meta"><a href="${esc(c.url)}" target="_blank">${esc(c.protocol)}</a>: ${esc(c.chapters.join("; "))}</div>`).join("")+`</details>`;
@@ -117,14 +120,18 @@ function tail(a){
   </div></div>`;
  return h;
 }
+let busy=false;
 async function ask(){
- const q=$("q").value.trim();if(!q)return;
- $("go").disabled=true;$("st").textContent="Проверяю…";
+ const q=$("q").value.trim();if(!q||busy)return;
+ busy=true;$("go").disabled=true;$("go").innerHTML=`<span class="spin"></span> Проверяю…`;
+ const t0=Date.now();
+ $("out").innerHTML=`<div class="card busy" role="status"><span class="spin"></span><div><b>Ищу в протоколах…</b><div class="meta" id="el">0 с</div></div></div>`;
+ const tick=setInterval(()=>{const el=$("el");if(el)el.textContent=Math.round((Date.now()-t0)/1000)+" с"},1000);
  try{
   const r=await fetch("/api/ask",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({question:q,population:$("pop").value})});
   const a=await r.json();$("out").innerHTML=render(a);if(!a.error)saveHist(q);
  }catch(e){$("out").innerHTML=render({error:String(e)})}
- $("go").disabled=false;$("st").textContent="Ctrl+Enter — отправить";
+ clearInterval(tick);busy=false;$("go").disabled=false;$("go").textContent="Проверить";
 }
 let stars=0;
 $("out").addEventListener("click",async e=>{
@@ -141,6 +148,6 @@ $("out").addEventListener("click",async e=>{
  }
 });
 $("go").onclick=ask;
-$("q").addEventListener("keydown",e=>{if(e.key=="Enter"&&(e.ctrlKey||e.metaKey))ask()});
+$("q").addEventListener("keydown",e=>{if(e.key=="Enter"&&!e.shiftKey&&!e.isComposing){e.preventDefault();ask()}});
 drawHist();
 </script></body></html>

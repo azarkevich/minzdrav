@@ -287,7 +287,7 @@ JSON lines into it.
 `text` = `kb.render`). The page shows diagnosis/service recognition, a coloured verdict per
 population, each excerpt with a `url#page=N` link, and the plain-text form for copying; query
 history is in the browser's localStorage. The page header shows `VERSION` from `kb_web.py`
-(substituted for `__VERSION__` in `web/index.html`; 1.1 = list mode) — bump it on user-visible changes. Binds to 127.0.0.1 only (no auth). `--llm` needs
+(substituted for `__VERSION__` in `web/index.html`; 1.1 = list mode, 1.2 = Enter sends / Shift+Enter new line, spinner) — bump it on user-visible changes. Binds to 127.0.0.1 only (no auth). `--llm` needs
 `KB_OPENROUTER_API_KEY` in the environment of the server process.
 
 Feedback: under each answer the page shows a 3-star rating, tags (диагноз/услуга распознаны неверно, вердикт неверный, цитата не по теме, не нашёл) and a comment. `POST /api/feedback` appends one line to `kb/feedback.jsonl` with the rating and a summary of the answer (diagnosis, service, verdict, evidence links) — low-rated lines are candidates for `eval/` cases.
