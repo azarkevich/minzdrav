@@ -43,7 +43,9 @@ What is unfinished or worth doing, roughly by priority. State as of 2026-10-24.
   or shrink the KB (162 MB JSON, ~0.5–1.5 GB RAM when loaded; move to SQLite with on-demand reads)
   to fit 256–512 MB free PaaS tiers; or Pyodide in the browser (needs a per-user OpenRouter key).
 - [ ] Web UI: history is only in the browser; no export of an answer (PDF / Excel) for the case file,
-  no batch mode (many questions from a spreadsheet), no feedback button («ответ неверный»).
+  no batch mode (many questions from a spreadsheet).
+- [ ] Feedback (3 stars + tags + comment → `kb/feedback.jsonl`) is collected but there is no viewer
+  and no script turning low-rated answers into `eval/` cases; ratings carry no user identity.
 - [ ] Per-call LLM usage is logged to `kb/llm_usage.jsonl`; no dashboard or spending cap in the app.
 - [ ] `kb_mcp.py` is tested only by a smoke test; not yet connected to Claude Desktop in practice.
 

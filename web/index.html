@@ -20,6 +20,8 @@ blockquote{margin:6px 0;padding:8px 12px;border-left:3px solid var(--acc);backgr
 .ev{border-top:1px solid var(--bd);padding-top:10px;margin-top:10px}
 .tag{display:inline-block;font-size:12px;padding:1px 8px;border-radius:99px;background:var(--bg);border:1px solid var(--bd);margin-left:4px}
 a{color:var(--acc)}.hist div{padding:4px 0;cursor:pointer;border-bottom:1px solid var(--bd);font-size:14px}.hist div:hover{color:var(--acc)}
+.stars{font-size:30px;line-height:1;margin:6px 0;cursor:pointer;user-select:none}.stars span{color:var(--bd)}.stars span.on{color:#f2b01e}.stars span:hover{color:#f2b01e}
+.tag input{vertical-align:middle}label.tag{cursor:pointer}
 details summary{cursor:pointer;color:var(--mut);font-size:13px}pre{white-space:pre-wrap;font-size:13px}
 </style></head><body><div class="wrap">
 <h1>Проверка диагностики по клиническим протоколам МЗ РБ</h1>
@@ -75,6 +77,13 @@ function render(a){
  (a.unparsed||[]).forEach(u=>h+=`<div class="verdict v-warn">Не разобран автоматически (${u.kind=="table"?"таблицы":"скан"}), проверьте вручную: <a href="${esc(u.url)}" target="_blank">${esc(u.protocol)}</a></div>`);
  h+=`<div class="meta">Метод: ${esc(a.method)}.</div>`;
  h+=`<details><summary>Текстовый вид (для копирования)</summary><pre>${esc(a.text)}</pre></details></div>`;
+ h+=`<div class="card" id="fb" data-id="${esc(a.answer_id)}"><b>Оцените ответ</b>
+  <div class="stars" id="stars">${[1,2,3].map(i=>`<span data-s="${i}" title="${["Плохо","Приемлемо","Хорошо"][i-1]}">★</span>`).join("")}</div>
+  <div id="fbmore" hidden>
+   <div class="row" id="tags">${["диагноз распознан неверно","услуга распознана неверно","вердикт неверный","цитата не по теме","не нашёл, а в протоколе есть"].map(t=>`<label class="tag"><input type="checkbox" value="${t}"> ${t}</label>`).join("")}</div>
+   <textarea id="fbc" style="min-height:50px;margin-top:8px" placeholder="Комментарий (необязательно)"></textarea>
+   <div class="row"><button id="fbsend">Отправить оценку</button><span class="meta" id="fbst"></span></div>
+  </div></div>`;
  return h;
 }
 async function ask(){
@@ -86,6 +95,20 @@ async function ask(){
  }catch(e){$("out").innerHTML=render({error:String(e)})}
  $("go").disabled=false;$("st").textContent="Ctrl+Enter — отправить";
 }
+let stars=0;
+$("out").addEventListener("click",async e=>{
+ const s=e.target.dataset&&e.target.dataset.s;
+ if(s){stars=+s;[...$("stars").children].forEach((c,i)=>c.classList.toggle("on",i<stars));$("fbmore").hidden=false;return}
+ if(e.target.id=="fbsend"){
+  const tags=[...document.querySelectorAll("#tags input:checked")].map(x=>x.value);
+  try{
+   const r=await fetch("/api/feedback",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({answer_id:$("fb").dataset.id,stars,tags,comment:$("fbc").value})});
+   const j=await r.json();
+   if(j.error)throw new Error(j.error);
+   $("fb").innerHTML=`<b>Спасибо, оценка ${stars} из 3 сохранена.</b>`;
+  }catch(err){$("fbst").textContent="Не удалось отправить: "+err.message}
+ }
+});
 $("go").onclick=ask;
 $("q").addEventListener("keydown",e=>{if(e.key=="Enter"&&(e.ctrlKey||e.metaKey))ask()});
 drawHist();
