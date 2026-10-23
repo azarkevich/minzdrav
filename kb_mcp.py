@@ -5,7 +5,8 @@ Tools:
   check_service(diagnosis, service, population?)  — is the service provided for? verdict +
                                                     verbatim excerpts + <url>#page=N links
   find_diagnosis(text)                             — МКБ-10 candidates for a diagnosis wording
-  list_diagnostics(diagnosis, population?)         — every diagnostics list item for a diagnosis
+  list_diagnostics(diagnosis, category?, service?, population?) — diagnostics list items for a
+                                                    diagnosis: all, lab / instrumental / consult, or one service
 
 Standard library only (newline-delimited JSON-RPC 2.0 over stdin/stdout, MCP stdio transport).
 Register in Claude Code:
@@ -19,7 +20,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))  # `python -I` drops the script dir
-from kb import LEVELS, Engine, render  # noqa: E402
+from kb import Engine, render  # noqa: E402
 
 PROTOCOL_VERSION = "2025-06-18"
 POPULATION = {"type": "string", "enum": ["adult", "child"],
@@ -43,10 +44,14 @@ TOOLS = [
     },
     {
         "name": "list_diagnostics",
-        "description": "Все позиции перечней диагностики (обязательная, дополнительная, наблюдение) "
-                       "в протоколах для диагноза, со ссылками на страницы.",
+        "description": "Перечень диагностики в протоколах для диагноза (обязательная, дополнительная, "
+                       "наблюдение), сгруппированный по протоколам и главам, со ссылками на страницы. "
+                       "Можно сузить видом исследований (category) и/или услугой (service: «КТ» — все виды КТ).",
         "inputSchema": {"type": "object", "properties": {
             "diagnosis": {"type": "string", "description": "диагноз словами или код МКБ-10"},
+            "category": {"type": "string", "enum": ["lab", "instrumental", "consult"],
+                         "description": "lab — лабораторные, instrumental — инструментальные, consult — консультации"},
+            "service": {"type": "string", "description": "услуга-фильтр, например «КТ», «УЗИ», «гормоны»"},
             "population": POPULATION}, "required": ["diagnosis"]},
     },
 ]
@@ -66,26 +71,6 @@ def engine() -> Engine:
     return _engine
 
 
-def list_diagnostics(diagnosis: str, population: str | None) -> str:
-    e = engine()
-    dx = e.resolve_diagnosis(diagnosis)
-    if not dx:
-        return f"Диагноз «{diagnosis}» не распознан. Укажите код МКБ-10."
-    code = dx[0]["code"]
-    out = [f"Диагноз: {code} {dx[0]['name']}"]
-    for s in sorted(e.sections_for(code, population, diagnosis), key=lambda s: (s["tier"], s["doc_id"], s["page"])):
-        items = [i for i in s["items"] if i["level"] != "text"]
-        if not items:
-            continue
-        doc = e.kb["documents"][s["doc_id"]]
-        where = f"Глава {s['chapter']} «{s['chapter_title']}»" if s["chapter"] is not None else s["chapter_title"]
-        out.append(f"\n## {s['protocol'] or doc['title']}\n{where}" + (" (смежный раздел)" if s["tier"] else ""))
-        for it in items:
-            cond = f" [{it['condition']}]" if it.get("condition") else ""
-            out.append(f"- {LEVELS[it['level']][1]}{cond}: {it['text']} — {doc['url']}#page={it['page']}")
-    return "\n".join(out) if len(out) > 1 else out[0] + "\nПеречни диагностики для этого диагноза не найдены."
-
-
 def call_tool(name: str, args: dict) -> str:
     if name == "check_service":
         a = engine().ask(diagnosis=args["diagnosis"], service=args["service"], population=args.get("population"))
@@ -93,7 +78,9 @@ def call_tool(name: str, args: dict) -> str:
     if name == "find_diagnosis":
         return json.dumps(engine().resolve_diagnosis(args["text"]), ensure_ascii=False, indent=1)
     if name == "list_diagnostics":
-        return list_diagnostics(args["diagnosis"], args.get("population"))
+        a = engine().list_services(None, args["diagnosis"], args.get("category"), args.get("service"),
+                                   args.get("population"))
+        return render(a)
     raise KeyError(name)
 
 

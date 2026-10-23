@@ -22,11 +22,12 @@ blockquote{margin:6px 0;padding:8px 12px;border-left:3px solid var(--acc);backgr
 a{color:var(--acc)}.hist div{padding:4px 0;cursor:pointer;border-bottom:1px solid var(--bd);font-size:14px}.hist div:hover{color:var(--acc)}
 .stars{font-size:30px;line-height:1;margin:6px 0;cursor:pointer;user-select:none}.stars span{color:var(--bd)}.stars span.on{color:#f2b01e}.stars span:hover{color:#f2b01e}
 .tag input{vertical-align:middle}label.tag{cursor:pointer}
+ul.lst{margin:4px 0 8px;padding-left:22px}ul.lst li{margin:2px 0}ul.lst:empty{display:none}
 details summary{cursor:pointer;color:var(--mut);font-size:13px}pre{white-space:pre-wrap;font-size:13px}
 </style></head><body><div class="wrap">
 <h1>Проверка диагностики по клиническим протоколам МЗ РБ</h1>
 <div class="card">
- <textarea id="q" placeholder="Диагноз – аутоиммунный тиреоидит, разрешён ли анализ мочи по Нечипоренко"></textarea>
+ <textarea id="q" placeholder="Диагноз – аутоиммунный тиреоидит, разрешён ли анализ мочи по Нечипоренко&#10;или: сахарный диабет, перечень лабораторных анализов"></textarea>
  <div class="row">
   <button id="go">Проверить</button>
   <select id="pop"><option value="">возраст: определить</option><option value="adult">взрослые</option><option value="child">дети</option></select>
@@ -40,7 +41,7 @@ details summary{cursor:pointer;color:var(--mut);font-size:13px}pre{white-space:p
 <script>
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const EX=["Диагноз – аутоиммунный тиреоидит, разрешён ли анализ мочи по Нечипоренко","Диагноз – болезнь Аддисона, разрешен ли тест с инсулиновой гипогликемией","Диагноз E06.3, ТТГ","Сахарный диабет 2 типа, определение гликированного гемоглобина"];
+const EX=["Диагноз – аутоиммунный тиреоидит, разрешён ли анализ мочи по Нечипоренко","Диагноз – болезнь Аддисона, разрешен ли тест с инсулиновой гипогликемией","Диагноз E06.3, ТТГ","Сахарный диабет 2 типа, определение гликированного гемоглобина","Сахарный диабет, перечень лабораторных анализов","Ангиомиолипома, какой вид КТ используется для диагностики"];
 $("examples").innerHTML=EX.map((e,i)=>`<span class="ex" data-i="${i}">${esc(e.length>48?e.slice(0,48)+"…":e)}</span>`).join("");
 $("examples").onclick=e=>{if(e.target.dataset.i){$("q").value=EX[e.target.dataset.i];ask()}};
 const lvl={mandatory:"v-ok",additional:"v-ok",listed:"v-warn",differential:"v-warn",monitoring:"v-warn",text:"v-warn",manual:"v-warn"};
@@ -49,8 +50,34 @@ function saveHist(q){hist=[q,...hist.filter(x=>x!==q)].slice(0,30);try{localStor
 function drawHist(){$("hcard").hidden=!hist.length;$("hist").innerHTML=hist.map((h,i)=>`<div data-i="${i}">${esc(h)}</div>`).join("")}
 $("hist").onclick=e=>{if(e.target.dataset.i){$("q").value=hist[e.target.dataset.i];ask()}};
 $("hclear").onclick=e=>{e.preventDefault();hist=[];try{localStorage.removeItem("hist")}catch(e){}drawHist()};
+function renderList(a){
+ const d=a.diagnosis||{};
+ let h=`<div class="card"><div class="meta"><b>Диагноз:</b> ${esc(d.code||"")} ${esc(d.name||"")} <span class="tag">из «${esc(a.diagnosis_text)}»</span>`;
+ (a.diagnosis_alternatives||[]).forEach(x=>h+=`<br>или? ${esc(x.code)} ${esc(x.name)}`);
+ h+=`<br><b>Перечень:</b> ${esc(a.category_label)}`+(a.service_text?`, услуга «${esc(a.service_text)}»`:"");
+ if(a.population)h+=`<br><b>Население:</b> ${a.population=="child"?"дети":"взрослые"}`;
+ h+=`</div>`;
+ if(!(a.results||[]).length)h+=`<div class="verdict v-bad">${esc(a.verdict)}</div>`;
+ (a.results||[]).forEach(r=>{
+  h+=`<div class="verdict v-ok">${esc(r.population.toUpperCase())}: ${esc(r.verdict)}</div>`;
+  r.sections.forEach(s=>{
+   const w=s.chapter!=null?`Глава ${esc(s.chapter)} «${esc(s.chapter_title)}»`:esc(s.chapter_title||"");
+   h+=`<div class="ev"><b>${esc(s.protocol)}</b><div class="meta">${w}`+(s.related?`<span class="tag">смежный раздел — проверьте применимость</span>`:"")+`</div><ul class="lst">`;
+   let lv=null;
+   s.items.forEach(e=>{
+    if(e.level!=lv){lv=e.level;h+=`</ul><div class="meta"><b>${esc(e.level_label)}</b></div><ul class="lst">`}
+    const p=e.pdf_pages.length>1?`${e.pdf_pages[0]}–${e.pdf_pages.at(-1)}`:e.pdf_pages[0];
+    h+=`<li>${e.condition?`<span class="meta">[${esc(e.condition)}]</span> `:""}${esc(e.text)} <a href="${esc(e.url)}" target="_blank" rel="noopener" class="meta">${e.clause?"п. "+esc(e.clause)+", ":""}стр. ${esc(p)}</a></li>`;
+   });
+   h+=`</ul></div>`;
+  });
+ });
+ (a.text_only||[]).forEach(t=>h+=`<div class="verdict v-warn">В тексте, не перечнем (проверьте по главе): <a href="${esc(t.url)}" target="_blank">${esc(t.protocol)}, ${t.chapter!=null?"глава "+esc(t.chapter)+" «"+esc(t.chapter_title)+"»":esc(t.chapter_title)}</a></div>`);
+ return h;
+}
 function render(a){
  if(a.error)return `<div class="card"><div class="verdict v-bad">${esc(a.error)}</div></div>`;
+ if(a.mode=="list")return renderList(a)+tail(a);
  const d=a.diagnosis||{},svc=a.service_catalogue||[];
  let h=`<div class="card"><div class="meta"><b>Диагноз:</b> ${esc(d.code||"")} ${esc(d.name||"")} <span class="tag">из «${esc(a.diagnosis_text)}»</span>`;
  (a.diagnosis_alternatives||[]).forEach(x=>h+=`<br>или? ${esc(x.code)} ${esc(x.name)}`);
@@ -74,6 +101,10 @@ function render(a){
   if(!r.evidence.length&&(r.checked||[]).length)h+=`<details><summary>Проверенные разделы</summary>`+r.checked.map(c=>`<div class="meta"><a href="${esc(c.url)}" target="_blank">${esc(c.protocol)}</a>: ${esc(c.chapters.join("; "))}</div>`).join("")+`</details>`;
   (r.notes||[]).forEach(n=>h+=`<div class="meta">Оговорка (п. ${esc(n.clause)}): «${esc(n.quote)}» <a href="${esc(n.url)}" target="_blank">ссылка</a></div>`);
  });
+ return h+tail(a);
+}
+function tail(a){
+ let h="";
  (a.unparsed||[]).forEach(u=>h+=`<div class="verdict v-warn">Не разобран автоматически (${u.kind=="table"?"таблицы":"скан"}), проверьте вручную: <a href="${esc(u.url)}" target="_blank">${esc(u.protocol)}</a></div>`);
  h+=`<div class="meta">Метод: ${esc(a.method)}.</div>`;
  h+=`<details><summary>Текстовый вид (для копирования)</summary><pre>${esc(a.text)}</pre></details></div>`;

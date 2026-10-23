@@ -247,6 +247,19 @@ python -I kb.py ask "…" --llm                          # LLM fallback for unre
   codes (complications). Match = all non-generic service stems occur in a list member/segment.
   Verdict per population; `table`/`scan` docs are used only through their table rows, otherwise
   reported as "requires manual check".
+- List mode (`Engine.list_services`, answer `mode: "list"`): questions with «перечень / список /
+  какой / какие / что входит» (`parse_list_question`, tried before the check split) — «сахарный диабет
+  перечень лабораторных анализов», «ангиомиолипома, какой вид КТ используется». Category lab /
+  instrumental / consult from the words of the question; what remains after filler words is a service
+  filter (same stem matching as check mode). Item kind (`item_kinds`): list sub-header
+  «Лабораторные исследования:», else member words (`KIND_WORDS`), else the matched пост. №123 code
+  (A09/A26/A08/A12.05… lab, A02–A07/A11 instrumental, B01 consult). Sections: tier-1 chapters dropped
+  when anything closer exists; chapters/protocols naming the diagnosis first, the rest flagged
+  «смежный раздел»; a «ДИАГНОСТИКА…» chapter about the diagnosis with nothing listed → `text_only`
+  note (criteria stated in text, e.g. «ДИАГНОСТИКА СД»). A question without a check verb is split on
+  the first comma: «Сахарный диабет 2 типа, определение гликированного гемоглобина». Eval: `eval/lists.jsonl`
+  (`mode: list`, `contains` = item substrings that must be listed). Known gap: chapters covering many
+  diseases (child neurology ch. 2) list every disease's items for any of them.
 - Eval (2026-10-23), `kb.py eval`: golden 34/34 (written while tuning); endocrinology held-out
   17/20 blind → 19/20; cross-specialty `holdout_all` 11/20 blind → 20/20; `holdout_all2` 13/14
   blind → 14/14. Every blind miss was diagnosis recognition, not service matching. Remaining
@@ -261,7 +274,8 @@ python -I kb.py ask "…" --llm                          # LLM fallback for unre
 
 `claude mcp add minzdrav -- python -I C:/w/minzdrav/kb_mcp.py` (or the same command in Claude
 Desktop's config). Tools: `check_service(diagnosis, service, population?)` (= `kb.py ask`, rendered
-text with excerpts and links), `find_diagnosis(text)`, `list_diagnostics(diagnosis, population?)`.
+text with excerpts and links), `find_diagnosis(text)`, `list_diagnostics(diagnosis, category?, service?, population?)`
+(= list mode; category lab / instrumental / consult).
 Hand-written newline-delimited JSON-RPC over stdio (no `mcp` package); KB from `$KB_PATH`, else
 `kb_all/kb.json`, else `kb/kb.json`. Smoke test: pipe `initialize`, `tools/list`, `tools/call`
 JSON lines into it.

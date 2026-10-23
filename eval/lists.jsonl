@@ -1,0 +1,7 @@
+# list questions (kb.py list mode): diagnosis code, category, service filter, items that must be listed
+{"question": "сахарный диабет перечень лабораторных анализов", "mode": "list", "icd": "E10", "category": "lab", "service": null, "contains": ["HbA1c", "определение кетоновых тел в моче"]}
+{"question": "андрогения перечень лабораторных анализов", "mode": "list", "icd": "E28.1", "category": "lab", "service": null, "contains": ["тестостерон", "кариотип"]}
+{"question": "ангиомиолипома, какой вид кт используется для диагностики", "mode": "list", "icd": "D30", "category": null, "service": "кт", "contains": ["КТ почек"]}
+{"question": "перечень инструментальных исследований при сахарном диабете 2 типа", "mode": "list", "icd": "E11", "category": "instrumental", "service": null, "contains": ["ЭКГ", "электронейромиография"]}
+{"question": "какие анализы сдают при гипотиреозе", "mode": "list", "icd": "E03", "category": "lab", "service": null, "contains": ["ТТГ"]}
+{"question": "артериальная гипертензия, какие исследования", "mode": "list", "icd": "I10", "category": null, "service": null, "contains": ["ЭКГ"]}
