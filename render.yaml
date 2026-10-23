@@ -1,0 +1,16 @@
+# Render Blueprint: New + → Blueprint → pick this repository.
+services:
+  - type: web
+    name: minzdrav
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -I kb_web.py --kb deploy/kb.idx.json --reference deploy/reference --llm --host 0.0.0.0
+    healthCheckPath: /healthz
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: KB_OPENROUTER_API_KEY
+        sync: false          # asked for in the Render dashboard, not stored in git
+      - key: KB_WEB_PASSWORD
+        sync: false          # site password (any user name)

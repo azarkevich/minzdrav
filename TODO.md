@@ -36,8 +36,9 @@ What is unfinished or worth doing, roughly by priority. State as of 2026-10-24.
 
 ## Product / UI
 
-- [ ] **Website without authentication** (`kb_web.py`, `run_web.bat`): anyone with the Cloudflare
-  tunnel link can spend the OpenRouter credit. Add basic auth from an env var (and `--host`).
+- [ ] **Website authentication**: `kb_web.py` supports basic auth via `$KB_WEB_PASSWORD`, but
+  `run_web.bat` (Cloudflare tunnel) does not set it, so that link is open. Render deploy: see `DEPLOY_RENDER.md`
+  (needs a GitHub repo + remote; not pushed yet).
 - [ ] **Permanent hosting.** Oracle Cloud Always Free did not work out; Hugging Face Spaces: Docker
   is paid, only Static is free. Options: own machine + Cloudflare Tunnel (current),
   the KB is now packed (`kb_pack.py`: ~50 MB RAM, 22 MB on disk), so 256–512 MB free PaaS

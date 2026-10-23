@@ -285,3 +285,7 @@ existing build (5 s). `kb.py ... --kb kb_all/kb.idx.json` reads a section's blob
 section is checked (`LazySection`, LRU of 64): process ~50 MB instead of ~530 MB (peak 720 MB while
 loading kb.json), same answers (eval sets and sample outputs identical). The website and the MCP
 server use the idx form by default. To deploy, copy only `kb.idx.json` + `kb.items.bin` + `reference/`.
+
+### Hosting (Render)
+
+`render.yaml` + `requirements.txt` + `deploy/` (`make_deploy.py` copies the packed KB and the two reference JSONs there) — see `DEPLOY_RENDER.md`. `kb_web.py`: `--host`, `$PORT`, optional basic auth from `$KB_WEB_PASSWORD`, unauthenticated `/healthz`, ratings also printed as `FEEDBACK {json}` to stdout (the free plan's disk is throwaway). No git remote is configured yet.

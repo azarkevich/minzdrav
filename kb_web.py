@@ -5,7 +5,10 @@
 Stdlib only. Listens on 127.0.0.1. History is kept in the browser (localStorage).
 """
 import argparse
+import base64
+import hmac
 import json
+import os
 import sys
 import threading
 import time
@@ -43,13 +46,36 @@ def make_handler(engine):
             self.end_headers()
             self.wfile.write(data)
 
+        def _authorized(self):
+            """Optional basic auth: any user name, password from $KB_WEB_PASSWORD (unset = open)."""
+            pw = os.environ.get("KB_WEB_PASSWORD")
+            if not pw:
+                return True
+            try:
+                given = base64.b64decode(self.headers.get("Authorization", "")[6:]).decode("utf-8").partition(":")[2]
+            except Exception:  # noqa: BLE001
+                given = ""
+            if hmac.compare_digest(given.encode(), pw.encode()):
+                return True
+            self.send_response(401)
+            self.send_header("WWW-Authenticate", 'Basic realm="minzdrav", charset="UTF-8"')
+            self.send_header("Content-Length", "0")
+            self.end_headers()
+            return False
+
         def do_GET(self):
+            if self.path == "/healthz":  # hosting health check, no password
+                return self._send(200, "ok", "text/plain")
+            if not self._authorized():
+                return
             if self.path in ("/", "/index.html"):
                 self._send(200, PAGE, "text/html")
             else:
                 self._send(404, "not found", "text/plain")
 
         def do_POST(self):
+            if not self._authorized():
+                return
             if self.path == "/api/feedback":
                 return self._feedback()
             if self.path != "/api/ask":
@@ -88,6 +114,7 @@ def make_handler(engine):
                 FEEDBACK_LOG.parent.mkdir(parents=True, exist_ok=True)
                 with LOCK, FEEDBACK_LOG.open("a", encoding="utf-8") as f:
                     f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+                print("FEEDBACK " + json.dumps(rec, ensure_ascii=False), flush=True)  # hosts with a throwaway disk keep stdout logs
                 out = {"ok": True}
             except Exception as ex:  # noqa: BLE001
                 out = {"error": f"{type(ex).__name__}: {ex}"}
@@ -104,11 +131,14 @@ def main():
     ap.add_argument("--kb", type=Path, default=Path("kb_all/kb.idx.json"))
     ap.add_argument("--reference", type=Path, default=Path("reference"))
     ap.add_argument("--llm", action="store_true", help="ask the LLM when the diagnosis is not recognized confidently")
-    ap.add_argument("--port", type=int, default=8000)
+    ap.add_argument("--host", default="127.0.0.1", help="0.0.0.0 to accept connections from other machines")
+    ap.add_argument("--port", type=int, default=int(os.environ.get("PORT", 8000)))
     args = ap.parse_args()
+    sys.stdout.reconfigure(encoding="utf-8")  # logs and FEEDBACK lines contain Cyrillic; hosts may default to ASCII
+    sys.stderr.reconfigure(encoding="utf-8")
     engine = kb.Engine(args.kb, args.reference, llm=args.llm)
-    srv = ThreadingHTTPServer(("127.0.0.1", args.port), make_handler(engine))
-    print(f"http://127.0.0.1:{args.port}/  (LLM {'on' if args.llm else 'off'}, KB {args.kb})", flush=True)
+    srv = ThreadingHTTPServer((args.host, args.port), make_handler(engine))
+    print(f"http://{args.host}:{args.port}/  (LLM {'on' if args.llm else 'off'}, KB {args.kb})", flush=True)
     srv.serve_forever()
 
 
