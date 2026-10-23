@@ -1,0 +1,4552 @@
+{
+ "sections": {
+  "dfe8182ecb97373c:0:0": {
+   "items": {
+    "dfe8182ecb97373c:0:0:17cebe08712c": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "dfe8182ecb97373c:0:0:e51255f81cc6": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "dfe8182ecb97373c:0:0:70c6ac700145": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "dfe8182ecb97373c:0:0:80d4e9206a5a": {
+     "status": "uncertain",
+     "rules": "monitoring",
+     "llm": null
+    },
+    "dfe8182ecb97373c:0:0:29a84af75b09": {
+     "status": "uncertain",
+     "rules": "monitoring",
+     "llm": null
+    },
+    "dfe8182ecb97373c:0:0:0f15038a0ef2": {
+     "status": "uncertain",
+     "rules": "monitoring",
+     "llm": null
+    },
+    "dfe8182ecb97373c:0:0:eee2563713ec": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "скринирующим тестом на фенилкетонурию является определение ФА флюорометрическим методом.",
+     "clause": "6.2"
+    },
+    "dfe8182ecb97373c:0:0:02c551fd0040": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "при превышении пограничного значения концентрации ФА (более 180 мкмоль/л) осуществляется повторное тестирование (должно быть проведено до двухнедельного возраста ребёнка).",
+     "clause": "6.3"
+    },
+    "dfe8182ecb97373c:0:0:5f5142d7a285": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "определение концентрации ФА в сыворотке крови;",
+     "clause": "7.1"
+    },
+    "dfe8182ecb97373c:0:0:a631bee560a3": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "определение концентрации фенилуксусной и фенилпировиноградной кислоты в моче;",
+     "clause": "7.2"
+    },
+    "dfe8182ecb97373c:0:0:fc438a9b7b13": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "исключение прочих наследственных дефектов метаболизма по селективной скринирующей программе: аминокислоты, простые углеводы, гликозаминогликаны;",
+     "clause": "7.3"
+    },
+    "dfe8182ecb97373c:0:0:af2d14ca4289": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "общий анализ крови;",
+     "clause": "7.4"
+    },
+    "dfe8182ecb97373c:0:0:77b63f0a9116": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "общий анализ мочи;",
+     "clause": "7.5"
+    },
+    "dfe8182ecb97373c:0:0:2198fb659e39": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "молекулярно-генетический анализ (далее – анализ ДНК) пациенту и родителям: определение основных мутаций гена фенилаланигидроксилазы, приводящих к ее недостаточности.",
+     "clause": "7.6"
+    },
+    "dfe8182ecb97373c:0:0:e48e9e4cc0b8": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "Контроль лечения ФКУ проводится определением уровня ФА в сыворотке или сухом пятне крови.",
+     "clause": "14.2"
+    },
+    "dfe8182ecb97373c:0:0:1b0c9821ed86": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "Частота контрольного осмотра врачом-генетиком (по месту жительства):",
+     "clause": "14.4"
+    },
+    "dfe8182ecb97373c:0:0:0dd075a22afc": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "Консультации: врача-невролога, врача-гастроэнтеролога и других специалистов (по показаниям).",
+     "clause": "14.5"
+    },
+    "dfe8182ecb97373c:0:0:765cabdac681": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "анализ ДНК женщины и ее супруга;",
+     "clause": "17.1"
+    },
+    "dfe8182ecb97373c:0:0:6e5c8327d07b": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "при гетерозиготном носительстве мутации обоими супругами проведение пренатальной диагностики (по желанию семьи).",
+     "clause": "17.2"
+    },
+    "dfe8182ecb97373c:0:0:f109be5a4c83": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "частота контрольного исследования ФА у беременных – 2 раза в неделю.",
+     "clause": "17.5"
+    }
+   },
+   "rejected": []
+  },
+  "d5c8e1d5dfeae080:0:3": {
+   "items": {
+    "d5c8e1d5dfeae080:0:3:17042ecc437e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:3:af2d14ca4289": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:3:77b63f0a9116": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:3:67903bd72925": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:3:fe8675e8ad90": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:3:8e885394e258": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:3:96b6d4b0cf4e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:3:f636230b9d52": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:3:5c6755555a1e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:3:7ec4d5293f25": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:3:42bce514ea3c": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:3:143d505f93f3": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:3:f36fa8d6e927": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:3:7aba954fdecc": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:3:e88d38872fac": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:3:e129490bb0cf": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:3:98937bdf95eb": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:3:109d0a6fb7ec": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "d5c8e1d5dfeae080:0:3:4775d2581664": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "d5c8e1d5dfeae080:0:3:888219bcc268": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "d5c8e1d5dfeae080:0:3:db0b221ef93b": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "d5c8e1d5dfeae080:0:3:4e1bbc07e3bc": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "d5c8e1d5dfeae080:0:3:0121e7b2fe9e": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "d5c8e1d5dfeae080:0:3:f4a8e12baff5": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "d5c8e1d5dfeae080:0:3:afce649200ca": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "d5c8e1d5dfeae080:0:3:c4a959eab978": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "d5c8e1d5dfeae080:0:3:bc56f4127443": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "d5c8e1d5dfeae080:0:3:f4731f13d55c": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "d5c8e1d5dfeae080:0:3:2fa1d987c8ec": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "d5c8e1d5dfeae080:0:3:8f9491e153a4": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "d5c8e1d5dfeae080:0:3:34724c73b458": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "d5c8e1d5dfeae080:0:3:8b4022a2316e": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "d5c8e1d5dfeae080:0:3:cfeb371a39a1": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "d5c8e1d5dfeae080:0:3:be380bc523b8": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "d5c8e1d5dfeae080:0:3:b67b634317f4": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "d5c8e1d5dfeae080:0:3:243b3b42ee36": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "эхокардиография (далее – Эхо-КГ);",
+     "clause": "19"
+    },
+    "d5c8e1d5dfeae080:0:3:495580c1a274": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "холтеровское мониторирование сердечной деятельности;",
+     "clause": "19"
+    },
+    "d5c8e1d5dfeae080:0:3:d15a372968a4": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "исследование функции внешнего дыхания;",
+     "clause": "19"
+    },
+    "d5c8e1d5dfeae080:0:3:27548715250a": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "ультразвуковая доплерография сосудов шеи и нижних конечностей;",
+     "clause": "19"
+    },
+    "d5c8e1d5dfeae080:0:3:bdd67d47f35d": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "врачебные консультации врачей-специалистов при сопутствующей патологии.",
+     "clause": "19"
+    },
+    "d5c8e1d5dfeae080:0:3:514ae9f1904d": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "определение гистологического типа опухоли;",
+     "clause": "20"
+    },
+    "d5c8e1d5dfeae080:0:3:5b54c931caa3": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "определение степени злокачественности опухоли и молекулярно-биологического подтипа рака на основании результатов ИГХ исследования.",
+     "clause": "20"
+    }
+   },
+   "rejected": []
+  },
+  "d5c8e1d5dfeae080:0:5": {
+   "items": {
+    "d5c8e1d5dfeae080:0:5:17042ecc437e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:5:af2d14ca4289": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:5:77b63f0a9116": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:5:42c9a4ab7457": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:5:3911693e4769": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:5:c2d7987f00b1": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:5:96b6d4b0cf4e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:5:de7ab36a9a02": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:5:bbdbf3a55909": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:5:ae086a8e6578": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:5:af372fbc44c3": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:5:40ede497e079": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:5:46f8ae53ed34": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "d5c8e1d5dfeae080:0:5:58183da72a35": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "Врач-акушер-гинеколог дает заключение о состоянии матери и плода с оценкой сопутствующих заболеваний, течения предыдущих беременностей, подтверждение роста и развития плода, примерное определение даты родов.",
+     "clause": "48"
+    },
+    "d5c8e1d5dfeae080:0:5:5598297fe61d": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "При проведении химиотерапии обязателен мониторинг состояния плода перед началом каждого курса.",
+     "clause": "49"
+    },
+    "d5c8e1d5dfeae080:0:5:d36447fcf1ef": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "18F-ФДГ–ПЭТ/КТ всего тела или КТ органов грудной клетки, органов брюшной полости, органов малого таза с контрастированием и остеосцинтиграфия;",
+     "clause": "49"
+    },
+    "d5c8e1d5dfeae080:0:5:483d5f21910b": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "МРТ головного мозга с внутривенным контрастным усилением;",
+     "clause": "49"
+    },
+    "d5c8e1d5dfeae080:0:5:ebe0164ba515": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "врачебные консультации врачей-специалистов: врача-невролога, врача-терапевта.",
+     "clause": "49"
+    }
+   },
+   "rejected": []
+  },
+  "96ca8aeb98230ad5:0:2": {
+   "items": {
+    "96ca8aeb98230ad5:0:2:dd4a984d8caf": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:2:17042ecc437e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:2:0a4a6043ba65": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:2:9debe70882b3": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:2:447bce0c89e8": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:2:619d98b2056b": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:2:b37893d4a138": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:2:cbf47831c2a9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:2:7d3a0fabb664": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:2:530313434ba9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:2:a8e876dbda3d": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:2:fc3fd923d0a9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:2:977a385c0d9f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:2:af944aa3fb7f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:2:77b63f0a9116": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:2:2983a067be49": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:2:5c6755555a1e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:2:5cd7810224a7": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:2:7bd596a0772e": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "96ca8aeb98230ad5:0:2:d8b2dc4b4509": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "96ca8aeb98230ad5:0:2:848e67b0393c": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "96ca8aeb98230ad5:0:2:589e655828d0": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "96ca8aeb98230ad5:0:2:ae115ec0020a": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "96ca8aeb98230ad5:0:2:ee36c67311c0": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "96ca8aeb98230ad5:0:2:243b3b42ee36": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "96ca8aeb98230ad5:0:2:233b7f91e747": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "96ca8aeb98230ad5:0:2:aef79892357b": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "96ca8aeb98230ad5:0:2:238e22feed15": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "96ca8aeb98230ad5:0:2:7230e10054ab": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "96ca8aeb98230ad5:0:2:40939deddb68": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "96ca8aeb98230ad5:0:2:1ca28c50df03": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    }
+   },
+   "rejected": []
+  },
+  "96ca8aeb98230ad5:0:5": {
+   "items": {
+    "96ca8aeb98230ad5:0:5:dd4a984d8caf": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:5:17042ecc437e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:5:0a4a6043ba65": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:5:447bce0c89e8": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:5:48a870b36279": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:5:530313434ba9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:5:a8e876dbda3d": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:5:f353b6e62fc5": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:5:977a385c0d9f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:5:9c3732d9a2f9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:5:77b63f0a9116": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:5:2983a067be49": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:5:f3f42b83aea7": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:5:bbdbf3a55909": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:5:0cc91d56373f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:5:8eac1dcce2a9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "96ca8aeb98230ad5:0:5:d8b2dc4b4509": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "96ca8aeb98230ad5:0:5:7bd596a0772e": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "96ca8aeb98230ad5:0:5:848e67b0393c": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "96ca8aeb98230ad5:0:5:589e655828d0": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "96ca8aeb98230ad5:0:5:ae115ec0020a": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "96ca8aeb98230ad5:0:5:ee36c67311c0": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "96ca8aeb98230ad5:0:5:921d5f9c6525": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "96ca8aeb98230ad5:0:5:403dc5978625": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "96ca8aeb98230ad5:0:5:17a33b8549db": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "96ca8aeb98230ad5:0:5:3bad8ed5771d": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "96ca8aeb98230ad5:0:5:521259f13fb9": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    }
+   },
+   "rejected": []
+  },
+  "e58dcbc5359172df:0:4": {
+   "items": {
+    "e58dcbc5359172df:0:4:0410389cc8a8": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "e58dcbc5359172df:0:4:a19fd4285574": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "e58dcbc5359172df:0:4:afa5594575a8": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "e58dcbc5359172df:0:4:50e54b79c494": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "e58dcbc5359172df:0:4:ffc1aaa3e78b": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "e58dcbc5359172df:0:4:3efde1e313e1": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "e58dcbc5359172df:0:4:75aebc24a158": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "e58dcbc5359172df:0:4:4fc34edaba96": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "e58dcbc5359172df:0:4:db6d6e503aa7": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "e58dcbc5359172df:0:4:41fecf61f9f2": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "Ультразвуковое исследование плода с фетометрией выполняется беременным женщинам с наличием антиэритроцитарных антител в 18–21, 32–35 недель беременности, перед родоразрешением и по медицинским показаниям:",
+     "clause": "17"
+    },
+    "e58dcbc5359172df:0:4:5d946157708c": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "при выявлении анти-D антител и резус(D)-положительной принадлежности крови плода по данным НИПД методом ПЦР, либо неопределенной резус(D)-принадлежности крови плода, выполняется контроль допплерометрии (далее – ДПМ) с оценкой пиковой систолической скорости кровотока (далее – ПССК) в средней мозговой артерии (далее – СМА) плода 1 раз в 14 дней с 18–20 недель до родоразрешения.",
+     "clause": "17.1"
+    },
+    "e58dcbc5359172df:0:4:b78e521b02c4": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "При необходимости выполняется идентификация антиэритроцитарных антител с определением их подклассов и концентрации с целью прогнозирования развития тяжелых форм ГБП и ГБН при резус-иммунизации (определение подклассов (IgG1, IgG3);",
+     "clause": "17.1"
+    },
+    "e58dcbc5359172df:0:4:86dda959396d": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "при выявлении анти-D антител и резус(D)-отрицательной принадлежности крови плода по данным НИПД методом ПЦР выполняется контроль ДПМ с оценкой ПССК в СМА плода 1 раз в 4–5 недель с 18–20 недель беременности до родоразрешения;",
+     "clause": "17.2"
+    },
+    "e58dcbc5359172df:0:4:602ceb3a9ea5": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "при выявлении анти-К (система Келл), анти-с (система Резус), анти-С (система Резус), анти-Е (система Резус) антител выполняется контроль ДПМ с оценкой ПССК в СМА плода 1 раз в 14 дней с 18–20 недель до родоразрешения;",
+     "clause": "17.3"
+    },
+    "e58dcbc5359172df:0:4:105b0e008cb3": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "при выявлении анти-Fya (система Даффи), анти Jkb (система Кидд); анти-А (системы АВ0), анти-В (системы АВ0), анти-А, В (системы АВ0), анти-А1 (системы АВ0) антител и антиэритроцитарных антител B, C, D групп агрессивности выполняется контроль ДПМ с оценкой ПССК в СМА плода в 18–21, 32–35 недель беременности и перед родоразрешением.",
+     "clause": "17.4"
+    },
+    "e58dcbc5359172df:0:4:8d7090d6cf1f": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "Определяется группа крови по системе АВ0 и резус(D)-принадлежность крови плода, количество эритроцитов, концентрация гемоглобина, гематокрит, концентрация общего билирубина, общего белка.",
+     "clause": "19"
+    }
+   },
+   "rejected": []
+  },
+  "ba8538181367b3b9:0:2": {
+   "items": {
+    "ba8538181367b3b9:0:2:03e80845bb29": {
+     "status": "uncertain",
+     "rules": "monitoring",
+     "llm": null
+    },
+    "ba8538181367b3b9:0:2:e03893e944b5": {
+     "status": "uncertain",
+     "rules": "monitoring",
+     "llm": null
+    },
+    "ba8538181367b3b9:0:2:42cb580624d1": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "УЗИ органов малого таза с оценкой состояния послеоперационного рубца матки;",
+     "clause": "5"
+    },
+    "ba8538181367b3b9:0:2:3ae15900de75": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "микроскопическое исследование отделяемого половых путей на флору;",
+     "clause": "5"
+    },
+    "ba8538181367b3b9:0:2:45c3abf61707": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "консультация врача-терапевта (врача общей практики), иных врачей-специалистов по медицинским показаниям.",
+     "clause": "5"
+    },
+    "ba8538181367b3b9:0:2:ce8cdaddd57e": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "УЗИ послеоперационного рубца матки в сроки: в 11 недель 0 дней – 13 недель 6 дней беременности, 18–21 неделю беременности, 32–35 недель беременности, 37–38 недель беременности и по медицинским показаниям;",
+     "clause": "8"
+    },
+    "ba8538181367b3b9:0:2:23b75c989b84": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "диагностические исследования и профилактические мероприятия в соответствии с клиническим протоколом «Медицинское наблюдение и оказание медицинской помощи женщинам в акушерстве и гинекологии», утвержденным постановлением Министерства здравоохранения Республики Беларусь от 19 февраля 2018 г. № 17;",
+     "clause": "8"
+    }
+   },
+   "rejected": []
+  },
+  "f56b43b55f7e219d:0:4": {
+   "items": {
+    "f56b43b55f7e219d:0:4:6b8d4e78838c": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "f56b43b55f7e219d:0:4:0111ff5595b9": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "f56b43b55f7e219d:0:4:5c6755555a1e": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "f56b43b55f7e219d:0:4:4a7b2d42236f": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "f56b43b55f7e219d:0:4:b6b9bb1e6c73": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "f56b43b55f7e219d:0:4:36116bbf2467": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "f56b43b55f7e219d:0:4:ca7d6199df47": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "f56b43b55f7e219d:0:4:dccf23561203": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "f56b43b55f7e219d:0:4:77b63f0a9116": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "f56b43b55f7e219d:0:4:01629468004a": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "f56b43b55f7e219d:0:4:4989e532e660": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "f56b43b55f7e219d:0:4:a346020144fb": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "f56b43b55f7e219d:0:4:fccccbef616e": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "медицинский осмотр женщины врачом – акушером-гинекологом, по медицинским показаниям – врачом – анестезиологом-реаниматологом;",
+     "clause": "24"
+    }
+   },
+   "rejected": []
+  },
+  "f56b43b55f7e219d:0:7": {
+   "items": {
+    "f56b43b55f7e219d:0:7:6b8d4e78838c": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "f56b43b55f7e219d:0:7:0111ff5595b9": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "f56b43b55f7e219d:0:7:bbdbf3a55909": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "f56b43b55f7e219d:0:7:4a7b2d42236f": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "f56b43b55f7e219d:0:7:b6b9bb1e6c73": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "f56b43b55f7e219d:0:7:e52e160b57d4": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "f56b43b55f7e219d:0:7:ca7d6199df47": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "f56b43b55f7e219d:0:7:dccf23561203": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "f56b43b55f7e219d:0:7:77b63f0a9116": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "f56b43b55f7e219d:0:7:01629468004a": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "f56b43b55f7e219d:0:7:4989e532e660": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "f56b43b55f7e219d:0:7:460485a39766": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "f56b43b55f7e219d:0:7:781a0783556d": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "additional"
+    }
+   },
+   "rejected": []
+  },
+  "2cc547425e17e88f:0:3": {
+   "items": {
+    "2cc547425e17e88f:0:3:01ae4d6cf763": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "2cc547425e17e88f:0:3:bfa33cca8a44": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "2cc547425e17e88f:0:3:65074ac14d68": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "2cc547425e17e88f:0:3:be2957f04be7": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "2cc547425e17e88f:0:3:bbdbf3a55909": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "2cc547425e17e88f:0:3:992705f1d06d": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2cc547425e17e88f:0:3:b5f516005988": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2cc547425e17e88f:0:3:57f26b80f3c3": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2cc547425e17e88f:0:3:ae0c0e12455d": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2cc547425e17e88f:0:3:78d2fe0272b2": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2cc547425e17e88f:0:3:2eba5ad50ea3": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2cc547425e17e88f:0:3:243b3b42ee36": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2cc547425e17e88f:0:3:7d639e236cd1": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2cc547425e17e88f:0:3:513c85787e53": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2cc547425e17e88f:0:3:d8a11b1f1bdc": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "2cc547425e17e88f:0:3:39ed912213eb": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2cc547425e17e88f:0:3:a75ac0f2b1b1": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2cc547425e17e88f:0:3:ab575a8311f2": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2cc547425e17e88f:0:3:921d5f9c6525": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2cc547425e17e88f:0:3:904478b6462c": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2cc547425e17e88f:0:3:8d615f2df270": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    }
+   },
+   "rejected": [
+    {
+     "clause": "10",
+     "level": "mandatory",
+     "condition": "в амбулаторных условиях",
+     "quote": "определение концентрации аФЛА: ВА, анти-КЛ антител – иммуноглобулинов класса G (далее – IgG) и класса М (далее – IgM), анти-2ГП I антител (IgG и IgM изотипов);"
+    },
+    {
+     "clause": "11",
+     "level": "mandatory",
+     "condition": "в стационарных условиях",
+     "quote": "определение концентрации аФЛА: ВА, анти-КЛ антител IgG и IgM изотипов, анти-2ГП I антител IgG и IgM изотипов – на этапе постановки диагноза; при изменении характера течения заболевания (обострении, подозрении на развитие осложнений);"
+    },
+    {
+     "clause": "13",
+     "level": "additional",
+     "condition": "в стационарных условиях",
+     "quote": "определение концентрации аФЛА: ВА, анти-КЛ антител IgG и IgM изотипов, анти-2ГП I антител IgG и IgM изотипов;"
+    }
+   ]
+  },
+  "efc32ca0ff8b25e8:0:2": {
+   "items": {
+    "efc32ca0ff8b25e8:0:2:a24278fb5edd": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:2:3a135c3b9900": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:2:16dacea186db": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:2:63587ce94dfc": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "efc32ca0ff8b25e8:0:2:b8b985f308d4": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "efc32ca0ff8b25e8:0:2:4bcde552537a": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "efc32ca0ff8b25e8:0:2:791d3a7edfcc": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "медицинский осмотр роженицы: термометрия, измерение артериального давления (далее – АД) на обеих руках, подсчет пульса; осмотр зева, кожи, молочных желез; осмотр на педикулез; определение роста и массы тела;",
+     "clause": "7"
+    },
+    "efc32ca0ff8b25e8:0:2:f5209dbb4fdb": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "специальное наружное акушерское обследование: измерение размеров таза, окружности живота, высоты стояния дна матки; определение наружными приемами положения, позиции и предлежащей части плода, выслушивание сердцебиения плода;",
+     "clause": "7"
+    },
+    "efc32ca0ff8b25e8:0:2:97272a1f6cb8": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "влагалищное исследование при поступлении, затем каждые 4 часа или при изменении акушерской ситуации (излитие околоплодных вод, ухудшение состояния роженицы или плода, появление патологических кровянистых выделений из половых путей, перед проведением анальгезии (введением аналгетиков), перед назначением родостимуляции): раскрытие шейки матки; наличие (отсутствие) плодного пузыря; определение предлежащей части плода и ее расположения по отношению к основным ориентирам плоскостей таза; расположение стреловидного шва и других ориентиров головки плода (при тазовом предлежании – ориентиров ягодичной области плода);",
+     "clause": "7"
+    },
+    "efc32ca0ff8b25e8:0:2:f54997e239fe": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "определение срока беременности по дате последней менструации и данным ультразвукового исследования (далее – УЗИ) плода;",
+     "clause": "7"
+    },
+    "efc32ca0ff8b25e8:0:2:b15c3d705083": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "выслушивание сердцебиения плода акушеркой каждые 30 минут между записями кардиотокограммы (далее – КТГ);",
+     "clause": "7"
+    },
+    "efc32ca0ff8b25e8:0:2:c8c12af46660": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "запись КТГ не менее 30 минут при поступлении, каждые 3 часа до завершения родов или в случае возникновения патологической акушерской ситуации (при необходимости – мониторирование);",
+     "clause": "7"
+    },
+    "efc32ca0ff8b25e8:0:2:15e2259a91f2": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "выслушивание сердцебиения плода (аускультация) после каждой схватки или запись КТГ;",
+     "clause": "8"
+    }
+   },
+   "rejected": []
+  },
+  "efc32ca0ff8b25e8:0:4": {
+   "items": {
+    "efc32ca0ff8b25e8:0:4:6ef704297adf": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:4:cdee7b4dd06e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:4:dc0913f187b6": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:4:f2402021fb97": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:4:a0f163f47bfe": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:4:46492d6775de": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "efc32ca0ff8b25e8:0:4:72002d3c8d43": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:4:99764d6b7c87": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:4:c31e44dca1ec": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:4:4340b96c129c": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:4:b90cdb9ece74": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:4:aecefb4dc560": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    }
+   },
+   "rejected": []
+  },
+  "efc32ca0ff8b25e8:0:8": {
+   "items": {
+    "efc32ca0ff8b25e8:0:8:552c787407db": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:8:9debe70882b3": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:8:d12704d41d11": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:8:58c3141f6b4b": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:8:ef5ebd7fe304": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "efc32ca0ff8b25e8:0:8:d105dbfc9bdd": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "efc32ca0ff8b25e8:0:8:65f040b94fab": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "efc32ca0ff8b25e8:0:8:feec3cc5a990": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    }
+   },
+   "rejected": []
+  },
+  "efc32ca0ff8b25e8:0:10": {
+   "items": {
+    "efc32ca0ff8b25e8:0:10:b6b4a637cd02": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:10:1ff4c6e91aa8": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:10:bf0714d47e8e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:10:fc996098374c": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "При подозрении на нарушение сердечного ритма плода по данным периодической аускультации для исключения дистресса плода проводится КТГ в течение не менее 20 минут.",
+     "clause": "74"
+    },
+    "efc32ca0ff8b25e8:0:10:9621084ddd4a": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "медицинский осмотр, оценка жалоб роженицы, тонуса матки, частоты, силы и продолжительности маточных сокращений, характера выделений из половых путей и околоплодных вод, степени раскрытия акушерского зева, уровня положения и особенности вставления предлежащей части плода, исключение выпадения пуповины;",
+     "clause": "85.1"
+    }
+   },
+   "rejected": []
+  },
+  "efc32ca0ff8b25e8:0:11": {
+   "items": {
+    "efc32ca0ff8b25e8:0:11:c72980040b6d": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:11:58c3141f6b4b": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:11:a4a619a97ee0": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:11:d105dbfc9bdd": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    }
+   },
+   "rejected": []
+  },
+  "efc32ca0ff8b25e8:0:12": {
+   "items": {
+    "efc32ca0ff8b25e8:0:12:21f89d9f75b8": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:12:17042ecc437e": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:12:702eb16db7a0": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:12:1817f23fdfd9": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "efc32ca0ff8b25e8:0:12:c88b9c5f626f": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "осмотр родовых путей в зеркалах после родоразрешения. При разрыве промежности III–IV степени проводится ректальное пальцевое исследование с целью оценки целостности стенки прямой кишки и ее наружного сфинктера (ненарушенный сфинктер создает сопротивление). Разрыв стенки кишки определяется по специфическому виду вывернутой слизистой;",
+     "clause": "97"
+    },
+    "efc32ca0ff8b25e8:0:12:e9463da09f4a": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "консультация врача-хирурга.",
+     "clause": "97"
+    },
+    "efc32ca0ff8b25e8:0:12:84e2530472e4": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "гистологическое исследование операционного материала;",
+     "clause": "98"
+    },
+    "efc32ca0ff8b25e8:0:12:099b07ba42cc": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "осмотр в зеркалах шейки матки сразу после выделения последа;",
+     "clause": "100"
+    },
+    "efc32ca0ff8b25e8:0:12:50ebf50e4251": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "при разрыве шейки матки III степени – ручное обследование стенок полости матки для исключения разрыва нижнего сегмента матки;",
+     "clause": "100"
+    },
+    "efc32ca0ff8b25e8:0:12:bd9c63ea512b": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "осмотр родовых путей в зеркалах;",
+     "clause": "105"
+    },
+    "efc32ca0ff8b25e8:0:12:3657ee0a5614": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "при разрыве верхней трети влагалища и переходящего на своды – ручное обследование стенок полости матки для исключения разрыва;",
+     "clause": "101"
+    },
+    "efc32ca0ff8b25e8:0:12:77b63f0a9116": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "общий анализ мочи;",
+     "clause": "102"
+    },
+    "efc32ca0ff8b25e8:0:12:4ccc6b451e4b": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "УЗИ мочевого пузыря;",
+     "clause": "102"
+    },
+    "efc32ca0ff8b25e8:0:12:75047c43dade": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "ретроградная уретрография;",
+     "clause": "102"
+    },
+    "efc32ca0ff8b25e8:0:12:d77d275fb972": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "цистоскопия;",
+     "clause": "102"
+    },
+    "efc32ca0ff8b25e8:0:12:e278a08dd3d2": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "консультация врача-уролога (врача-хирурга) с целью определения дальнейшей тактики ведения;",
+     "clause": "102"
+    },
+    "efc32ca0ff8b25e8:0:12:10cbc6656e11": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "диагноз устанавливается на основании клинических проявлений, рентгенографии костей таза;",
+     "clause": "103"
+    },
+    "efc32ca0ff8b25e8:0:12:35775aa195c6": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "постельный режим, консультация врача-травматолога (врача-хирурга) для определения тактики ведения.",
+     "clause": "103"
+    },
+    "efc32ca0ff8b25e8:0:12:c96607dcf8bf": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "клинические проявления, осмотр родовых путей в зеркалах, вагинальный и ректовагинальный осмотры, УЗИ органов малого таза;",
+     "clause": "104"
+    },
+    "efc32ca0ff8b25e8:0:12:3db3a4a0e32f": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "differential",
+     "quote": "при гематомах малого таза – необходимо исключить разрыв матки;",
+     "clause": "104"
+    }
+   },
+   "rejected": []
+  },
+  "efc32ca0ff8b25e8:0:14": {
+   "items": {
+    "efc32ca0ff8b25e8:0:14:17042ecc437e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:14:d52b8df59b5a": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:14:bf825931a815": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:14:852999c55391": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:14:7f24dbcbb9d6": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:14:44acc93c2b72": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:14:bbdbf3a55909": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "efc32ca0ff8b25e8:0:14:a756029c0c88": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "efc32ca0ff8b25e8:0:14:97300d7b061a": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "efc32ca0ff8b25e8:0:14:0434a3be06eb": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "efc32ca0ff8b25e8:0:14:29fe3e4ca837": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "efc32ca0ff8b25e8:0:14:2089a730b8c3": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "efc32ca0ff8b25e8:0:14:c6983b62351c": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "efc32ca0ff8b25e8:0:14:f2297b1d335a": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "efc32ca0ff8b25e8:0:14:297c4635f743": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "efc32ca0ff8b25e8:0:14:6e0d1c28df30": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "консультация врача-невролога.",
+     "clause": "111"
+    },
+    "efc32ca0ff8b25e8:0:14:4e298661b7dc": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "контроль состояния плода с использованием КТГ (обязательный компонент ведения таких родов);",
+     "clause": "112"
+    }
+   },
+   "rejected": []
+  },
+  "efc32ca0ff8b25e8:0:15": {
+   "items": {
+    "efc32ca0ff8b25e8:0:15:17042ecc437e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:15:1ff4c6e91aa8": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:15:b89826bf1790": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:15:bf825931a815": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:15:8c535ca221f3": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:15:594574989863": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:15:3f7d9c2020ac": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:15:c78a473b7b44": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:15:6c429041459e": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "измерение температуры тела каждые 3 часа;",
+     "clause": "115"
+    },
+    "efc32ca0ff8b25e8:0:15:47d131993897": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "непрерывная КТГ.",
+     "clause": "115"
+    },
+    "efc32ca0ff8b25e8:0:15:1574982f6ce2": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "обязательный компонент – контроль состояния плода с использованием КТГ;",
+     "clause": "116"
+    },
+    "efc32ca0ff8b25e8:0:15:a18a6860dbf8": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "обязательный компонент ведения таких родов – контроль состояния плода с использованием КТГ;",
+     "clause": "119"
+    }
+   },
+   "rejected": []
+  },
+  "efc32ca0ff8b25e8:0:17": {
+   "items": {
+    "efc32ca0ff8b25e8:0:17:10592479ab8e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:17:17042ecc437e": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "efc32ca0ff8b25e8:0:17:48a870b36279": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:17:68c303c7daad": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:17:e21e47454f4b": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:17:876faea15f5f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:17:b4bf0b51de33": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:17:5472de54e353": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "efc32ca0ff8b25e8:0:17:a5ee5ea1ed20": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:17:26c5b2c13fc6": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:17:00931a7c8a0b": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:17:74e3ed9e0965": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:17:58c3141f6b4b": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:17:dccf23561203": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": "monitoring"
+    },
+    "efc32ca0ff8b25e8:0:17:a24278fb5edd": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:17:bf0b56c97b93": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:17:c31e44dca1ec": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": "monitoring"
+    },
+    "efc32ca0ff8b25e8:0:17:8b1bc952c526": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:17:71ac65c3dee5": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:17:bbdbf3a55909": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:17:4e6e54523519": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:17:88c94b1aaacd": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:17:36cf256637be": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "efc32ca0ff8b25e8:0:17:b7e5092969c7": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "Перед хирургическим вмешательством обязателен осмотр врача-анестезиолога-реаниматолога, согласно клиническому протоколу «Анестезиологическое обеспечение хирургических вмешательств», утвержденному постановлением Министерства здравоохранения Республики Беларусь от 19 апреля 2023 г. № 57.",
+     "clause": "131"
+    },
+    "efc32ca0ff8b25e8:0:17:e2d265e14f63": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "титр неполных АТ;",
+     "clause": "134"
+    },
+    "efc32ca0ff8b25e8:0:17:8c9dcc1fbb02": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "параметры КОС;",
+     "clause": "134"
+    },
+    "efc32ca0ff8b25e8:0:17:e17fdb66999c": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "сывороточный ферритин; железо сыворотки;",
+     "clause": "134"
+    },
+    "efc32ca0ff8b25e8:0:17:7c18c25c348b": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "тромбоэластография;",
+     "clause": "134"
+    },
+    "efc32ca0ff8b25e8:0:17:68ffa0822ac2": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "Д-димеры; спонтанный фибринолиз; антитромбин III;",
+     "clause": "134"
+    },
+    "efc32ca0ff8b25e8:0:17:8985492b9d7f": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "мутация V фактора (мутация Лейдена);",
+     "clause": "134"
+    },
+    "efc32ca0ff8b25e8:0:17:2a746f6b8971": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "мутация протромбина G20210A;",
+     "clause": "134"
+    },
+    "efc32ca0ff8b25e8:0:17:9397ae707b6d": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "дефицит антитромбина III;",
+     "clause": "134"
+    },
+    "efc32ca0ff8b25e8:0:17:6bf3cd4c79ac": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "дефицит протеинов С и S, гомозиготная мутация MTHFR (C677 T), гипергомоцистеинемия;",
+     "clause": "134"
+    },
+    "efc32ca0ff8b25e8:0:17:4b211f7e6f9c": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "исследование крови на глюкозу в 07:00 (натощак), 10:00, 13:00, 16:00; пероральный глюкозотолерантный тест, гликированный гемоглобин;",
+     "clause": "134"
+    },
+    "efc32ca0ff8b25e8:0:17:819aa730d655": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "тиреотропный гормон (далее – ТТГ), свободный тироксин (далее – свТ4), антитела к тиреоидной пероксидазе (далее – АТТПО);",
+     "clause": "134"
+    },
+    "efc32ca0ff8b25e8:0:17:d49ac81e51c3": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "суточная потеря белка;",
+     "clause": "134"
+    },
+    "efc32ca0ff8b25e8:0:17:01a718114453": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "анализ мочи по Нечипоренко;",
+     "clause": "134"
+    },
+    "efc32ca0ff8b25e8:0:17:0979a8ac9d07": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "анализ мочи на желчные пигменты, уробилин;",
+     "clause": "134"
+    },
+    "efc32ca0ff8b25e8:0:17:e82c5e00c900": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "дополнительная диагностика и консультация врачей-специалистов по медицинским показаниям; непосредственно при планировании операции консультация врача-анестезиолога-реаниматолога.",
+     "clause": "134"
+    },
+    "efc32ca0ff8b25e8:0:17:e67646dc1c0f": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "биохимический анализ крови (билирубин, глюкоза, мочевина, креатинин, общий белок, АлАТ, АсАТ, СРБ, электролиты (калий, натрий, кальций); коагулограмма (АЧТВ, протромбиновое время, МНО, фибриноген);",
+     "clause": "135"
+    },
+    "efc32ca0ff8b25e8:0:17:2313886e77c6": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "биохимический анализ крови (билирубин, глюкоза, мочевина, креатинин, общий белок, АлАТ, АсАТ, СРБ, электролиты (калий, натрий, кальций)), коагулограмма (АЧТВ, протромбиновое время, МНО, фибриноген);",
+     "clause": "137"
+    },
+    "efc32ca0ff8b25e8:0:17:cabfb53d5368": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "бимануальное исследование;",
+     "clause": "137"
+    },
+    "efc32ca0ff8b25e8:0:17:61adb81055c8": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "осмотр в зеркалах и УЗИ органов малого таза перед выпиской.",
+     "clause": "137"
+    }
+   },
+   "rejected": []
+  },
+  "a82a0490d3100291:0:3": {
+   "items": {
+    "a82a0490d3100291:0:3:7fa7d8d7b0c2": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:3:a0ea186b82d2": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:3:1d55efa157b3": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:3:517653fbca4b": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:3:f7a79108409d": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:3:921d5f9c6525": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:3:9d1d582d8029": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:3:bb82a96f64ba": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:3:f4074ef71aa2": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:3:fbd37a98d637": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:3:8841ae5402c0": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:3:c98c3dcf1fb2": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:3:86b3a39df79d": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:3:cfb9cb0124f8": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:3:a0a948907a09": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:3:f9035fc2231c": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    }
+   },
+   "rejected": []
+  },
+  "a82a0490d3100291:0:4": {
+   "items": {
+    "a82a0490d3100291:0:4:8bef501c6966": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:4:77b63f0a9116": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:4:46a89c956826": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:4:3d4d35d1bbc4": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:4:a7c489b30535": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:4:2492597a42be": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "анамнез: социальный (семейный), жизни, акушерско-гинекологический, аллергологический, фармакологический, трансфузионный, соматические заболевания матери – при поступлении;",
+     "clause": "19"
+    },
+    "a82a0490d3100291:0:4:f0840201d297": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "антропометрия – при поступлении; раз в неделю – контроль;",
+     "clause": "19"
+    },
+    "a82a0490d3100291:0:4:365fc7e6e614": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "общий осмотр, измерение массы тела, температуры тела, оценка диуреза, стула, ЧСС, ЧД – ежедневно, чаще – по медицинским показаниям; измерение АД – при поступлении на правой руке и любой ноге, далее частота измерений определяется врачом; измерение окружности головы у недоношенных детей – 1 раз в 7 дней.",
+     "clause": "19"
+    },
+    "a82a0490d3100291:0:4:31cf2b612025": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "УЗИ головного мозга;",
+     "clause": "21"
+    },
+    "a82a0490d3100291:0:4:be20f93ac1a8": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "УЗИ органов брюшной полости и забрюшинного пространства;",
+     "clause": "21"
+    },
+    "a82a0490d3100291:0:4:bbdbf3a55909": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "ЭКГ.",
+     "clause": "21"
+    }
+   },
+   "rejected": []
+  },
+  "a82a0490d3100291:0:5": {
+   "items": {
+    "a82a0490d3100291:0:5:7df781f3300d": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:3cdbab10add4": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:174f59ab5c58": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:611e004ff3db": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:2aaaebc1d638": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:9e7cea4246be": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:e3b77067a396": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:89900a2c32a1": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:96576381e255": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:14b10e8737a0": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:a0af440c1ef7": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:c64e78faa9a6": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:4cb09f8acc34": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:252e8333d28f": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:da980d5c5ac8": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:c6ebd66a3c7a": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:e76f4e698fe9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:d9d4de9eb50f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:4081275c78a5": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:921d5f9c6525": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:d6ecc365da4b": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:019d28706d62": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:1fbb9ce5356c": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:45651a535b11": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:1153443269d9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:66c258d3714e": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:a20925c6be97": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:2d2d8efd92ce": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:6757f36ca1d8": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:09383015551f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:ac87a470e81f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:2d0d5ac89523": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:fa5a963ff8d6": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:f44a597038d6": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:a66b1a524f21": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:fc24953bbe61": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:1f3a7752b9e9": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:d6ba923b68ff": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:93343f2f8054": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:dfd56a0e8fe7": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:4be7f30fb352": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:bb23f356877e": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:5896d10c9f4d": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:5fa7ce5f336f": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:7decfe42d39f": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:f7b0cb6a95dd": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:a0a175b2e3c1": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:9b4d0f460596": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:6b6e78687b3e": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:679a1ea6a7fb": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:964cf234d1ac": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:f0f289e80415": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:297c4635f743": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:7c18c25c348b": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:9aa2585d8bf8": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:369cbd8743cb": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:7c613c075538": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:1cfbe8572d78": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:cf639d496b26": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:ddd025136209": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:3c987be03646": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:38589ac5c352": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:6146c283ac81": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:5e952b900dfe": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:58b8861b60a3": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:f259c98c402e": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:d328688eb2ef": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:afd2c78997eb": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:372f6f461411": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:1f3bab0b35ae": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:d9a8e59b2b8c": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:4d729d5bd262": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:b410840fb076": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:8907dfa44c09": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:a70181200aa5": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:9fedd3028682": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:3510f4561547": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:f522a67c4f9d": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:483d6ca6f865": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:51e9d2e405b0": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:621e0ff017af": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:b61663b2155c": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:060e376be028": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:0d3f9df41b89": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:0e52d313834a": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:47860606c787": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:9fbec78d064e": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:d3226d2a2b37": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:86a681879d20": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:a9a81c5e43b6": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:2828105248d6": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:2f5c0aafc7ea": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:eb4a9f4b1caa": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:d1ce6e52c1b2": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:2eeb4e5cebcc": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:4038a123a6c5": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:54d62310aef0": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:bba5b186562d": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:55b9e0a9231b": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:5958dcce2775": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:252436784018": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:b76af7ca1bb0": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:cbd042ce2fdd": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:afdb99df6ca5": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:9e1194e85471": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:3def660325ff": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:71db2f5320e9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:1b3473ff9de7": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:4973f5f6a7a1": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:20475356c2dd": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:5f96c5355979": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:91ffecd5cace": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:fb01c964d5a9": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:3600214bb57a": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:25c0ec7d5dfe": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:92ef619dc785": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:2d88a37f0ff8": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:876b969726ed": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:afeb2bf28eeb": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:e20cc3e2fd28": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:e3c0c4ecc03f": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:a7141710b279": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:ebbaad0044e4": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:9fbc6ee04c82": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:552913e1b59b": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:0fddac5d68aa": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:a38f1ee7c967": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:7d5385db22f3": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:b4bbb23b67c4": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:87d96c3938c9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:7c97ee85624d": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:60a3ecb0ba50": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:a2885d8215ba": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:f07b1801abe5": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:70b4b9daf53e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:c18592203e54": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:2e0761d059dc": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:5ddaf48568f4": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:0e452f9c93d3": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:f13d518b7819": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:43f864966e8a": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:04615ddce12e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:357f43a04d9c": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:19d8e5ee43a7": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:d549e4d1618f": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:ca2bf01dcce7": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:20fcadd47679": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:c4c3044ee13f": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:09a64e9ff74b": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:0484a889b2a8": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:410c9abb6a27": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:2dc4357eb6f3": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:16ee08f407f0": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:9337faa0d422": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:daca82a5b861": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:dc456d482fd2": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:b18490e9c2fd": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:666c782e20cb": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:f3ccee472fee": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:a242cf8db3c1": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:ee1b5b8a620e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:c49e2281d7b1": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:0044da5c243d": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:535878bd254e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:9a1aa3deeda0": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:0705331da0fa": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:39eef7e027f2": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:2083c1984fc0": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:2464df443aba": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:a16a02a7e48d": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:ce8fe07167e0": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:f47c5c805595": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:8265f4dc0b44": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:e65317abca47": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:944cce40d213": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:7fea7c1711e9": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:18e6799458d9": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:9e934ef28c04": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:823cb9d92597": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:796d824b90ac": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:6939d3d719f4": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:d63c058348f4": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:2b44802f1d96": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:d50c2dac43f1": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:be18c6d19961": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:bcb1b3387a0b": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:376a7bccf490": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:9dbfbf720e34": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:246849597406": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:e56974303655": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:7f86296bfcb8": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:7176ee325cff": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:a0072fee802a": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:35040c85c336": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:f03aefa0cf4b": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:a9266792bfa4": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:07e3cbf3665a": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:87e147533e62": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:74a6d30f0506": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:0dfbb2fcaa24": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:26e0263459ea": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:02ed81192bbd": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:6a478e2d1ab4": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:e9be68216942": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:f38243a51076": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:e53d99544922": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:65fc9e2b7c25": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:da16036b75d6": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:42d3809b4ed2": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:f027fb882bde": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:73b35d0fcf8a": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:cd68e8da7d38": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:efdc64d813a0": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:658114918019": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:8f10acd80ad8": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:64895f9fd454": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:79a99a14f037": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:7cbc52377880": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:0aa47a9b5175": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:42e658ab97cd": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:87565f34207e": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:7ebfd3bea6de": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:e342c9e7b56a": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:29ecdefb3d9a": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:84965fcc19c0": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:7dd9661ee147": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:d6d8504f7921": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:2f5b615aefd0": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:c09a882afbca": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:3b92ba2d224e": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:98f5b34be553": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:e226e97b9bd7": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:078fffa97285": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:be8efce166c5": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:6622e1c8b4dc": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:c78ac9bdc860": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:87343420d423": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:d4d92f6ace42": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:48dac92121f4": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:bf7e55e5bdbf": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:71555b2c5b98": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:245883975295": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:01fdc5d50101": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:8a2fee0e3d25": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:c1b403371092": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:6cb4614da6b3": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:70eb6bb55dff": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:d632b08bc613": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:59bea178eda0": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:61f43d9c038c": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:a019a6d4eaa1": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:b3e413c0a23c": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:5aad6262720c": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:9ef2486f4655": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:bc3efc825ac6": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:b70764697e66": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:7b420762ff16": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:9504f26536cb": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:92e79e7639cb": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:e1e372410827": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:65953fee0a19": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:1b3b1be49832": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:f85c71c18fd6": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:bbe662bf8f25": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:9c65986069ca": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:32aaf82508aa": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:c2faaefea92f": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:8da073f0fd3f": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:5493d60427a7": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:8a21e86df74d": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:c8cd89ae67ee": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:12d22ed9aa6e": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:3496dcb76a11": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:8fc711357bc8": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:e7fb13c86d6b": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:db821abd8d26": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:b48b896bd2bd": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:f1def8bfc654": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:b8b1e8cbba8b": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:74889508fc9e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:46d8fc9abcf1": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:44165da7724e": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:3fe40f118982": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:18e625c12aeb": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:1238bf727ef7": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:81e13d00100e": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:665d4ac7e2cd": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:654f03cdd7bc": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:aa6c36fe2a89": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:ea83d3005df1": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:8a90ae84b136": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:9b0ab946237d": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:b1b1603d3335": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:9a396eecae18": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:d4ea110b463d": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:fdb188318715": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:ac3dae9fb75a": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:ad9ac33871a1": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:75fae02a2a8c": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:9b45fd11ac98": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:8cd733af32fc": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:ba146ff09500": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:13f383107913": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:e1cbb6c54a4a": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:63512df52964": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:f28fa9d3a609": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:5e6df28d8a28": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:7b59475594d9": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:a443b2869c06": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:fa7c1b50bd10": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:8a7440be361a": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:2a1d77faef14": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:9d7403499cf4": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:d8cd8e6d061c": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:b1204bfa9576": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:e4b81f8a1146": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:ef63099b9a06": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:ab6fc1610849": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:37499248bfa2": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:503154494134": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:12605f338276": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:8cb32cd6dd21": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:672ef7472f2e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:9278219c5b6a": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:4eb6bafcafeb": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:d69dc981120f": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:1bb1bd92a91c": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:aeabffeba4af": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:25cf0c195b6e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:1c581e9684e9": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:7637e425ef03": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:0e4c5183bbfb": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:855ff9074fa7": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:8947bd0009d4": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:5fe1df1d5953": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:3de9d9a320cd": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:5b78bf82d72e": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:af302810ffa4": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:1610baa9ea5a": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:a0e5d07f134c": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:d9875d1755de": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:c89a23cf0272": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:a67c642ecbd2": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:2f54a4e32aea": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:bd07c7156ff5": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:0d9468ee4954": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:011d6cb72924": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:ed8d3473f97e": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:113033091f9a": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:a9a59fae74e8": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:297a9923b5f6": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:23c872c63c2d": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:f8b02431c76b": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:bdc092b25dbb": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:d2d0ee2442f7": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:8d220ac58899": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:b331140c1967": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:6f94f87b74fa": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:395c0d1a6f0a": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:7cc23d469e92": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:6d1ba74f8f9c": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:94be2c4bb3b7": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:2cd29089a0da": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:df327af3767c": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:becc48db4bd4": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:9a3354860e59": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:a629845feb3a": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:accbc388278f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:da0970e26633": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:fc00038c64da": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:8d95e6158005": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:b4d63f294453": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:79bcd9099db2": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:ed2aaa6a4e01": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:bb062c9c5d88": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:59218c219078": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:6d1002f58de2": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:43bcc4f90e87": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:fcf8cc45f53e": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:883ba57d3d1f": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:525d72481b84": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:596942080d02": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:ab2eab373cb9": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:e8e6f8ca445a": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:1ebc6a8d1895": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:8bdcdee98fe6": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:994f421d86f4": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:014ee9ccba3b": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:1a7293dd7593": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:48c66e3ba218": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:a136c08557d4": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:d350bdaaf2fe": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:643c629177a6": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:a6d69e8d0584": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:5f896055fb79": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:9980fe778697": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:d36dfd287a89": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:604ec49dbf03": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:593841da73a9": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:b66404e06a03": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:1f6e21997e99": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a82a0490d3100291:0:5:54e957b000d4": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a82a0490d3100291:0:5:a9527685245b": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:67e12bfe5dca": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "a82a0490d3100291:0:5:10e8caa8d472": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "постоянный контроль оксигенации, артериального давления и частоты сердечных сокращений;",
+     "clause": "Приложение 21, 6"
+    },
+    "a82a0490d3100291:0:5:d0fd266d324f": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "измерение концентрации метгемоглобина в крови через 3 часа после начала лечения в дальнейшем – измерение через каждые 6–12 часов; контроль уровня метгемоглобина в крови (не должен превышать 4,0 %);",
+     "clause": "Приложение 21, 6"
+    }
+   },
+   "rejected": []
+  },
+  "bb6ac640f29fafcc:0:2": {
+   "items": {
+    "bb6ac640f29fafcc:0:2:f676bedc6c5d": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:60e4a96ac71d": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:a6cdb1c01085": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:a11ad3a93aa6": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:a411eafac80f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:5a485ed7bd7a": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:759b359629cf": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:343538bb956c": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:f0438335581d": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:7e0c102ae610": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:561b2fb976c2": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:016a54aa3d8f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:52a714994b1f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:a2f2ac370678": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:8c4d983a09d2": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:427d24d5b310": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:02402f27c144": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:9c776781b933": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:3d1725324ec4": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:be870574b0ad": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:487f81bf44bf": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:7c8ac051f438": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:88d0a8f7752b": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:9a1ad8bc2409": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:65be287c59a1": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:e439217cb8c0": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:3d1bdb243dda": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:a5b4810c3136": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:45d6e4b5f54d": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:a481570a412d": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:2b5a61a088cf": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:7374036b0432": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:e1aa4baf4ff1": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:401ed183873c": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:cb39eb57b36d": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:4bee89fda5d8": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:95fd8e03a3c4": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    }
+   },
+   "rejected": []
+  },
+  "e3dd94e4afd4daee:0:3": {
+   "items": {
+    "e3dd94e4afd4daee:0:3:8228cbb26d51": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "e3dd94e4afd4daee:0:3:1753bef624ec": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "e3dd94e4afd4daee:0:3:ade08f07eec8": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:c7506f98d6b2": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:305803a491cb": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:ba7e4702dd40": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:666e35971c78": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:16dacea186db": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:3209e834d2de": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:0bcaf86963d1": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:d5a0ab156edc": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:79fd4b5b65a4": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:61200b4a5a1a": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:b718d79d65b8": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:a1aadda8ebe9": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "e3dd94e4afd4daee:0:3:112d8eca7acf": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:c6d4e6efa123": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:243b3b42ee36": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:cde1cde0f867": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "ежедневный тщательный медицинский осмотр пациента;",
+     "clause": "15.4"
+    },
+    "e3dd94e4afd4daee:0:3:91ca696616d1": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "забор крови на бактериологическое исследование для верификации фунгемии;",
+     "clause": "15.4"
+    },
+    "e3dd94e4afd4daee:0:3:48f900d0749b": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "бактериологические посевы из всех предполагаемых локусов инфекции.",
+     "clause": "15.4"
+    },
+    "e3dd94e4afd4daee:0:3:bd821aae9091": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "ежедневный контроль общего состояния пациента;",
+     "clause": "15.5"
+    },
+    "e3dd94e4afd4daee:0:3:17f400fc964e": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "контроль лабораторных показателей – общий анализ крови (далее – ОАК) не менее 1 раза в неделю, БИК (калий, магний, общий белок, мочевина, креатинин, аланинаминотрансфераза (далее – АлАТ), аспартатаминотрансфераза (далее – АсАТ), общий билирубин, С-реактивный белок (далее – СРБ) не менее 2 раз в неделю;",
+     "clause": "15.5"
+    },
+    "e3dd94e4afd4daee:0:3:431af374e79c": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "при терапии амфотерицином В (рекомендовано назначение липидных форм из-за меньшей нефротоксичности) производится контроль скорости клубочковой фильтрации (далее – СКФ) почек или КЭК не менее 2 раз в неделю. Если клиренс креатинина прогрессивно снижается на фоне терапии амфотерицином В, рекомендовано рассмотреть вопрос о смене группы противогрибкового ЛС;",
+     "clause": "15.5"
+    },
+    "e3dd94e4afd4daee:0:3:c44e3175c2ad": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "контроль динамики изменений уровня сывороточного галактоманана (при наличие возможности в организации здравоохранения) при условии его позитивности в начале заболевания (до назначения противогрибковой терапии) с целью оценки ответа на проводимое лечение;",
+     "clause": "15.5"
+    },
+    "e3dd94e4afd4daee:0:3:a1e8a1f75d2d": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "контроль КТ пораженного органа проводится при стабилизации или улучшении клинического состояния по необходимости (не ранее, чем через 7 дней от предыдущего исследования). Для мониторинга ответа на терапию рекомендовано выполнение КТ пораженного органа не чаще 1 раза в 1–2 недели. Увеличение очага в объеме на фоне выхода из нейтропении (АЧН >500/мкл) не свидетельствует об отрицательной динамике грибковой инфекции. В данном случае необходим контроль КТ еще через 7 дней. При прогрессивном ухудшении клинического состояния пациента контроль КТ может быть выполнен в любые сроки. Плановый контроль КТ (после исчезновения патологических очагов грибковой инфекции) не проводится.",
+     "clause": "15.5"
+    },
+    "e3dd94e4afd4daee:0:3:4d862746d78e": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "В рамках дополнительных лечебных мероприятий пациентам с острыми лейкозами, апластическими анемиями, которым планируется выполнение аллогенной ТГСК, следует проводить диагностику дисбактериоза посредством секвенирования нового поколения.",
+     "clause": "21.1"
+    }
+   },
+   "rejected": []
+  }
+ }
+}

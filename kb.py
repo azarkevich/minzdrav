@@ -112,7 +112,7 @@ class Engine:
             blob = kb_path.parent / self.kb["packed"]
             self.kb["sections"] = [LazySection(s, blob) for s in self.kb["sections"]]
         self.llm = llm
-        cc = kb_path.parent / "crosscheck.json"  # kb_llm.py crosscheck
+        cc = Path(__file__).parent / "crosscheck" / f"{kb_path.resolve().parent.name}.json"  # kb_llm.py crosscheck
         self.crosscheck = {}
         if cc.exists():
             for sec in json.loads(cc.read_text(encoding="utf-8"))["sections"].values():

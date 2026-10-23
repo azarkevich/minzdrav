@@ -8,7 +8,7 @@ system works without them:
      against the source text, then compared with the rules' items:
         verified  — both found the item with the same level;
         uncertain — only one side found it, or the levels differ.
-     Result: kb/crosscheck.json, read by kb.py to label the evidence.
+     Result: crosscheck/kb.json (kb_all.json for kb_all), tracked in git, read by kb.py to label the evidence.
 
 Provider ($KB_LLM_PROVIDER, or chosen by which key is set):
   openrouter  — KB_OPENROUTER_API_KEY, via `requests`;
@@ -275,7 +275,7 @@ def main():
     sub = ap.add_subparsers(dest="cmd", required=True)
     c = sub.add_parser("crosscheck")
     c.add_argument("--kb", type=Path, default=Path("kb/kb.json"))
-    c.add_argument("--out", type=Path, default=Path("kb/crosscheck.json"))
+    c.add_argument("--out", type=Path, help="default: crosscheck/<kb folder name>.json (tracked in git)")
     c.add_argument("--limit", type=int, help="only the first N chapters (trial run)")
     c.add_argument("--dry-run", action="store_true", help="show what would be sent and a token estimate")
     c.add_argument("--stop-at", type=float, help="stop when the 5-hour limit (~/.claude/rate-limits.json) reaches this %%")
@@ -303,6 +303,9 @@ def main():
                                     text=chapter_text(secs[0]))[:3000])
         return
 
+    if args.out is None:
+        args.out = Path("crosscheck") / f"{args.kb.resolve().parent.name}.json"
+    args.out.parent.mkdir(exist_ok=True)
     done = json.loads(args.out.read_text(encoding="utf-8")) if args.out.exists() else {"sections": {}}
     for i, s in enumerate(secs, 1):
         if s["id"] in done["sections"]:

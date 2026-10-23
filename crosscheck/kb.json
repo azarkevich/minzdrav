@@ -1,0 +1,3241 @@
+{
+ "sections": {
+  "dfe8182ecb97373c:0:0": {
+   "items": {
+    "dfe8182ecb97373c:0:0:17cebe08712c": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "dfe8182ecb97373c:0:0:e51255f81cc6": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "dfe8182ecb97373c:0:0:70c6ac700145": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "dfe8182ecb97373c:0:0:80d4e9206a5a": {
+     "status": "uncertain",
+     "rules": "monitoring",
+     "llm": null
+    },
+    "dfe8182ecb97373c:0:0:29a84af75b09": {
+     "status": "uncertain",
+     "rules": "monitoring",
+     "llm": null
+    },
+    "dfe8182ecb97373c:0:0:0f15038a0ef2": {
+     "status": "uncertain",
+     "rules": "monitoring",
+     "llm": null
+    },
+    "dfe8182ecb97373c:0:0:eee2563713ec": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "скринирующим тестом на фенилкетонурию является определение ФА флюорометрическим методом.",
+     "clause": "6.2"
+    },
+    "dfe8182ecb97373c:0:0:02c551fd0040": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "при превышении пограничного значения концентрации ФА (более 180 мкмоль/л) осуществляется повторное тестирование (должно быть проведено до двухнедельного возраста ребёнка).",
+     "clause": "6.3"
+    },
+    "dfe8182ecb97373c:0:0:5f5142d7a285": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "определение концентрации ФА в сыворотке крови;",
+     "clause": "7.1"
+    },
+    "dfe8182ecb97373c:0:0:a631bee560a3": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "определение концентрации фенилуксусной и фенилпировиноградной кислоты в моче;",
+     "clause": "7.2"
+    },
+    "dfe8182ecb97373c:0:0:fc438a9b7b13": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "исключение прочих наследственных дефектов метаболизма по селективной скринирующей программе: аминокислоты, простые углеводы, гликозаминогликаны;",
+     "clause": "7.3"
+    },
+    "dfe8182ecb97373c:0:0:af2d14ca4289": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "общий анализ крови;",
+     "clause": "7.4"
+    },
+    "dfe8182ecb97373c:0:0:77b63f0a9116": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "общий анализ мочи;",
+     "clause": "7.5"
+    },
+    "dfe8182ecb97373c:0:0:2198fb659e39": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "молекулярно-генетический анализ (далее – анализ ДНК) пациенту и родителям: определение основных мутаций гена фенилаланигидроксилазы, приводящих к ее недостаточности.",
+     "clause": "7.6"
+    },
+    "dfe8182ecb97373c:0:0:e48e9e4cc0b8": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "Контроль лечения ФКУ проводится определением уровня ФА в сыворотке или сухом пятне крови.",
+     "clause": "14.2"
+    },
+    "dfe8182ecb97373c:0:0:1b0c9821ed86": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "Частота контрольного осмотра врачом-генетиком (по месту жительства):",
+     "clause": "14.4"
+    },
+    "dfe8182ecb97373c:0:0:0dd075a22afc": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "Консультации: врача-невролога, врача-гастроэнтеролога и других специалистов (по показаниям).",
+     "clause": "14.5"
+    },
+    "dfe8182ecb97373c:0:0:765cabdac681": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "анализ ДНК женщины и ее супруга;",
+     "clause": "17.1"
+    },
+    "dfe8182ecb97373c:0:0:6e5c8327d07b": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "при гетерозиготном носительстве мутации обоими супругами проведение пренатальной диагностики (по желанию семьи).",
+     "clause": "17.2"
+    },
+    "dfe8182ecb97373c:0:0:f109be5a4c83": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "частота контрольного исследования ФА у беременных – 2 раза в неделю.",
+     "clause": "17.5"
+    }
+   },
+   "rejected": []
+  },
+  "20c0bee0b6551aa8:0:2": {
+   "items": {
+    "20c0bee0b6551aa8:0:2:c205ea1bbc4c": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "20c0bee0b6551aa8:0:2:a756029c0c88": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "20c0bee0b6551aa8:0:2:7478abf095e8": {
+     "status": "uncertain",
+     "rules": "monitoring",
+     "llm": null
+    },
+    "20c0bee0b6551aa8:0:2:8ca761302116": {
+     "status": "uncertain",
+     "rules": "monitoring",
+     "llm": null
+    },
+    "20c0bee0b6551aa8:0:2:cdbd5a5cfdb8": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "20c0bee0b6551aa8:0:2:a62d5aee8acc": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "20c0bee0b6551aa8:0:2:bc2cf6991961": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "ультразвуковое исследование (далее-УЗИ) щитовидной железы;",
+     "clause": "6.4.1"
+    },
+    "20c0bee0b6551aa8:0:2:77db90c61b3c": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "определение концентрации тиреотропного гормона (далее-ТТГ), тироксина (далее Т4) и/или свободного тироксина (далее-fТ4), свободного трийодтиронина (далее-fТ3), тиреоглобулина (далее-Тg); определение антител к тиреоидной пероксидазе; определение концентрации тироксинсвязываюшего глобулина (далее-ТСГ);",
+     "clause": "6.4.2"
+    },
+    "20c0bee0b6551aa8:0:2:1460da4cfd72": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "электрокардиография (далее-ЭКГ).",
+     "clause": "6.4.3"
+    },
+    "20c0bee0b6551aa8:0:2:4df3b47b8883": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "Консультация врачей специалистов (по показаниям): врача-невролога, врача-оториноларинголога и других специалистов.",
+     "clause": "8"
+    },
+    "20c0bee0b6551aa8:0:2:ad56e7832ae3": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "Лабораторный контроль лечения ПВГ осуществляется путем определения ТТГ в сыворотке.",
+     "clause": "12.3"
+    },
+    "20c0bee0b6551aa8:0:2:a1ce8810103e": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "При уровне ТТГ более 2 мЕД/л определить fT4 в сыворотке крови.",
+     "clause": "12.4"
+    }
+   },
+   "rejected": []
+  },
+  "2e840a42063d2d94:0:3": {
+   "items": {
+    "2e840a42063d2d94:0:3:198daee9323d": {
+     "status": "uncertain",
+     "rules": "differential",
+     "llm": null
+    },
+    "2e840a42063d2d94:0:3:8d39177c15ef": {
+     "status": "uncertain",
+     "rules": "differential",
+     "llm": null
+    },
+    "2e840a42063d2d94:0:3:96d91640760e": {
+     "status": "uncertain",
+     "rules": "differential",
+     "llm": null
+    },
+    "2e840a42063d2d94:0:3:04081b493fff": {
+     "status": "uncertain",
+     "rules": "differential",
+     "llm": null
+    },
+    "2e840a42063d2d94:0:3:a366abd1a143": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "differential",
+     "quote": "Дифференциальная диагностика СД 1 или 2 типа проводится в случае отсутствия двух и более диагностических критериев на основании дополнительных мероприятий: определение в сыворотке или плазме крови уровней диабет-ассоциированных антител, С-пептида (базальный, стимулированный).",
+     "clause": "21"
+    },
+    "2e840a42063d2d94:0:3:9c37cfb98eb3": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "differential",
+     "quote": "При необходимости проводится консультация врача-генетика и генетическое тестирование.",
+     "clause": "22"
+    },
+    "2e840a42063d2d94:0:3:84bf038610b7": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "differential",
+     "quote": "В случае впервые выявленной гипергликемии при экстренной госпитализации необходимо определить уровень HbA1c; его повышение более 6,5 % свидетельствует в пользу СД.",
+     "clause": "23"
+    },
+    "2e840a42063d2d94:0:3:bc4cdbc61ba9": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "общий анализ мочи (далее – ОАМ), при отсутствии патологии осадка мочи – анализ альбуминурии;",
+     "clause": "25"
+    },
+    "2e840a42063d2d94:0:3:c4719786aec9": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "биохимический анализ крови (далее – БАК): общий холестерин (далее – оХС), липопротеины низкой плотности (далее – ЛПНП), триглицериды (далее – ТГ), креатинин, расчет СКФ, общий белок, общий билирубин, аланинаминотрансфераза (далее – АЛТ), аспартатаминотрансфераза (далее – АСТ);",
+     "clause": "25"
+    },
+    "2e840a42063d2d94:0:3:4bd680cda163": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "осмотр стоп;",
+     "clause": "25"
+    },
+    "2e840a42063d2d94:0:3:b6c456c80b08": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "осмотр врачом-офтальмологом с оценкой глазного дна в условиях мидриаза;",
+     "clause": "25"
+    },
+    "2e840a42063d2d94:0:3:6dddd20fe5f6": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "тонометрию, электрокардиограмму (далее – ЭКГ) в покое;",
+     "clause": "25"
+    },
+    "2e840a42063d2d94:0:3:dab160d231e7": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "по медицинским показаниям (в случае умеренного, высокого, очень высокого, экстремального ССР) выполняются дополнительные исследования: эхокардиография (далее – ЭхоКГ), ультразвуковое исследование (далее – УЗИ) брахиоцефальных артерий или бедренных артерий, холтеровское мониторирование ЭКГ (далее – ХМ-ЭКГ), суточное мониторирование АД (далее – СМАД) и другие исследования в соответствии с рекомендациями врача-специалиста.",
+     "clause": "25"
+    }
+   },
+   "rejected": []
+  },
+  "2e840a42063d2d94:0:5": {
+   "items": {
+    "2e840a42063d2d94:0:5:413f68e062d8": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "2e840a42063d2d94:0:5:8f4200c25d67": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "2e840a42063d2d94:0:5:00275d030a47": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "2e840a42063d2d94:0:5:c18ebee917b3": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "2e840a42063d2d94:0:5:e8272153b068": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "2e840a42063d2d94:0:5:2e7a1491bcec": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "2e840a42063d2d94:0:5:45f714323d87": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "2e840a42063d2d94:0:5:4564a20a7d7d": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "2e840a42063d2d94:0:5:9b5916449842": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    }
+   },
+   "rejected": []
+  },
+  "2e840a42063d2d94:0:6": {
+   "items": {
+    "2e840a42063d2d94:0:6:868724d2315f": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "2e840a42063d2d94:0:6:8f4200c25d67": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "2e840a42063d2d94:0:6:00275d030a47": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "2e840a42063d2d94:0:6:ad2889a0f55e": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "2e840a42063d2d94:0:6:a51eb1630394": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "2e840a42063d2d94:0:6:2e7a1491bcec": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "2e840a42063d2d94:0:6:73c279bf2a2a": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "2e840a42063d2d94:0:6:e784a1af2582": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "2e840a42063d2d94:0:6:8fcaef021d2d": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "2e840a42063d2d94:0:6:3ccef8a69548": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "2e840a42063d2d94:0:6:228fc98027be": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "по уровню HbA1c – 1 раз в 3 месяца до достижения индивидуального целевого уровня HbA1c, далее – 1 раз в 6–12 месяцев;",
+     "clause": "41"
+    }
+   },
+   "rejected": []
+  },
+  "2e840a42063d2d94:0:8": {
+   "items": {
+    "2e840a42063d2d94:0:8:f164ec9e19dd": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "2e840a42063d2d94:0:8:c44cd38e445b": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "2e840a42063d2d94:0:8:2f0f43ab111f": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "до 30 недель беременности: посещения беременными на диетотерапии врача акушера-гинеколога – 1 раз в 2 недели, на инсулинотерапии – врача-эндокринолога 1 раз в 2 недели;",
+     "clause": "60"
+    },
+    "2e840a42063d2d94:0:8:e8bbd2379491": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "после 30 недель беременности: посещения беременными на диетотерапии врача акушера-гинеколога – 1 раз в неделю, на инсулинотерапии – врача-эндокринолога 1 раз в неделю.",
+     "clause": "60"
+    },
+    "2e840a42063d2d94:0:8:0f013426072e": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "После родоразрешения инсулинотерапия отменяется, проводится контроль гликемии на фоне диетотерапии с реклассификацией клинического диагноза через 4–12 недель после родов.",
+     "clause": "60"
+    }
+   },
+   "rejected": []
+  },
+  "2e840a42063d2d94:0:9": {
+   "items": {
+    "2e840a42063d2d94:0:9:8c039c41308c": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "2e840a42063d2d94:0:9:2aa880bc3415": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "2e840a42063d2d94:0:9:0db205adab1b": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "2e840a42063d2d94:0:9:1f570f3eea5c": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "2e840a42063d2d94:0:9:d5f3afdeef94": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2e840a42063d2d94:0:9:3a135c3b9900": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2e840a42063d2d94:0:9:d4b972e73697": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2e840a42063d2d94:0:9:874be598403f": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2e840a42063d2d94:0:9:1184250e5164": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2e840a42063d2d94:0:9:1105e45c95ef": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "2e840a42063d2d94:0:9:5cb3efe20929": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2e840a42063d2d94:0:9:6143e4f4dbc6": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2e840a42063d2d94:0:9:2638b4ba8be3": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2e840a42063d2d94:0:9:27bdc87bb370": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "2e840a42063d2d94:0:9:f362e77eaa65": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "2e840a42063d2d94:0:9:3c2e2eecc8de": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "2e840a42063d2d94:0:9:21147f9183db": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "2e840a42063d2d94:0:9:7a5b517043d4": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "2e840a42063d2d94:0:9:852ceac00e52": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "2e840a42063d2d94:0:9:ad23409d88fa": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "2e840a42063d2d94:0:9:9353a6ad34fc": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "Каждые 2 ч. до достижения рН >7,0 необходим мониторинг уровня калия и КЩС.",
+     "clause": "70.4"
+    },
+    "2e840a42063d2d94:0:9:4bd270ba63cf": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "План наблюдения на стационарном этапе не отличается от такового при ДКА, включая дополнительно расчет скорректированного натрия, определение уровня лактата, осмолярности плазмы, ЦВД, коагулограммы с определением протромбинового времени.",
+     "clause": "78"
+    },
+    "2e840a42063d2d94:0:9:2cda6dd4b1e2": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "Обязательная диагностика включает определение уровня глюкозы крови, оценку сознания.",
+     "clause": "88"
+    },
+    "2e840a42063d2d94:0:9:55a2a455ea8d": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "Дополнительная диагностика включает определение HbA1c, тест на этанол в крови, магнитно-резонансную томографию (далее – МРТ) головного мозга, электроэнцефалограмму, прием (осмотр, консультация) врачом-неврологом.",
+     "clause": "88"
+    }
+   },
+   "rejected": []
+  },
+  "2e840a42063d2d94:0:12": {
+   "items": {
+    "2e840a42063d2d94:0:12:5ba27d56bcef": {
+     "status": "verified",
+     "rules": "differential",
+     "llm": "differential"
+    },
+    "2e840a42063d2d94:0:12:4aeaa976e5e0": {
+     "status": "verified",
+     "rules": "differential",
+     "llm": "differential"
+    },
+    "2e840a42063d2d94:0:12:11db39e89e87": {
+     "status": "verified",
+     "rules": "differential",
+     "llm": "differential"
+    },
+    "2e840a42063d2d94:0:12:802bb0ca4c94": {
+     "status": "verified",
+     "rules": "differential",
+     "llm": "differential"
+    },
+    "2e840a42063d2d94:0:12:73d61a33a1af": {
+     "status": "verified",
+     "rules": "differential",
+     "llm": "differential"
+    },
+    "2e840a42063d2d94:0:12:11af899b29fb": {
+     "status": "verified",
+     "rules": "differential",
+     "llm": "differential"
+    },
+    "2e840a42063d2d94:0:12:1a8c02d0f9b8": {
+     "status": "verified",
+     "rules": "differential",
+     "llm": "differential"
+    },
+    "2e840a42063d2d94:0:12:0a2bbb79cb81": {
+     "status": "verified",
+     "rules": "differential",
+     "llm": "differential"
+    },
+    "2e840a42063d2d94:0:12:131ec42520a8": {
+     "status": "verified",
+     "rules": "differential",
+     "llm": "differential"
+    },
+    "2e840a42063d2d94:0:12:c28e07de96f0": {
+     "status": "verified",
+     "rules": "differential",
+     "llm": "differential"
+    },
+    "2e840a42063d2d94:0:12:8fffcf2baca3": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    }
+   },
+   "rejected": []
+  },
+  "2e840a42063d2d94:0:14": {
+   "items": {
+    "2e840a42063d2d94:0:14:fb37e3c834d4": {
+     "status": "uncertain",
+     "rules": "differential",
+     "llm": null
+    },
+    "2e840a42063d2d94:0:14:f6f7654bde2e": {
+     "status": "uncertain",
+     "rules": "differential",
+     "llm": null
+    },
+    "2e840a42063d2d94:0:14:9b5a6806a3f7": {
+     "status": "uncertain",
+     "rules": "differential",
+     "llm": null
+    },
+    "2e840a42063d2d94:0:14:d3a80ffb3226": {
+     "status": "verified",
+     "rules": "differential",
+     "llm": "differential"
+    },
+    "2e840a42063d2d94:0:14:32b89b7a74dc": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "2e840a42063d2d94:0:14:b0f25bd509ef": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "2e840a42063d2d94:0:14:f5af9026e598": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "2e840a42063d2d94:0:14:e2f659ef1374": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "2e840a42063d2d94:0:14:5fc45dee7a3e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "2e840a42063d2d94:0:14:51c893256437": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2e840a42063d2d94:0:14:ef6917b9d2ba": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2e840a42063d2d94:0:14:ee82f46f4d01": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2e840a42063d2d94:0:14:ade8ccf9f0ac": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2e840a42063d2d94:0:14:13793b540a7a": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2e840a42063d2d94:0:14:8835b868789a": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2e840a42063d2d94:0:14:ac75df218fba": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2e840a42063d2d94:0:14:a5e4237fe111": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2e840a42063d2d94:0:14:463a99e7c497": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2e840a42063d2d94:0:14:ac469d30bc14": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "2e840a42063d2d94:0:14:d27e2ec59329": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    }
+   },
+   "rejected": []
+  },
+  "a91c9adb1cbfde7b:0:2": {
+   "items": {
+    "a91c9adb1cbfde7b:0:2:7952cc0b40b9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a91c9adb1cbfde7b:0:2:ddd18ca6eee2": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a91c9adb1cbfde7b:0:2:91409d94479b": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:2:208739d725d5": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:2:a0aa35f3ad03": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:2:67fa892697b5": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:2:52baacd6c53a": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:2:67a8346ea177": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:2:60e60144ebcc": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "differential",
+     "quote": "Основным методом дифференциальной диагностики объемных образований ЩЖ является ТАБ.",
+     "clause": "17"
+    },
+    "a91c9adb1cbfde7b:0:2:1293805194c8": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "Консультация врача-онколога показана пациентам:",
+     "clause": "20"
+    },
+    "a91c9adb1cbfde7b:0:2:2b2163e719ea": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "Консультация врача-радиолога показана пациентам с функциональной тиреоидной автономией и при наличии медицинских противопоказаний для хирургического лечения.",
+     "clause": "21"
+    },
+    "a91c9adb1cbfde7b:0:2:bf65ac240ff6": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "По медицинским показаниям – УЗИ ЩЖ 1 раз в 12–24 месяцев с последующим определением целесообразности дальнейшего наблюдения и кратности осмотра, прочие обследования – также по медицинским показаниям.",
+     "clause": "22"
+    },
+    "a91c9adb1cbfde7b:0:2:93f0f9defe42": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "При получении цитологических результатов биопсии 3-й категории (атипия неопределенного значения) устанавливают срок контрольного обследования через 3–6 месяцев для УЗИ ЩЖ и при необходимости повторной ТАБТАБ для дальнейшей индивидуализации плана наблюдения.",
+     "clause": "22"
+    }
+   },
+   "rejected": []
+  },
+  "a91c9adb1cbfde7b:0:3": {
+   "items": {
+    "a91c9adb1cbfde7b:0:3:36016b980911": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a91c9adb1cbfde7b:0:3:c2607877d749": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a91c9adb1cbfde7b:0:3:f61019ed0730": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:3:ca747f11a401": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:3:df86a6a44c5b": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:3:3a135c3b9900": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:3:9ba5ba43e67a": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:3:46e546204d24": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:3:83ea68a8e4d0": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:3:44f38acef1a6": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    }
+   },
+   "rejected": []
+  },
+  "a91c9adb1cbfde7b:0:4": {
+   "items": {
+    "a91c9adb1cbfde7b:0:4:36016b980911": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a91c9adb1cbfde7b:0:4:c2607877d749": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a91c9adb1cbfde7b:0:4:bbdbf3a55909": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a91c9adb1cbfde7b:0:4:c2638ae36573": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a91c9adb1cbfde7b:0:4:73a8c54f67db": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:4:0901dcec42ae": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:4:15d30fb9d259": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:4:a58a6c4f51aa": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:4:1f47b8d7209e": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:4:937cbee860b5": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:4:af00eb783fc8": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:4:86d2dac7bb23": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:4:6b6079782730": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:4:4d7cfc18f3cd": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:4:0c4ee80eb163": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:4:cfdd83351eee": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:4:32e6d8c41118": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:4:7096676a2745": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:4:cfad7e3f5188": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:4:23d6d763a796": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "a91c9adb1cbfde7b:0:4:8e2ae48f57ef": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "a91c9adb1cbfde7b:0:4:3deede8ef392": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "Контроль св.Т4 проводится 1 раз в 4–6 недель при использовании схемы «блокируй» и 1 раз в 2–3 месяца при схеме «блокируй/замещай». Первый контроль уровня ТТГ проводится не ранее чем через 3 месяца после нормализации св.Т4.",
+     "clause": "50"
+    },
+    "a91c9adb1cbfde7b:0:4:cba0f2cdcf64": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "При фебрильных состояниях, фарингите или ангине следует срочно направить пациента на ОАК.",
+     "clause": "50"
+    },
+    "a91c9adb1cbfde7b:0:4:317e2e1febb3": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "лечение субклинического тиреотоксикоза 1-й степени у молодых пациентов без симптомов не рекомендуется. Их рекомендовано наблюдать в динамике (каждые 6–12 месяцев проводить определение уровня ТТГ, св.Т4, св.Т3) вследствие низкого риска прогрессирования до манифестного тиреотоксикоза и возможности спонтанной ремиссии;",
+     "clause": "56"
+    },
+    "a91c9adb1cbfde7b:0:4:a57f8baa4cb0": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "При выявлении низконормального или сниженного содержания в сыворотке, плазме крови кальция проводится исследование уровня паратиреоидного гормона с верификацией клинического диагноза через 6 недель (транзиторный гипопаратиреоз) и 6 месяцев (хронический гипопаратиреоз); дальнейшее наблюдение – в соответствии с рекомендациями по ведению гипопаратиреоза;",
+     "clause": "60"
+    },
+    "a91c9adb1cbfde7b:0:4:25168759008c": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "после радиойодтерапии: контроль в сыворотке, плазме крови уровня св.Т4 с интервалом 4–6 недель, ТТГ с интервалом 3–6 месяцев, контрольное УЗИ области шеи через 6–12 месяцев, реклассификация клинического диагноза.",
+     "clause": "60"
+    }
+   },
+   "rejected": []
+  },
+  "a91c9adb1cbfde7b:0:5": {
+   "items": {
+    "a91c9adb1cbfde7b:0:5:efa48c616db9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a91c9adb1cbfde7b:0:5:d64a3a553f55": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a91c9adb1cbfde7b:0:5:e1eeb2680a95": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:5:09b05935bd2b": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:5:8fb847ccf308": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    }
+   },
+   "rejected": []
+  },
+  "a91c9adb1cbfde7b:0:6": {
+   "items": {
+    "a91c9adb1cbfde7b:0:6:efa48c616db9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a91c9adb1cbfde7b:0:6:e310f8c2b63e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a91c9adb1cbfde7b:0:6:bb74c3f13a78": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:6:47d4f30b2557": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:6:c145fd5c5c04": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:6:b39f0e782718": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:6:ed5ccc23f160": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:6:2089a730b8c3": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:6:ad537966cac0": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:6:7f9393e2e365": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "a91c9adb1cbfde7b:0:6:d4bf5119c152": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "a91c9adb1cbfde7b:0:6:2ebbb65388e7": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "a91c9adb1cbfde7b:0:6:d386a0d9599a": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "a91c9adb1cbfde7b:0:6:fdd7f878b586": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    }
+   },
+   "rejected": []
+  },
+  "a91c9adb1cbfde7b:0:16": {
+   "items": {
+    "a91c9adb1cbfde7b:0:16:fddb3f771d34": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a91c9adb1cbfde7b:0:16:f1c49d892b09": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a91c9adb1cbfde7b:0:16:36016b980911": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a91c9adb1cbfde7b:0:16:c2607877d749": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "a91c9adb1cbfde7b:0:16:f727dbfe150f": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:16:0af7312505bf": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:16:937cbee860b5": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:16:19b522102cef": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:16:81d63f88f3af": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "a91c9adb1cbfde7b:0:16:aa4d315f127e": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    }
+   },
+   "rejected": []
+  },
+  "f48063792fdcfa86:0:2": {
+   "items": {
+    "f48063792fdcfa86:0:2:e094f4f693b2": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "f48063792fdcfa86:0:2:bf7317088ce3": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "f48063792fdcfa86:0:2:5766c72975bc": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "f48063792fdcfa86:0:2:2ed2bbc92f8b": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "f48063792fdcfa86:0:2:d35da899a8f3": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "f48063792fdcfa86:0:2:e11d10dcd3c3": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "f48063792fdcfa86:0:2:29df477c3834": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "f48063792fdcfa86:0:2:671697baf787": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "f48063792fdcfa86:0:2:7bb0d07697b4": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "f48063792fdcfa86:0:2:397a8c7d60e1": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "f48063792fdcfa86:0:2:45c9ad75059d": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "f48063792fdcfa86:0:2:d56336905ebb": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "f48063792fdcfa86:0:2:a009da9b294b": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "f48063792fdcfa86:0:2:6ec0d05521d5": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "f48063792fdcfa86:0:2:e86c2c632851": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "f48063792fdcfa86:0:2:ed2969f425ca": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "differential",
+     "quote": "исключение аутоиммунной патологии других эндокринных желез (щитовидная железа, надпочечники, гонады);",
+     "clause": "12"
+    },
+    "f48063792fdcfa86:0:2:a7473664f2f6": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "differential",
+     "quote": "генетическое тестирование;",
+     "clause": "12"
+    },
+    "f48063792fdcfa86:0:2:5a78124e3dbd": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "differential",
+     "quote": "исключение псевдогипопаратиреоза.",
+     "clause": "12"
+    }
+   },
+   "rejected": []
+  },
+  "f48063792fdcfa86:0:3": {
+   "items": {
+    "f48063792fdcfa86:0:3:d79660b25db1": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "f48063792fdcfa86:0:3:bf7317088ce3": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "f48063792fdcfa86:0:3:1e38c7916e8e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "f48063792fdcfa86:0:3:29df477c3834": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "f48063792fdcfa86:0:3:56a7c9a45191": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "f48063792fdcfa86:0:3:8205ea78dd20": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "f48063792fdcfa86:0:3:52ee0ad85f44": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "f48063792fdcfa86:0:3:74384d1ad83e": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "f48063792fdcfa86:0:3:7257889837dd": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "f48063792fdcfa86:0:3:e8a43b5a1adc": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "f48063792fdcfa86:0:3:70fa51cfa72d": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "f48063792fdcfa86:0:3:2162a9eead94": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "f48063792fdcfa86:0:3:7bc33f7fd053": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "f48063792fdcfa86:0:3:e3b6a3f75e91": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "f48063792fdcfa86:0:3:f9f61f31dd64": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "f48063792fdcfa86:0:3:c311d6e9b17e": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "f48063792fdcfa86:0:3:591ad9aa53bf": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "f48063792fdcfa86:0:3:d1caa086d741": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "f48063792fdcfa86:0:3:ea82d7cf1cc6": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    }
+   },
+   "rejected": []
+  },
+  "f48063792fdcfa86:0:4": {
+   "items": {
+    "f48063792fdcfa86:0:4:965795d433b3": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "f48063792fdcfa86:0:4:ce8171dca38e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "f48063792fdcfa86:0:4:03e9e3569d47": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "f48063792fdcfa86:0:4:1e38c7916e8e": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "f48063792fdcfa86:0:4:e8a43b5a1adc": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "f48063792fdcfa86:0:4:29df477c3834": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "f48063792fdcfa86:0:4:56a7c9a45191": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "f48063792fdcfa86:0:4:b39f0e782718": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "f48063792fdcfa86:0:4:f7483e965fd3": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "f48063792fdcfa86:0:4:f7f50aca6c46": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "f48063792fdcfa86:0:4:41e412b130e0": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "f48063792fdcfa86:0:4:5e4579edfc01": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "Мониторинг Са и фосфора проводится не реже 1 раз в 2 недели в течение первого месяца, затем – ежемесячно; ПТГ – 1 раз в 3 месяца до достижения целевого уровня, затем – 1 раз в 6–12 месяцев.",
+     "clause": "57"
+    },
+    "f48063792fdcfa86:0:4:5541675244a6": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "ХБП С3: ПТГ, Са, фосфор – 1 раз в год;",
+     "clause": "60"
+    },
+    "f48063792fdcfa86:0:4:d64a59c02895": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "ХБП С4: ПТГ – 1 раз в год; Са, фосфор – 1 раз в 6 месяцев;",
+     "clause": "60"
+    },
+    "f48063792fdcfa86:0:4:6dec9a9945da": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "ХБП С5, С5Д: ПТГ – 1 раз в 6 месяцев; Са, фосфор – 1 раз в 3 месяца.",
+     "clause": "60"
+    },
+    "f48063792fdcfa86:0:4:0d81cb009b84": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "ХБП С3, С4: ПТГ, 25(OH)D, ЩФ – 1 раз в год; Са, фосфор – 1 раз в 6 месяцев;",
+     "clause": "60"
+    },
+    "f48063792fdcfa86:0:4:4d71393c53d5": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "ХБП С5, С5Д: ПТГ, ЩФ – 1 раз в 6 месяцев, 25(OH)D – 1 раз в год; Са, фосфор – 1 раз в 1–3 месяца.",
+     "clause": "60"
+    }
+   },
+   "rejected": []
+  },
+  "6b445be22b4df541:0:2": {
+   "items": {
+    "6b445be22b4df541:0:2:41e4d6eea1fd": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:2:677c99634644": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:2:e93ec2cad819": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:2:bc3d92ed49ac": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:2:31f97ac21955": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:2:f8d5e600b32e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:2:f4334f955e6f": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:2:df492e17e608": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:2:b94ff7cbd2d5": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "прием (осмотр, консультация): врача-офтальмолога, врача-нейрохирурга, врача-невролога, врача-онколога, врача-радиолога.",
+     "clause": "11"
+    },
+    "6b445be22b4df541:0:2:66472956d464": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "При наличии микроаденомы любого размера повторная МРТ рекомендуется через 1 год.",
+     "clause": "15"
+    },
+    "6b445be22b4df541:0:2:37c81f8028b1": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "При размере микроаденомы более 5 мм повторную МРТ и гормональное обследование проводят через 1 год, при отсутствии отрицательной динамики только МРТ через 2–3 года, при отсутствии отрицательной динамики дальнейшее наблюдение можно прекратить.",
+     "clause": "15"
+    },
+    "6b445be22b4df541:0:2:a0f2ca201395": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "При наличии макроаденомы, расположенной удаленно от хиазмы (более 5 мм), повторное МРТ-исследование и офтальмологическое обследование рекомендуются через 6–12 месяцев, затем 1 раз в 12 месяцев последующие 2 года, дальнейшая кратность наблюдения 1 раз в 2 года. Комплексное гормональное обследование с целью исключения гипопитуитаризма рекомендуется проводить в те же сроки.",
+     "clause": "15"
+    },
+    "6b445be22b4df541:0:2:cb361d36cfb8": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "Если аденома любого размера прилегает к зрительному нерву или хиазме (менее 5 мм), необходимо рассматривать хирургическое вмешательство. Если хирургическое вмешательство не проведено, повторная МРТ рекомендуется через 6–12 месяцев, в эти же сроки показано офтальмологическое обследование с исследованием полей зрения. В дальнейшем при отсутствии отрицательной динамики обследование проводится 1 раз в 12 месяцев первые 3 года.",
+     "clause": "15"
+    }
+   },
+   "rejected": []
+  },
+  "6b445be22b4df541:0:3": {
+   "items": {
+    "6b445be22b4df541:0:3:13900beb6e31": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "6b445be22b4df541:0:3:b95b12e6b503": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "6b445be22b4df541:0:3:68db3024a52e": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "гиперпролактинемию можно диагностировать при повторном выявлении повышенного уровня пролактина выше верхней границы нормы референсного интервала для используемого диагностического набора после исключения физиологической гиперпролактинемии и подтверждения нормального уровня ТТГ;",
+     "clause": "22"
+    },
+    "6b445be22b4df541:0:3:fd567510f091": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "при наличии патологической гиперпролактинемии и подозрении на объемное образование в гипоталамо-гипофизарной области проводится МРТ гипофиза, предпочтительно с введением контрастного вещества;",
+     "clause": "22"
+    },
+    "6b445be22b4df541:0:3:22ca5edb81bf": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "в случае выявления макроаденомы или микроаденомы с супраселлярным ростом, показана консультация врача-офтальмолога с оценкой остроты зрения, состояния зрительного нерва и компьютерной периметрией;",
+     "clause": "22"
+    },
+    "6b445be22b4df541:0:3:c9fe8d3995d1": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "differential",
+     "quote": "при повышении уровня пролактина и отсутствии клинических симптомов проводится определение мономерного пролактина для исключения феномена макропролактинемии;",
+     "clause": "22"
+    },
+    "6b445be22b4df541:0:3:9e4406cad281": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "при подозрении на медикаментозную гиперпролактинемию рекомендуется повторное определение уровня пролактина через 72 ч. после отмены препарата, если это возможно без риска для состояния пациента;",
+     "clause": "22"
+    },
+    "6b445be22b4df541:0:3:8a08164c5061": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "при несоответствии больших размеров аденомы гипофиза, наличии явных клинических симптомов и умеренного повышения уровня пролактина крови рекомендуется проводить разведение сыворотки 1:100 и определение пролактина повторно в разведении для исключения ложноотрицательных результатов («HOOK»-эффект);",
+     "clause": "22"
+    },
+    "6b445be22b4df541:0:3:dfa59a9ae815": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "у женщин с нормальным менструальным циклом выполняется оценка овуляции (при планировании беременности – в течение 3-х циклов);",
+     "clause": "22"
+    },
+    "6b445be22b4df541:0:3:9ba7f47466d4": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "при подозрении на вторичную гиперпролактинемию проводится обследование в соответствии с клиническим протоколом диагностики возможного заболевания (причины вторичной гиперпролактинемии).",
+     "clause": "22"
+    },
+    "6b445be22b4df541:0:3:5aac6d96cca7": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "Осмотр врача-офтальмолога и оценка полей зрения, периметрия проводятся 1 раз в 3 месяца.",
+     "clause": "25"
+    },
+    "6b445be22b4df541:0:3:6c51716b5920": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "При длительном приеме (более 5 лет) агонистов дофамина ежегодно показана ЭхоКГ и УЗИ органов брюшной полости и забрюшинного пространства.",
+     "clause": "25"
+    },
+    "6b445be22b4df541:0:3:cbe848236e1e": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "После отмены агонистов дофамина уровень пролактина определяется 1 раз в 3 месяца в течение первого года наблюдения, далее – ежегодно в течение минимум 5 лет.",
+     "clause": "25"
+    },
+    "6b445be22b4df541:0:3:f67de0d04a8c": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "После аденомэктомии проводится контроль уровня пролактина 1 раз в 3 месяца в течение 12 месяцев, далее – ежегодно в течение 5 лет.",
+     "clause": "27"
+    },
+    "6b445be22b4df541:0:3:a21c8947de87": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "Также проводится оценка тропных функций гипофиза для исключения их дефицита и концентрационной способности почек (исключение несахарного диабета), осмотр врача-офтальмолога с оценкой полей зрения и МРТ-контроль по медицинским показаниям.",
+     "clause": "27"
+    }
+   },
+   "rejected": []
+  },
+  "6b445be22b4df541:0:4": {
+   "items": {
+    "6b445be22b4df541:0:4:c694e455195c": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:4:a683d9bdf4a3": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:4:677c99634644": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:4:5ad54aeb4e89": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:4:5d2bf20b060f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:4:c768423e099b": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:4:7f60f0617481": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:4:695025eec269": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:4:1a2dd58cb2e4": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:4:e5992b6e1d56": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:4:b797d671ec4b": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:4:508444bc29ef": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:4:c760541444dd": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:4:406bbc90f42b": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:4:649c550eab81": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:4:9d65d937602a": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "6b445be22b4df541:0:4:1f0d46d22736": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "6b445be22b4df541:0:4:8d56f10c3d3e": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "6b445be22b4df541:0:4:dcf127df4ca6": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "6b445be22b4df541:0:4:c04589a3e817": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "6b445be22b4df541:0:4:1e01c80d9ea7": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    }
+   },
+   "rejected": []
+  },
+  "6b445be22b4df541:0:5": {
+   "items": {
+    "6b445be22b4df541:0:5:b71cc1d9e96f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:5:37cda9734d88": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:5:1105e45c95ef": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:5:5134e350e032": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:5:5346184f8a12": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:5:ca2482b6b67c": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:5:74f19d6c14cd": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:5:97300d7b061a": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:5:3618b4070221": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:5:65b9254d8871": {
+     "status": "verified",
+     "rules": "differential",
+     "llm": "differential"
+    },
+    "6b445be22b4df541:0:5:4db3977d909e": {
+     "status": "verified",
+     "rules": "differential",
+     "llm": "differential"
+    },
+    "6b445be22b4df541:0:5:90eaa6bf8d30": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "6b445be22b4df541:0:5:472c8e0a6e86": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "6b445be22b4df541:0:5:ef0f733816d1": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    }
+   },
+   "rejected": []
+  },
+  "6b445be22b4df541:0:6": {
+   "items": {
+    "6b445be22b4df541:0:6:d28dc9fb8e70": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:6:b312ba383612": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:6:1105e45c95ef": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:6:a1bdb55ca71c": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:6:3eaacd3d0630": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:6:e739d4fd1ec0": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:6:8e3c8a6d329b": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:6:dbefef81a3aa": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:6:a4c4a8fb3e05": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:6:b2bf30bbbe2c": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:6:bbdbf3a55909": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:6:6a1ef60f4d90": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:6:d4d8712b2d3a": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "6b445be22b4df541:0:6:fb0170059023": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "6b445be22b4df541:0:6:2b40a15e6fbb": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "6b445be22b4df541:0:6:e298df3c6c5f": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "6b445be22b4df541:0:6:dcacca58fa5f": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "контролировать концентрацию натрия в сыворотке крови через 6 и 12 ч., далее – ежедневно, пока уровень натрия в сыворотке крови не стабилизируется на фоне постоянной терапии.",
+     "clause": "75"
+    },
+    "6b445be22b4df541:0:6:e4b2035d5f4b": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "контролировать концентрацию натрия в сыворотке крови через 1 ч., 6 ч. и 12 ч.",
+     "clause": "77"
+    },
+    "6b445be22b4df541:0:6:9df20d6958d9": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "контролировать концентрацию натрия в сыворотке крови через 4 ч.",
+     "clause": "79"
+    },
+    "6b445be22b4df541:0:6:eeba74e7a328": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "контролировать сывороточную концентрацию натрия каждые 6 ч. до стабилизации уровня натрия до тех пор, пока уровень натрия в сыворотке крови не стабилизируется на фоне постоянной терапии.",
+     "clause": "81"
+    }
+   },
+   "rejected": []
+  },
+  "6b445be22b4df541:0:7": {
+   "items": {
+    "6b445be22b4df541:0:7:d352760db33c": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6b445be22b4df541:0:7:05b6e65dc78f": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6b445be22b4df541:0:7:67cf8e9019d1": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6b445be22b4df541:0:7:a524d67ad751": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6b445be22b4df541:0:7:613f0112d684": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:7:31f97ac21955": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:7:ee21895d41bf": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:7:4c33a57fbc4c": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:7:dccf23561203": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:7:677c99634644": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:7:b797d671ec4b": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:7:a739da7eb5fb": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:7:61bc986693d7": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:7:42457bb09e61": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:7:29028e5668ac": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:7:c39ed810506c": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "уровня ИФР-1 базальный: через 6 недель после начала терапии соматропином, через 6 недель после повышения дозы, не реже 1 раза в 6 месяцев – при подобранной дозе;",
+     "clause": "94"
+    },
+    "6b445be22b4df541:0:7:fd13c16240e4": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "динамики массы тела, индекса массы тела, обхвата талии, уровня АД, БАК (липиды, глюкоза, АСТ, АЛТ, креатинин, мочевина) – 1 раз в 6 месяцев;",
+     "clause": "94"
+    },
+    "6b445be22b4df541:0:7:cb4fad103687": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "ЭКГ – 1 раз в год, ЭхоКГ – по медицинским показаниям;",
+     "clause": "94"
+    },
+    "6b445be22b4df541:0:7:551e4fbf1d6b": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "данных рентгеноденситометрии поясничного отдела позвоночника, проксимальных отделов бедренных костей – 1 раз в 1,5–2 года;",
+     "clause": "94"
+    },
+    "6b445be22b4df541:0:7:908ad743c475": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "данных МРТ гипофиза – по индивидуальным медицинским показаниям.",
+     "clause": "94"
+    }
+   },
+   "rejected": []
+  },
+  "6b445be22b4df541:0:8": {
+   "items": {
+    "6b445be22b4df541:0:8:64ffb8c6406d": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6b445be22b4df541:0:8:760635e87c4f": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6b445be22b4df541:0:8:6669947acccb": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6b445be22b4df541:0:8:a7c8623bde93": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6b445be22b4df541:0:8:6b367d105f01": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:8:677c99634644": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:8:2e24b882a726": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:8:721206f678ba": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:8:a5912b6a17e0": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:8:6b46dbbab33e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:8:bbdbf3a55909": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:8:b797d671ec4b": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:8:c320a1e00a13": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:8:a6dba8f88887": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:8:2ed2e099c3eb": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:8:c29e66866379": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:8:eaa4a5830377": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:8:6b8d4e78838c": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:8:85244fa7d37a": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:8:309ed953f49a": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:8:8ae37af93fbe": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:8:5e7b3fe7dc7b": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:8:2c1ea376e6e9": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:8:f7483e965fd3": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:8:b39f0e782718": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:8:62255557d789": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:8:af3e1e5a3950": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "6b445be22b4df541:0:8:195ae87b90c4": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "6b445be22b4df541:0:8:e7476ea7f483": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "6b445be22b4df541:0:8:58258a95b548": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "6b445be22b4df541:0:8:b95532edf347": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "6b445be22b4df541:0:8:28b98f965393": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    }
+   },
+   "rejected": []
+  },
+  "6b445be22b4df541:0:9": {
+   "items": {
+    "6b445be22b4df541:0:9:fb189956006d": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:9:0563208c5455": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:9:b1e5f337495f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:9:a9dd6a8da1d4": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:9:96a628dcbc59": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:9:ac1021710972": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:9:3eacfabcf4d4": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:9:bbdbf3a55909": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:9:83ea68a8e4d0": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:9:be20f93ac1a8": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:9:d9b650a92491": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:9:8c3e54cb0ad7": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "прием (осмотр, консультация) врачом-гинекологом, врачом-фтизиатром (для исключения туберкулеза), врачом-дерматологом, врачом-урологом, врачом-офтальмологом, врачом-генетиком.",
+     "clause": "119"
+    },
+    "6b445be22b4df541:0:9:cfb93b86739e": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "В течение первого года заболевания показан общий осмотр с оценкой симптоматики и уровней электролитов – 1 раз в месяц.",
+     "clause": "129"
+    },
+    "6b445be22b4df541:0:9:115ff006a107": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "Для оценки адекватности дозы флудрокортизона используют показатели АД, электролитов крови, активности ренина плазмы.",
+     "clause": "129"
+    }
+   },
+   "rejected": []
+  },
+  "6b445be22b4df541:0:10": {
+   "items": {
+    "6b445be22b4df541:0:10:03ba5ccb0aa6": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:10:b1e5f337495f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:10:9d62e95625f5": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:10:e98a1bc252d7": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:10:aaef07d655d5": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:10:07dc200132f8": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:10:58b325d0a3dc": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:10:1b320c6b6a77": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:10:d77de3418577": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:10:bb5d9fa07fe3": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:10:a1dde19678f4": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:10:66380e2f7859": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    }
+   },
+   "rejected": []
+  },
+  "6b445be22b4df541:0:11": {
+   "items": {
+    "6b445be22b4df541:0:11:2f9daa6e1434": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6b445be22b4df541:0:11:4529319ae850": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6b445be22b4df541:0:11:964d21c46367": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6b445be22b4df541:0:11:bbb0cf59076a": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6b445be22b4df541:0:11:0c822c908766": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6b445be22b4df541:0:11:d9179e7ec7c3": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6b445be22b4df541:0:11:92b686b7e620": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6b445be22b4df541:0:11:5cc66b7c3642": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6b445be22b4df541:0:11:c3204c2c4dd3": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:11:ef33f4490005": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:11:803a530905e2": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:11:4e45ea9f0a12": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:11:01f4904d4bcc": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:11:f6f1e55160e8": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:11:c320a1e00a13": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:11:b4d1a516db20": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:11:3eaacd3d0630": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:11:3ce9276c9d95": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:11:8bc821c1d2c8": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:11:20b380f0b106": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    }
+   },
+   "rejected": []
+  },
+  "6b445be22b4df541:0:12": {
+   "items": {
+    "6b445be22b4df541:0:12:6168402a471d": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:12:ef33f4490005": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:12:10cf40743d0d": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:12:eab17388bd52": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:12:bbdbf3a55909": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:12:af267ec3a331": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:12:8ce318c1be7c": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:12:3eacfabcf4d4": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:12:141b04cc46fc": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:12:bf8459f5f1d8": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:12:9fde131e93e4": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:12:4ac4423dfd96": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    }
+   },
+   "rejected": []
+  },
+  "6b445be22b4df541:0:13": {
+   "items": {
+    "6b445be22b4df541:0:13:80ff2f35ac9c": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:13:dccf23561203": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:13:bbdbf3a55909": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:13:c88fa11545f5": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:13:d9e51c01e870": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:13:26ed91c1f482": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:13:0808c3cdd41e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:13:12900c37c694": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:13:47ddf980c831": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:13:3c79c619b22a": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:13:55cfdaed4a08": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:13:3eacfabcf4d4": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:13:166beb41b792": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:13:03dc938f1396": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:13:a1dde19678f4": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:13:3e62b767e30b": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:13:b797d671ec4b": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:13:5a6bee6cabfd": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    }
+   },
+   "rejected": []
+  },
+  "6b445be22b4df541:0:14": {
+   "items": {
+    "6b445be22b4df541:0:14:441251919e1c": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:14:6b8d4e78838c": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": "differential"
+    },
+    "6b445be22b4df541:0:14:fd30b23fad42": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:14:a3573c501099": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:14:1042e00f58a2": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "6b445be22b4df541:0:14:236e1b9886fc": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:14:a1e4e0c8e84f": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:14:507827d898c2": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:14:5a7fc4cee59a": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:14:5054372cf953": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:14:b797d671ec4b": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:14:d33f0f48f7c9": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:14:8fa17dc877b7": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:14:9a8e84ce9327": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "differential",
+     "quote": "исключение беременности, гипотиреоза, гиперпролактинемии;",
+     "clause": "185"
+    },
+    "6b445be22b4df541:0:14:3abe69f2a725": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "differential",
+     "quote": "При ее диагностировании необходимо провести дифференциальный поиск функциональных или анатомических, генетических нарушений гипофизарной области, показана МРТ указанной области.",
+     "clause": "185"
+    },
+    "6b445be22b4df541:0:14:f19b3fffe097": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "differential",
+     "quote": "Дифференциальная диагностика при вторичной аменорее предусматривает исключение беременности, гипотиреоза, гиперпролактинемии.",
+     "clause": "185"
+    }
+   },
+   "rejected": [
+    {
+     "clause": "184",
+     "level": "additional",
+     "condition": "",
+     "quote": "тест на беременность, -ХГЧ;"
+    }
+   ]
+  },
+  "6b445be22b4df541:0:15": {
+   "items": {
+    "6b445be22b4df541:0:15:90b18674b176": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    }
+   },
+   "rejected": []
+  },
+  "6b445be22b4df541:0:16": {
+   "items": {
+    "6b445be22b4df541:0:16:8a9d8c161494": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:16:d562c89261ad": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:16:6b8d4e78838c": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:16:d4d0546d436a": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:16:5428505bc799": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:16:96dec5f2dc30": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:16:3cb330839a98": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:16:609a81a05747": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:16:ba2d2e9ec6e1": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:16:5f4b69279566": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:16:b797d671ec4b": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:16:b39f0e782718": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:16:f131907d02d6": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:16:8bda17b19e8a": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:16:0cea7c49855c": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:16:e0402de56011": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:16:ce41c280fed2": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "Контроль ГТТ с определением глюкозы и инсулина – 1 раз в год по медицинским показаниям, HbA1c – по медицинским показаниям.",
+     "clause": "203"
+    }
+   },
+   "rejected": []
+  },
+  "6b445be22b4df541:0:17": {
+   "items": {
+    "6b445be22b4df541:0:17:ee17c3ef5acb": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:17:6b8d4e78838c": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:17:a3573c501099": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b445be22b4df541:0:17:dfa995a47a5f": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:17:8a1a945b1e59": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:17:3eacfabcf4d4": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:17:d420fc9a710f": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:17:47ddf980c831": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:17:c320a1e00a13": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:17:b39f0e782718": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:17:ba2d2e9ec6e1": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:17:9de7b31000bf": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b445be22b4df541:0:17:4acddff0bf55": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    }
+   },
+   "rejected": []
+  },
+  "6b445be22b4df541:0:19": {
+   "items": {
+    "6b445be22b4df541:0:19:2c2480f90f0d": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "6b445be22b4df541:0:19:91d550a928b2": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "6b445be22b4df541:0:19:e349a8c24319": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "6b445be22b4df541:0:19:5b0328191693": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "6b445be22b4df541:0:19:2e8300be9a58": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "6b445be22b4df541:0:19:e4cc91d97014": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "определить уровень общего тестостерона крови (не менее двух исследований в разные дни). Забор проб крови проводится с 7.00 до 10.00 утра натощак через 10–12 ч. после последнего приема пищи с исключением алкогольной нагрузки накануне вечером;",
+     "clause": "232"
+    },
+    "6b445be22b4df541:0:19:cb5aaa13759e": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "при выявлении низкого уровня тестостерона крови проводится дополнительное исследование с целью дифференциального клинического диагноза уровня нарушения (ФСГ, ЛГ, ПРЛ, ТТГ, УЗИ тестикул):",
+     "clause": "232"
+    },
+    "6b445be22b4df541:0:19:4df60220c2a5": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "differential",
+     "quote": "высокие значения ФСГ, ЛГ – гипергонадотропный гипогонадизм, определение кариотипа;",
+     "clause": "232"
+    },
+    "6b445be22b4df541:0:19:6f23f7525847": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "differential",
+     "quote": "низкие или низконормальные значения ФСГ, ЛГ – для подтверждения клинического диагноза гипогонадотропного гипогонадизма необходимо уточнить наличие патологии гипофизарной области – МРТ гипофиза, наличие болезней накопления (ферритин), наличие дисфункции других тропных гормонов; наличие ятрогенного гипопитуитаризма;",
+     "clause": "232"
+    }
+   },
+   "rejected": []
+  },
+  "7cd3bc04d077e0ef:0:2": {
+   "items": {
+    "7cd3bc04d077e0ef:0:2:73c773503147": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "7cd3bc04d077e0ef:0:2:a6236fdd42cf": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "7cd3bc04d077e0ef:0:2:6a3e30a60b76": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "7cd3bc04d077e0ef:0:2:0c4ee80eb163": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "7cd3bc04d077e0ef:0:2:5b0088960605": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "7cd3bc04d077e0ef:0:2:fde0fc570a9c": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "7cd3bc04d077e0ef:0:2:2663d4ce961e": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "7cd3bc04d077e0ef:0:2:9a656ff5d392": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "7cd3bc04d077e0ef:0:2:3f6b0f1b97c2": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "7cd3bc04d077e0ef:0:2:13ba80149c78": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "7cd3bc04d077e0ef:0:2:a6c775bf61be": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "7cd3bc04d077e0ef:0:2:f51fd9f7bd7b": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "7cd3bc04d077e0ef:0:2:bd1e38511a63": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "7cd3bc04d077e0ef:0:2:196009f5f1c6": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "БАК: глюкоза крови, гликированный гемоглобин, мочевая кислота; общий холестерин, липопротеины низкой плотности, липопротеины высокой плотности, триглицериды, аланинаминотрансфераза, аспартатаминотрансфераза, гамма-глютамилтранспептидаза, креатинин;",
+     "clause": "10"
+    },
+    "7cd3bc04d077e0ef:0:2:a44f0ed8077e": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "исследование уровня тиреотропного гормона;",
+     "clause": "10"
+    },
+    "7cd3bc04d077e0ef:0:2:79d7fdf4ffa5": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "mandatory",
+     "quote": "стратификация риска развития сахарного диабета 2 типа и сердечно-сосудистого риска.",
+     "clause": "10"
+    }
+   },
+   "rejected": []
+  },
+  "7cd3bc04d077e0ef:0:3": {
+   "items": {
+    "7cd3bc04d077e0ef:0:3:0b70f5071014": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "7cd3bc04d077e0ef:0:3:d26cef52ef52": {
+     "status": "uncertain",
+     "rules": "monitoring",
+     "llm": null
+    },
+    "7cd3bc04d077e0ef:0:3:fd2fce2dada7": {
+     "status": "uncertain",
+     "rules": "monitoring",
+     "llm": null
+    },
+    "7cd3bc04d077e0ef:0:3:13c1245a5df7": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "7cd3bc04d077e0ef:0:3:94192601f5d0": {
+     "status": "verified",
+     "rules": "monitoring",
+     "llm": "monitoring"
+    },
+    "7cd3bc04d077e0ef:0:3:9b1ac5588ff7": {
+     "status": "uncertain",
+     "rules": "monitoring",
+     "llm": null
+    },
+    "7cd3bc04d077e0ef:0:3:5c3f2d9b1b97": {
+     "status": "uncertain",
+     "rules": "monitoring",
+     "llm": null
+    },
+    "7cd3bc04d077e0ef:0:3:066b04fc8bab": {
+     "status": "uncertain",
+     "rules": "monitoring",
+     "llm": null
+    },
+    "7cd3bc04d077e0ef:0:3:2f02b426d060": {
+     "status": "uncertain",
+     "rules": "monitoring",
+     "llm": null
+    },
+    "7cd3bc04d077e0ef:0:3:b2225d2363d7": {
+     "status": "uncertain",
+     "rules": "monitoring",
+     "llm": null
+    },
+    "7cd3bc04d077e0ef:0:3:2f8f02d6a29f": {
+     "status": "uncertain",
+     "rules": "monitoring",
+     "llm": null
+    },
+    "7cd3bc04d077e0ef:0:3:d15e29cb0964": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "Через 6 месяцев после хирургического вмешательства показана оценка постпрадиальной гликемии для регистрации гипогликемических эпизодов, контроль показателей липидограммы, уровня общего и скорректированного по альбумину кальция, фосфора, кальцидиола.",
+     "clause": "19"
+    },
+    "7cd3bc04d077e0ef:0:3:dd90994f7c60": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "Через 3–6 месяцев после оперативного вмешательства и далее ежегодно рекомендован контроль показателей обмена железа, уровня витамина В12.",
+     "clause": "19"
+    },
+    "7cd3bc04d077e0ef:0:3:c52031d50f6f": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "Через 2 года после хирургического вмешательства показана рентгеноденситометрия поясничного отдела позвоночника, проксимальных отделов бедренных костей.",
+     "clause": "19"
+    }
+   },
+   "rejected": []
+  },
+  "366126cb9b665dbf:0:2": {
+   "items": {
+    "366126cb9b665dbf:0:2:56a7c9a45191": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "366126cb9b665dbf:0:2:451ac27c04bc": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "366126cb9b665dbf:0:2:570e63691401": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "366126cb9b665dbf:0:2:7af7e8c2adc0": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "366126cb9b665dbf:0:2:001a244c8c09": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "366126cb9b665dbf:0:2:34b32c9d57ec": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "366126cb9b665dbf:0:2:e08924216813": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "366126cb9b665dbf:0:2:1edcf93a4cb4": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "366126cb9b665dbf:0:2:0aade059df59": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "366126cb9b665dbf:0:2:d42fe0a90591": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "366126cb9b665dbf:0:2:5a7fc4cee59a": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "366126cb9b665dbf:0:2:af2d14ca4289": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "366126cb9b665dbf:0:2:81d63f88f3af": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "366126cb9b665dbf:0:2:c6924cedef8f": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    }
+   },
+   "rejected": []
+  }
+ }
+}
