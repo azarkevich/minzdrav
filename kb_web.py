@@ -20,7 +20,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import kb  # noqa: E402
 from sheet_log import SheetLog, mask  # noqa: E402
 
-VERSION = "1.6"  # shown on the page; bump on user-visible changes
+VERSION = "1.7"  # shown on the page; bump on user-visible changes
 PAGE = (Path(__file__).resolve().parent / "web" / "index.html").read_text(encoding="utf-8").replace("__VERSION__", VERSION)
 LOCK = threading.Lock()
 FEEDBACK_LOG = Path(__file__).resolve().parent / "kb" / "feedback.jsonl"

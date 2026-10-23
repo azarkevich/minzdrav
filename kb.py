@@ -21,7 +21,7 @@ import zlib
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # `python -I` drops the script dir
-from kb_text import GENERIC, Normalizer, close, contains, trigram_sim
+from kb_text import GENERIC, METHOD, Normalizer, close, contains, trigram_sim
 from kb_build import Catalogue
 import insurance
 
@@ -399,7 +399,10 @@ class Engine:
         # prefer the LLM's code that the protocols cover (E27.1 over E27.2 for Аддисон)
         covered = [c for c in codes if c in self.covered
                    or any(x.startswith(c + ".") or c.startswith(x + ".") for x in self.covered)]
-        return ((covered or codes or [parsed["diagnosis"]])[0], parsed["service"],
+        service = parsed["service"].strip()
+        if re.fullmatch(r"(?:не\s+)?(?:указан\w*|нет|отсутству\w*|-|—)(?:\s+в\s+вопросе)?\.?", service, re.I):
+            service = ""  # «не указана в вопросе»
+        return ((covered or codes or [parsed["diagnosis"]])[0], service or None,
                 parsed["population"] if parsed["population"] != "unknown" else None,
                 f"диагноз выделен LLM: «{parsed['diagnosis']}» → {', '.join(codes) or 'код не предложен'}")
 
@@ -459,15 +462,29 @@ class Engine:
             if lst:
                 return self.list_services(question, *lst, population=population)
             d, s = split_question(question)
+            if not (d or s or diagnosis or service):
+                # only a diagnosis («сахарный диабет 2 типа», «E06.3»): insurance verdict + every
+                # diagnostic measure of the protocols
+                cand = _clean_dx(question.strip(" ?."))
+                # «анализ крови», «УЗИ щитовидной железы» name a service, not a diagnosis
+                is_service = any(x in GENERIC or x in METHOD for x in self.norm.stems(cand))
+                dx = self.resolve_diagnosis(cand) if cand and not is_service else []
+                if dx and dx[0]["score"] >= (LLM_DX_SCORE if self.llm else MIN_DX_SCORE):
+                    return dict(self.list_services(question, cand, population=population), diagnosis_only=True)
             diagnosis, service = diagnosis or d, service or s
         asked_diagnosis = diagnosis  # the user's wording, shown even when the LLM supplies the code
         if self.llm and question and (not diagnosis or not service or self._weak(diagnosis)):
             diagnosis, s, pop, llm_used = self._llm_parse(question)
             service = service or s
             population = population or pop
+            if diagnosis and not service:  # the LLM found only a diagnosis
+                res = self.list_services(None, diagnosis, population=population)
+                if "method" in res:
+                    res["method"] += f"; {llm_used}"
+                return dict(res, question=question, diagnosis_only=True)
         if not diagnosis or not service:
-            return {"error": "Не удалось выделить диагноз и услугу. Сформулируйте как "
-                             "«Диагноз – …, разрешено ли …» или задайте --diagnosis и --service."}
+            return {"error": "Не удалось выделить диагноз и услугу. Сформулируйте как «Диагноз – …, разрешено ли …», "
+                             "«…, перечень лабораторных анализов» или укажите только диагноз (или код МКБ-10)."}
         if population is None and question:
             population = "child" if CHILD_RE.search(question) else "adult" if ADULT_RE.search(question) else None
 
@@ -560,7 +577,7 @@ class Engine:
         if population is None and question:
             population = "child" if CHILD_RE.search(question) else "adult" if ADULT_RE.search(question) else None
         base = {"mode": "list", "question": question, "diagnosis_text": asked_diagnosis, "category": category,
-                "category_label": CATEGORIES[category][0] if category else "все исследования",
+                "category_label": CATEGORIES[category][0] if category else "все диагностические мероприятия",
                 "service_text": service, "population": population}
         dx = self.resolve_diagnosis(diagnosis)
         if not dx or dx[0]["score"] < MIN_DX_SCORE:
@@ -657,7 +674,8 @@ def render_list(a: dict) -> str:
     out.append(f"Диагноз: {d['code']} {d['name']}   (из «{a['diagnosis_text']}»)")
     for alt in a["diagnosis_alternatives"]:
         out.append(f"   или? {alt['code']} {alt['name']}")
-    out.append(f"Перечень: {a['category_label']}" + (f", услуга «{a['service_text']}»" if a["service_text"] else ""))
+    out.append(f"Перечень: {a['category_label']}" + (f", услуга «{a['service_text']}»" if a["service_text"] else "")
+               + ("   (указан только диагноз)" if a.get("diagnosis_only") else ""))
     if a["population"]:
         out.append(f"Население: {'дети' if a['population'] == 'child' else 'взрослые'}")
     if not a["results"]:

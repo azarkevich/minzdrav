@@ -5,3 +5,6 @@
 {"question": "перечень инструментальных исследований при сахарном диабете 2 типа", "mode": "list", "icd": "E11", "category": "instrumental", "service": null, "contains": ["ЭКГ", "электронейромиография"]}
 {"question": "какие анализы сдают при гипотиреозе", "mode": "list", "icd": "E03", "category": "lab", "service": null, "contains": ["ТТГ"]}
 {"question": "артериальная гипертензия, какие исследования", "mode": "list", "icd": "I10", "category": null, "service": null, "contains": ["ЭКГ"]}
+{"question": "сахарный диабет 2 типа", "mode": "list", "icd": "E11", "category": null, "service": null, "contains": ["HbA1c", "ЭКГ"]}
+{"question": "E06.3", "mode": "list", "icd": "E06.3", "category": null, "service": null, "contains": ["ТТГ"]}
+{"question": "Диагноз – псориаз", "mode": "list", "icd": "L40", "category": null, "service": null, "contains": []}
