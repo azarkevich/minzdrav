@@ -403,6 +403,42 @@ class Engine:
                 parsed["population"] if parsed["population"] != "unknown" else None,
                 f"диагноз выделен LLM: «{parsed['diagnosis']}» → {', '.join(codes) or 'код не предложен'}")
 
+    def insurance_check(self, chosen, diagnosis: str, service, **kw):
+        """Insurance block for the chosen code — unless the wording fits several МКБ-10 rubrics the rules
+        treat differently («сахарный диабет»: E10 excluded, E11 insured): then ask to clarify."""
+        if not self.insurance:
+            return None
+        ins = self.insurance.check(chosen["code"], chosen["name"], diagnosis, service, **kw)
+        qs = [x for x in self.norm.stems(diagnosis) if x not in GENERIC and x not in DX_NEUTRAL]
+        if not qs or ICD_CODE_RE.search(diagnosis.translate(CYR2LAT)):
+            return ins
+        # every rubric whose МКБ-10 name has all the words of the question (exact stems, no prefixes:
+        # «псориаз» must not pull in «псориатическая артропатия»)
+        fits = [c for c, n in self.icd.items() if (len(c) == 3 or c == chosen["code"]) and re.fullmatch(r"[A-Z]\d{2}(\.\d{1,2})?", c)
+                and all(any(close(s, w) for w in self.name_stems.get(n.lower()) or self.norm.stems(n)) for s in qs)]
+        if not 1 < len(fits) <= 15:
+            return ins
+        # pregnancy / perinatal / congenital rubrics («врожденная пневмония») only when the question is about them
+        fits = [c for c in fits if c[0] not in "OPQ" or c[0] == chosen["code"][0]]
+        variants = []
+        for c in fits:
+            v = self.insurance.check(c, self.icd[c], "", service)
+            variants.append({"code": c, "name": self.icd[c], "verdict_level": v["verdict_level"],
+                             "clauses": [{"clause": m["clause"], "short": m["short"], "url": m["url"]} for m in v["excluded"]]})
+        # only a named exclusion counts: a parent rubric with one excluded subcode (K29 ∋ K29.2 alcoholic) is not one
+        if not any(v["verdict_level"] == "excluded" for v in variants)                 or not any(v["verdict_level"] in ("covered", "limited") for v in variants):
+            return ins
+        parts = []
+        for level in ("excluded", "probable", "limited", "covered"):
+            vs = [v for v in variants if v["verdict_level"] == level]
+            if vs:
+                cl = sorted({m["clause"] for v in vs for m in v["clauses"]})
+                parts.append(f"{insurance.SHORT[level]}" + (f" (п. {', '.join(cl)})" if cl else "") + ": "
+                             + ", ".join(f"{v['code']} {v['name']}" for v in vs))
+        ins.update(verdict_level="unclear", excluded=[], variants=variants,
+                   verdict=f"УТОЧНИТЕ ДИАГНОЗ — «{diagnosis.strip()}» может означать разные заболевания. " + "; ".join(parts))
+        return ins
+
     def _choose(self, dx):
         """The top МКБ-10 candidate, or a close one the protocols cover when it isn't covered."""
         chosen = dx[0]
@@ -508,9 +544,8 @@ class Engine:
             "method": ("правила + перекрёстная проверка LLM" if self.crosscheck else "правила (без перекрёстной проверки LLM)")
                       + (f"; {llm_used}" if llm_used else ""),
             # «not provided for» only when a protocol was checked: п. 4.1.50 of the insurance rules
-            "insurance": self.insurance.check(chosen["code"], chosen["name"], diagnosis, service,
-                                              protocol_level=main["verdict_level"] if results else "-")
-                         if self.insurance else None,
+            "insurance": self.insurance_check(chosen, diagnosis, service,
+                                              protocol_level=main["verdict_level"] if results else "-"),
         }
 
     def list_services(self, question: str | None, diagnosis: str, category: str | None = None,
@@ -607,9 +642,8 @@ class Engine:
             else "В перечнях диагностики протоколов для этого диагноза ничего не найдено" if sections
             else "ПРОТОКОЛ НЕ НАЙДЕН для этого диагноза",
             evidence=results[0]["evidence"] if results else [], results=results, text_only=text_only,
-            insurance=self.insurance.check(chosen["code"], chosen["name"], diagnosis, service,
-                                           items=list(dict.fromkeys(e["text"] for r in results for e in r["evidence"])))
-                      if self.insurance else None,
+            insurance=self.insurance_check(chosen, diagnosis, service,
+                                           items=list(dict.fromkeys(e["text"] for r in results for e in r["evidence"]))),
             unparsed=[{"protocol": self.kb["documents"][d]["title"], "url": self.kb["documents"][d]["url"],
                        "kind": self.kb["documents"][d]["kind"]} for d in unparsed],
             method=("правила + перекрёстная проверка LLM" if self.crosscheck else "правила (без перекрёстной проверки LLM)")

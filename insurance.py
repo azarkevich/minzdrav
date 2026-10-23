@@ -16,7 +16,7 @@ import urllib.request
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # `python -I` drops the script dir
-from kb_text import Normalizer, contains  # noqa: E402
+from kb_text import Normalizer, close  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
 RULES = HERE / "data" / "insurance" / "task20.rules.json"
@@ -31,7 +31,10 @@ VERDICTS = {
     "limited": "СТРАХОВОЙ, С ОГРАНИЧЕНИЯМИ — часть услуг по этому заболеванию не оплачивается",
     "covered": "ИСКЛЮЧЕНИЙ НЕ НАЙДЕНО — страховой случай при внезапном расстройстве здоровья или обострении "
                "хронического заболевания, в объёме Программы страхования",
+    "unclear": "УТОЧНИТЕ ДИАГНОЗ — формулировка подходит под заболевания с разным страховым решением",
 }
+SHORT = {"excluded": "не страховой", "probable": "вероятно не страховой", "limited": "страховой, с ограничениями",
+         "covered": "страховой"}
 
 
 # ---------------------------------------------------------------------------- build
@@ -124,6 +127,12 @@ def in_ids(cid: str, ranges) -> bool:
     return False
 
 
+def word_match(s: str, t: str) -> bool:
+    """Stem `s` of a rule phrase occurs as text stem `t`: equal (one typo), or `t` continues it
+    («гормон» → «гормональн»); a shorter `t` is not enough — «плазм» is not «плазмаферез»."""
+    return close(s, t) or t.startswith(s) or (s.startswith(t) and len(t) >= len(s) - 2)
+
+
 class Insurance:
     def __init__(self, path: Path = BUILT, norm: Normalizer | None = None):
         self.rules = json.loads(path.read_text(encoding="utf-8"))
@@ -140,7 +149,7 @@ class Insurance:
         ts = self.norm.stems(text) if text else []
         for p in phrases or []:
             ps = self.stems(p)
-            if ps and all(contains(ts, s) for s in ps):
+            if ps and all(any(word_match(s, t) for t in ts) for s in ps):
                 return p
         return None
 

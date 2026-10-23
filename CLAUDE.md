@@ -288,7 +288,7 @@ JSON lines into it.
 `text` = `kb.render`). The page shows diagnosis/service recognition, a coloured verdict per
 population, each excerpt with a `url#page=N` link, and the plain-text form for copying; query
 history is in the browser's localStorage. The page header shows `VERSION` from `kb_web.py`
-(substituted for `__VERSION__` in `web/index.html`; 1.1 = list mode, 1.2 = Enter sends / Shift+Enter new line, spinner, 1.3 = insurance block, 1.4 = insurance / protocols tabs, 1.5 = rating panel between the question and the answer) — bump it on user-visible changes. Binds to 127.0.0.1 only (no auth). `--llm` needs
+(substituted for `__VERSION__` in `web/index.html`; 1.1 = list mode, 1.2 = Enter sends / Shift+Enter new line, spinner, 1.3 = insurance block, 1.4 = insurance / protocols tabs, 1.5 = rating panel between the question and the answer, 1.6 = «уточните диагноз», Google Sheet log) — bump it on user-visible changes. Binds to 127.0.0.1 only (no auth). `--llm` needs
 `KB_OPENROUTER_API_KEY` in the environment of the server process.
 
 Feedback: under each answer the page shows a 3-star rating, tags (диагноз/услуга распознаны неверно, вердикт неверный, цитата не по теме, не нашёл) and a comment. `POST /api/feedback` appends one line to `kb/feedback.jsonl` with the rating and a summary of the answer (diagnosis, service, verdict, evidence links) — low-rated lines are candidates for `eval/` cases.
@@ -326,6 +326,17 @@ the exclusion, e.g. маточные кровотечения in 4.1.34; `dx_wor
 stems of the service or of list items). Notes: п. 4.2 (paid until the final diagnosis), п. 3.1, п. 4.1.1
 when the diagnosis says «хронический», п. 4.1.50 when the protocol does not provide for the service.
 `Engine.ask` / `list_services` put the result under `insurance`; `kb.render` appends it, the page shows
-it in two tabs: «Правила страхования: <verdict>» and «Клинические протоколы»; a non-insured
+it in two tabs (`Engine.insurance_check`: when the wording fits several МКБ-10 rubrics with a named
+exclusion on one side and insured ones on the other — «сахарный диабет» E10 vs E11, «артрит», «гепатит» — the
+level is `unclear` with `variants`; O/P/Q rubrics only when the question is about them): «Правила страхования: <verdict>» and «Клинические протоколы»; a non-insured
 (excluded / probable) case opens on the rules tab, an insured one on the protocols tab. Appendices 11–13 (program contents) are not in
 the PDF — the answer says to check the contract's program.
+
+## 9. `sheet_log.py` + `web/sheet_logger.gs` — question / rating log in a Google Sheet
+
+`kb_web.py` sends a row per question («Запросы») and per rating («Оценки») to an Apps Script web app when
+`$KB_SHEET_URL` / `$KB_SHEET_TOKEN` are set (setup: `DEPLOY_RENDER.md`); one background thread, 3 retries,
+`SHEET_FAIL` on stdout otherwise. `mask()` replaces personal data (ФИО with initials / patronymic / after
+«пациент», phones, e-mail, dates, passport / personal numbers, «полис № …», long numbers) in everything stored —
+the engine still gets the raw question. Personal data in the question also break the diagnosis / service split
+(«…, HbA1c, Ковалёва А.В» → service «HbA1c, Ковалёва»), so operators should type only the diagnosis and the service.

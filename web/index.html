@@ -30,10 +30,11 @@ ul.lst{margin:4px 0 8px;padding-left:22px}ul.lst li{margin:2px 0}ul.lst:empty{di
 .ins .ev b{color:var(--ins)}.tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:-1px}
 .tab{background:var(--bg);color:var(--fg);border:1px solid var(--bd);border-bottom:none;border-radius:10px 10px 0 0;padding:9px 14px;font-weight:400}
 .tab[aria-selected=true]{background:var(--card);box-shadow:inset 0 3px 0 var(--acc)}
-.ti-excluded b{color:var(--bad)}.ti-probable b{color:var(--warn)}.ti-limited b,.ti-covered b{color:var(--ok)}
-.tab.ti-excluded[aria-selected=true],.tab.ti-probable[aria-selected=true],.tab.ti-limited[aria-selected=true],.tab.ti-covered[aria-selected=true]{box-shadow:inset 0 3px 0 var(--ins)}
+.ti-excluded b{color:var(--bad)}.ti-unclear b{color:var(--warn)}.ti-probable b{color:var(--warn)}.ti-limited b,.ti-covered b{color:var(--ok)}
+.tab.ti-excluded[aria-selected=true],.tab.ti-unclear[aria-selected=true],.tab.ti-probable[aria-selected=true],.tab.ti-limited[aria-selected=true],.tab.ti-covered[aria-selected=true]{box-shadow:inset 0 3px 0 var(--ins)}
 .pane>.card:first-child{border-top-left-radius:0}
 #fb{border:2px solid var(--acc)}#fb .stars{margin:4px 0 0}
+b.bad{color:var(--bad)}b.warn{color:var(--warn)}b.ok{color:var(--ok)}
 details summary{cursor:pointer;color:var(--mut);font-size:13px}pre{white-space:pre-wrap;font-size:13px}
 </style></head><body><div class="wrap">
 <h1>Проверка диагностики по клиническим протоколам МЗ РБ и правилам страхования <span class="meta" style="font-weight:400">версия __VERSION__</span></h1>
@@ -55,7 +56,8 @@ const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&g
 const EX=["Диагноз – аутоиммунный тиреоидит, разрешён ли анализ мочи по Нечипоренко","Диагноз – псориаз, разрешено ли определение СОЭ","Диагноз – болезнь Аддисона, разрешен ли тест с инсулиновой гипогликемией","Диагноз E06.3, ТТГ","Сахарный диабет 2 типа, определение гликированного гемоглобина","Сахарный диабет, перечень лабораторных анализов","Ангиомиолипома, какой вид КТ используется для диагностики"];
 $("examples").innerHTML=EX.map((e,i)=>`<span class="ex" data-i="${i}">${esc(e.length>48?e.slice(0,48)+"…":e)}</span>`).join("");
 $("examples").onclick=e=>{if(e.target.dataset.i){$("q").value=EX[e.target.dataset.i];ask()}};
-const ilvl={excluded:"v-bad",probable:"v-warn",limited:"v-warn",covered:"v-ok"};
+const ilvl={unclear:"v-warn",excluded:"v-bad",probable:"v-warn",limited:"v-warn",covered:"v-ok"};
+const a0=i=>(i.verdict.match(/«(.*?)»/)||[,""])[1];
 function insurance(i){
  if(!i)return "";
  const a=(u,t)=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}</a>`;
@@ -64,7 +66,12 @@ function insurance(i){
    +(m.examples?`<div class="meta">В перечне: ${esc(m.examples.slice(0,3).join("; "))}${m.examples.length>3?` и ещё ${m.examples.length-3}`:""}</div>`:"")
    +(q?`<blockquote>${esc(m.quote)}</blockquote>`:"")+a(m.url,`Правила, стр. ${m.page}`)+`</div>`).join("")+`</div>`:"";
  let h=`<div class="card ins"><div class="meta">${a(i.url,i.rules)}</div>`;
- h+=`<div class="verdict ${ilvl[i.verdict_level]}">${esc(i.verdict)}</div>`;
+ if(i.variants){
+  const S={excluded:"не страховой",probable:"вероятно не страховой",limited:"страховой, с ограничениями",covered:"страховой"};
+  h+=`<div class="verdict v-warn">Уточните диагноз — «${esc(a0(i))}» может означать разные заболевания с разным страховым решением</div><ul class="lst">`
+   +i.variants.map(v=>`<li><b>${esc(v.code)}</b> ${esc(v.name)} — <b class="${v.verdict_level=="excluded"?"bad":v.verdict_level=="probable"?"warn":"ok"}">${S[v.verdict_level]}</b>`
+     +v.clauses.map(m=>` ${a(m.url,"п. "+m.clause)}`).join("")+`</li>`).join("")+`</ul><div class="meta">Задайте вопрос с уточнённым диагнозом или кодом МКБ-10.</div>`;
+ }else h+=`<div class="verdict ${ilvl[i.verdict_level]}">${esc(i.verdict)}</div>`;
  h+=rows("Исключение:",i.excluded)+rows("Не исключено (оговорка пункта):",i.exceptions)
    +rows("Ограничения по услугам для этого заболевания:",i.limited)+rows("Лимиты и исключения по услуге (Программа «А»):",i.service_limits);
  const c=i.circumstances;
@@ -134,11 +141,11 @@ function render(a){
 }
 // two tabs: insurance rules and protocols; the insurance verdict is in the tab title, and a
 // non-insured case opens on the rules tab, an insured one goes straight to the protocols
-const ITAB={excluded:"Не страховой случай",probable:"Вероятно не страховой случай",limited:"Страховой случай (с ограничениями)",covered:"Страховой случай"};
+const ITAB={unclear:"Уточните диагноз",excluded:"Не страховой случай",probable:"Вероятно не страховой случай",limited:"Страховой случай (с ограничениями)",covered:"Страховой случай"};
 function tabs(a,prot){
  const i=a.insurance;
  if(!i)return feedback(a)+prot;
- const insFirst=i.verdict_level=="excluded"||i.verdict_level=="probable";
+ const insFirst=["excluded","probable","unclear"].includes(i.verdict_level);
  const pv=a.mode=="list"?"перечень":(a.results||[]).length?(a.results[0].verdict_level?"предусмотрено":"не предусмотрено"):"протокол не найден";
  const tab=(t,on,cls,label)=>`<button role="tab" class="tab ${cls}" data-tab="${t}" aria-selected="${on}">${label}</button>`;
  return feedback(a)+`<div class="tabs" role="tablist">`

@@ -18,20 +18,22 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import kb  # noqa: E402
+from sheet_log import SheetLog, mask  # noqa: E402
 
-VERSION = "1.5"  # shown on the page; bump on user-visible changes
+VERSION = "1.6"  # shown on the page; bump on user-visible changes
 PAGE = (Path(__file__).resolve().parent / "web" / "index.html").read_text(encoding="utf-8").replace("__VERSION__", VERSION)
 LOCK = threading.Lock()
 FEEDBACK_LOG = Path(__file__).resolve().parent / "kb" / "feedback.jsonl"
 ANSWERS: dict = {}  # recent answers by id, so a rating is stored together with what was answered
+SHEET = SheetLog()  # $KB_SHEET_URL: questions and ratings → Google Sheet (personal data masked)
 
 
 def summary(question, ans):
     """What a reviewer needs to judge the answer later (and to turn it into an eval case)."""
     ev = [{"protocol": e["protocol"], "clause": e["clause"], "pages": e["pdf_pages"], "url": e["url"]}
           for r in ans.get("results", []) for e in r["evidence"][:3]]
-    return {"question": question, "diagnosis_text": ans.get("diagnosis_text"),
-            "diagnosis": (ans.get("diagnosis") or {}).get("code"), "service_text": ans.get("service_text"),
+    return {"question": mask(question), "diagnosis_text": mask(ans.get("diagnosis_text")),
+            "diagnosis": (ans.get("diagnosis") or {}).get("code"), "service_text": mask(ans.get("service_text")),
             "service": [s["code"] for s in (ans.get("service_catalogue") or [])[:2]],
             "population": ans.get("population"), "verdict_level": ans.get("verdict_level"),
             "verdict": ans.get("verdict"), "evidence": ev, "method": ans.get("method"),
@@ -87,6 +89,7 @@ def make_handler(engine):
                 question = (req.get("question") or "").strip()
                 if not question:
                     raise ValueError("Пустой вопрос")
+                t0 = time.time()
                 with LOCK:
                     ans = engine.ask(question, population=req.get("population") or None)
                 if not ans.get("error"):
@@ -99,6 +102,14 @@ def make_handler(engine):
                         ANSWERS[ans["answer_id"]] = summary(question, ans)
                         while len(ANSWERS) > 500:
                             ANSWERS.pop(next(iter(ANSWERS)))
+                sm = summary(question, ans)
+                SHEET.send("Запросы", {
+                    "время": SHEET.now(), "answer_id": ans.get("answer_id", ""), "вопрос": sm["question"],
+                    "режим": "перечень" if ans.get("mode") == "list" else "проверка", "население": req.get("population") or "",
+                    "диагноз": " ".join(x for x in [sm["diagnosis"], (ans.get("diagnosis") or {}).get("name")] if x),
+                    "услуга": sm["service_text"], "вердикт протокола": sm["verdict"] or "",
+                    "страховой вердикт": (ans.get("insurance") or {}).get("verdict", ""),
+                    "ошибка": mask(ans.get("error", "")), "время ответа, с": round(time.time() - t0, 1), "версия": VERSION})
             except Exception as ex:  # noqa: BLE001 — show the problem in the page
                 ans = {"error": f"{type(ex).__name__}: {ex}"}
             self._send(200, json.dumps(ans, ensure_ascii=False), "application/json")
@@ -111,12 +122,20 @@ def make_handler(engine):
                     raise ValueError("stars must be 1..3")
                 rec = {"t": int(time.time()), "answer_id": req.get("answer_id"), "stars": stars,
                        "tags": [str(t)[:40] for t in (req.get("tags") or [])][:10],
-                       "comment": str(req.get("comment") or "")[:2000],
+                       "comment": mask(str(req.get("comment") or "")[:2000]),
                        "answer": ANSWERS.get(req.get("answer_id"))}
                 FEEDBACK_LOG.parent.mkdir(parents=True, exist_ok=True)
                 with LOCK, FEEDBACK_LOG.open("a", encoding="utf-8") as f:
                     f.write(json.dumps(rec, ensure_ascii=False) + "\n")
                 print("FEEDBACK " + json.dumps(rec, ensure_ascii=False), flush=True)  # hosts with a throwaway disk keep stdout logs
+                a = rec["answer"] or {}
+                SHEET.send("Оценки", {
+                    "время": SHEET.now(), "answer_id": rec["answer_id"] or "", "оценка": stars, "теги": "; ".join(rec["tags"]),
+                    "комментарий": rec["comment"], "вопрос": a.get("question", ""), "диагноз": a.get("diagnosis") or "",
+                    "услуга": a.get("service_text") or "", "вердикт протокола": a.get("verdict") or "",
+                    "страховой вердикт": (a.get("insurance") or {}).get("verdict") or "",
+                    "цитаты": "\n".join(f"{e['protocol']}, п. {e['clause']}: {e['url']}" for e in a.get("evidence", [])),
+                    "версия": VERSION})
                 out = {"ok": True}
             except Exception as ex:  # noqa: BLE001
                 out = {"error": f"{type(ex).__name__}: {ex}"}
@@ -140,7 +159,7 @@ def main():
     sys.stderr.reconfigure(encoding="utf-8")
     engine = kb.Engine(args.kb, args.reference, llm=args.llm)
     srv = ThreadingHTTPServer((args.host, args.port), make_handler(engine))
-    print(f"http://{args.host}:{args.port}/  (version {VERSION}, LLM {'on' if args.llm else 'off'}, KB {args.kb})", flush=True)
+    print(f"http://{args.host}:{args.port}/  (version {VERSION}, LLM {'on' if args.llm else 'off'}, sheet {'on' if SHEET.url else 'off'}, KB {args.kb})", flush=True)
     srv.serve_forever()
 
 

@@ -21,6 +21,25 @@ Files involved: `render.yaml` (blueprint), `requirements.txt`, `deploy/` (the ru
    - `KB_WEB_PASSWORD` — the site password; the browser asks for a login (any) and this password.
 4. **Apply.** The first build takes a few minutes. The address is `https://minzdrav-<id>.onrender.com`.
 
+## Questions and ratings → Google Sheet
+
+`sheet_log.py` sends every question (sheet «Запросы») and every rating (sheet «Оценки») to a Google
+Sheet through an Apps Script web app. Personal data are masked before sending and before writing
+`kb/feedback.jsonl` (`sheet_log.mask`: ФИО with initials or a patronymic, «пациент Иванов», phones,
+e-mail, dates, passport and personal numbers, «полис / договор № …», 6+ digit runs).
+
+1. Create a Google Sheet (e.g. «minzdrav — запросы и оценки»), share it with the people who review answers.
+2. Extensions → Apps Script → replace the code with `web/sheet_logger.gs`, set `TOKEN` to a long random
+   string → Save.
+3. Deploy → New deployment → type «Web app», Execute as «Me», Who has access «Anyone» → Deploy →
+   allow access → copy the Web app URL (`https://script.google.com/macros/s/…/exec`).
+4. Render → the service → Environment: `KB_SHEET_URL` = that URL, `KB_SHEET_TOKEN` = the same TOKEN →
+   Save (the service restarts). The startup log line shows `sheet on`.
+
+Columns are created from the first row; a new field from a later version becomes a new column. After
+editing the script: Deploy → Manage deployments → edit → Version «New version» (the URL stays). A row that
+can't be sent is printed to the log as `SHEET_FAIL {json}`.
+
 ## Behaviour of the free plan
 
 - The service sleeps after 15 minutes without requests; the first request after that waits up to ~1 minute.
