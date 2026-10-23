@@ -12,7 +12,7 @@ if "%KB_OPENROUTER_API_KEY%"=="" (
 )
 
 rem Website in its own window (close it to stop the server)
-start "minzdrav-web" python -I kb_web.py --kb kb_all/kb.json %LLMFLAG% --port 8000
+start "minzdrav-web" python -I kb_web.py --kb kb_all/kb.idx.json %LLMFLAG% --port 8000
 
 echo Waiting for the knowledge base to load...
 :wait

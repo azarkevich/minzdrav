@@ -276,3 +276,12 @@ history is in the browser's localStorage. Binds to 127.0.0.1 only (no auth). `--
 `KB_OPENROUTER_API_KEY` in the environment of the server process.
 
 Feedback: under each answer the page shows a 3-star rating, tags (диагноз/услуга распознаны неверно, вердикт неверный, цитата не по теме, не нашёл) and a comment. `POST /api/feedback` appends one line to `kb/feedback.jsonl` with the rating and a summary of the answer (diagnosis, service, verdict, evidence links) — low-rated lines are candidates for `eval/` cases.
+
+### Low-memory form (`kb_pack.py`)
+
+`kb_build.py` also writes `kb.idx.json` (section metadata, ~3 MB) + `kb.items.bin` (each section's
+`items` as a zlib blob, ~19 MB) next to `kb.json`; `python -I kb_pack.py kb_all/kb.json` converts an
+existing build (5 s). `kb.py ... --kb kb_all/kb.idx.json` reads a section's blob only when the
+section is checked (`LazySection`, LRU of 64): process ~50 MB instead of ~530 MB (peak 720 MB while
+loading kb.json), same answers (eval sets and sample outputs identical). The website and the MCP
+server use the idx form by default. To deploy, copy only `kb.idx.json` + `kb.items.bin` + `reference/`.

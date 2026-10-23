@@ -1,6 +1,6 @@
 """Small local website for the expert system: ask a question, read the answer with excerpts and links.
 
-    python -I kb_web.py [--kb kb_all/kb.json] [--llm] [--port 8000]
+    python -I kb_web.py [--kb kb_all/kb.idx.json] [--llm] [--port 8000]
 
 Stdlib only. Listens on 127.0.0.1. History is kept in the browser (localStorage).
 """
@@ -101,7 +101,7 @@ def make_handler(engine):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--kb", type=Path, default=Path("kb_all/kb.json"))
+    ap.add_argument("--kb", type=Path, default=Path("kb_all/kb.idx.json"))
     ap.add_argument("--reference", type=Path, default=Path("reference"))
     ap.add_argument("--llm", action="store_true", help="ask the LLM when the diagnosis is not recognized confidently")
     ap.add_argument("--port", type=int, default=8000)

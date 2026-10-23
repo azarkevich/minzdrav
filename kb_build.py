@@ -453,6 +453,9 @@ def main():
     kb, report = build(args.parsed, args.reference, args.category)
     args.out.mkdir(parents=True, exist_ok=True)
     (args.out / "kb.json").write_text(json.dumps(kb, ensure_ascii=False), encoding="utf-8")
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from kb_pack import pack
+    pack(kb, args.out)  # kb.idx.json + kb.items.bin for low-memory serving
 
     secs = kb["sections"]
     items = [i for s in secs for i in s["items"]]

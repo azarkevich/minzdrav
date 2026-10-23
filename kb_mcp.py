@@ -10,7 +10,7 @@ Tools:
 Standard library only (newline-delimited JSON-RPC 2.0 over stdin/stdout, MCP stdio transport).
 Register in Claude Code:
     claude mcp add minzdrav -- python -I C:/w/minzdrav/kb_mcp.py
-Knowledge base: $KB_PATH or kb_all/kb.json next to this script (falls back to kb/kb.json).
+Knowledge base: $KB_PATH or kb_all/kb.idx.json (else kb_all/kb.json) next to this script (falls back to kb/kb.json).
 """
 import json
 import os
@@ -57,7 +57,9 @@ _engine = None
 def engine() -> Engine:
     global _engine
     if _engine is None:
-        kb = Path(os.environ.get("KB_PATH") or (HERE / "kb_all" / "kb.json"))
+        kb = Path(os.environ.get("KB_PATH") or (HERE / "kb_all" / "kb.idx.json"))
+        if not kb.exists() and not os.environ.get("KB_PATH"):
+            kb = HERE / "kb_all" / "kb.json"
         if not kb.exists():
             kb = HERE / "kb" / "kb.json"
         _engine = Engine(kb, HERE / "reference")

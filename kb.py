@@ -11,9 +11,11 @@ question is split into diagnosis and service by phrasing; diagnosis is matched t
 (typos tolerated), service to stems that must all occur in a protocol list item.
 """
 import argparse
+import functools
 import json
 import re
 import sys
+import zlib
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # `python -I` drops the script dir
@@ -78,9 +80,37 @@ def split_question(q: str):
     return None, None
 
 
+@functools.lru_cache(maxsize=64)
+def _read_items(blob: Path, offset: int, size: int):
+    with blob.open("rb") as f:
+        f.seek(offset)
+        return json.loads(zlib.decompress(f.read(size)))
+
+
+class LazySection(dict):
+    """Section whose `items` are read from the packed blob on first access."""
+
+    def __init__(self, meta: dict, blob: Path):
+        super().__init__(meta)
+        self._blob = blob
+
+    def with_extra(self, **extra):  # the copy keeps reading items lazily
+        out = LazySection(self, self._blob)
+        out.update(extra)
+        return out
+
+    def __missing__(self, key):
+        if key != "items":
+            raise KeyError(key)
+        return _read_items(self._blob, *self["_blob"])
+
+
 class Engine:
     def __init__(self, kb_path: Path, ref: Path, llm: bool = False):
         self.kb = json.loads(kb_path.read_text(encoding="utf-8"))
+        if self.kb.get("packed"):  # kb.idx.json: section items stay on disk (see kb_pack.py)
+            blob = kb_path.parent / self.kb["packed"]
+            self.kb["sections"] = [LazySection(s, blob) for s in self.kb["sections"]]
         self.llm = llm
         cc = kb_path.parent / "crosscheck.json"  # kb_llm.py crosscheck
         self.crosscheck = {}
@@ -181,7 +211,7 @@ class Engine:
                 tier = 2
             else:
                 continue
-            s = dict(s, tier=tier)
+            s = s.with_extra(tier=tier) if isinstance(s, LazySection) else dict(s, tier=tier)
             if population and s["population"] and population not in s["population"]:
                 continue
             out.append(s)

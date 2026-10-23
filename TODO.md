@@ -40,8 +40,8 @@ What is unfinished or worth doing, roughly by priority. State as of 2026-10-24.
   tunnel link can spend the OpenRouter credit. Add basic auth from an env var (and `--host`).
 - [ ] **Permanent hosting.** Oracle Cloud Always Free did not work out; Hugging Face Spaces: Docker
   is paid, only Static is free. Options: own machine + Cloudflare Tunnel (current),
-  or shrink the KB (162 MB JSON, ~0.5–1.5 GB RAM when loaded; move to SQLite with on-demand reads)
-  to fit 256–512 MB free PaaS tiers; or Pyodide in the browser (needs a per-user OpenRouter key).
+  the KB is now packed (`kb_pack.py`: ~50 MB RAM, 22 MB on disk), so 256–512 MB free PaaS
+  tiers fit memory-wise (payment / region is the remaining blocker); or Pyodide in the browser (needs a per-user OpenRouter key).
 - [ ] Web UI: history is only in the browser; no export of an answer (PDF / Excel) for the case file,
   no batch mode (many questions from a spreadsheet).
 - [ ] Feedback (3 stars + tags + comment → `kb/feedback.jsonl`) is collected but there is no viewer
