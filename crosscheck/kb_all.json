@@ -11407,6 +11407,2782 @@
     }
    },
    "rejected": []
+  },
+  "4556c77ec5db3f76:0:4": {
+   "items": {
+    "4556c77ec5db3f76:0:4:35d0d7c7c9cf": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "monitoring"
+    },
+    "4556c77ec5db3f76:0:4:96505ae8823d": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "monitoring"
+    },
+    "4556c77ec5db3f76:0:4:57c378fdb47f": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "monitoring"
+    },
+    "4556c77ec5db3f76:0:4:6eb1ea8902bf": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "monitoring"
+    }
+   },
+   "rejected": []
+  },
+  "cc75bc6fd1fd5596:0:4": {
+   "items": {
+    "cc75bc6fd1fd5596:0:4:57c378fdb47f": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "monitoring"
+    },
+    "cc75bc6fd1fd5596:0:4:15bd04f36fe0": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "monitoring"
+    },
+    "cc75bc6fd1fd5596:0:4:a9de8b71c6e8": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "monitoring"
+    }
+   },
+   "rejected": []
+  },
+  "acb1eebaec325932:0:2": {
+   "items": {
+    "acb1eebaec325932:0:2:0076d99126c0": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "acb1eebaec325932:0:2:8a244da068ed": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "acb1eebaec325932:0:2:d8b2dc4b4509": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "acb1eebaec325932:0:2:1cb0fc879986": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:7971ca9d86e8": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:178036d14c1d": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:61c0497ed5d8": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:c3b707d8fb6f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:0739448615c5": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:f91dada7b645": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:c7cb360a81da": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:a19d8af58533": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:1b86e28435a4": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:e5d4ba534efc": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:d0bcb07675b0": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:5d4dcbc355c9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:6e226f0a079e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:f4138d35ecd9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:ff1f48343934": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:5f70637eb48a": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:f07375fd137f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:17d1985379e9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:8c9ebdd69dcb": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:dd4be08b4e98": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:3bd35459000c": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:29d7e8e7ee6d": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:ab196d70b088": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:d732691e831a": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:2241866bb3c7": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:b4d2fb78aedb": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:3d9be2c8150c": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:229ea26b34b9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:1e78d4e3aa7e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:2:02049833b204": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:2:fe5d99b2c04d": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:2:050b8912df20": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:2:34ceb12f66dc": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:2:5b9d91b75855": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:2:9726d544f5ec": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:2:e7eca05245a5": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    }
+   },
+   "rejected": []
+  },
+  "acb1eebaec325932:0:3": {
+   "items": {
+    "acb1eebaec325932:0:3:0076d99126c0": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "acb1eebaec325932:0:3:8a244da068ed": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "acb1eebaec325932:0:3:d8b2dc4b4509": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "acb1eebaec325932:0:3:38cfa1e7d791": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:3:80aebf4d586b": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:3:67905792c926": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:3:f948a6bb7664": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:3:43bed870e96f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:3:52266d0868a9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:3:0c09fa87e7aa": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:3:94bd85f41359": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:3:d3dd25a2a06e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:3:a120920b6691": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:3:a19d8af58533": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:3:739acce49701": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:3:f1c43d182417": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:3:8772489c048e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:3:897b01421e37": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:3:d2f85bc8c365": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:3:4bb983ab506b": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:3:b9317b9a7220": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:3:17d1985379e9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:3:aa3eb114a6ab": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:3:88063cafa148": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:3:6278f99c1631": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:3:ca39c4b73779": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:3:be20f93ac1a8": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:3:742e0ba315e9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:3:9c160484f077": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:3:e8f6adf43d7e": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:3:9d95b169da11": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "acb1eebaec325932:0:3:6349c4870c8a": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:3:6b10c9e47410": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:3:ca6e40462e99": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:3:99dc36e66ca1": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:3:65c821106ffa": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:3:040eae1ea20f": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:3:f11bc2822c46": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:3:b31a0b83ee7d": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:3:e7eca05245a5": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    }
+   },
+   "rejected": [
+    {
+     "clause": "24",
+     "level": "additional",
+     "condition": "",
+     "quote": "определение антифосфолипидных АТ (далее – аФЛ): волчаночного антикоагулянта (далее – ВА), АТ к кардиолипину (далее – аКЛ), АТ к 2-гликопротеину I типа (далее – 2-ГП I);"
+    }
+   ]
+  },
+  "acb1eebaec325932:0:4": {
+   "items": {
+    "acb1eebaec325932:0:4:972e062e7e66": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "acb1eebaec325932:0:4:8a244da068ed": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "acb1eebaec325932:0:4:d8b2dc4b4509": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "acb1eebaec325932:0:4:e67b9f888d62": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:1d96d236b90f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:7445e4b44b52": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:9e8404c0d238": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:4db598e15360": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:2c73e9410e8c": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:ae23fa3eb8cf": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:fb7fc9aff700": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:b31a0b83ee7d": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:c971d1268ff4": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:cfda75302de0": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:4b3eaef83fb1": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:8e942f35dc0a": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:f3558c89348b": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:0068d96e9ee2": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "acb1eebaec325932:0:4:9b4655db82b5": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:d2f85bc8c365": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:4bb983ab506b": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:a65c1a746852": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:59aca21011cb": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:8ce57619cfa8": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:f9b353fdf2ca": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:17d1985379e9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:aa3eb114a6ab": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:e3103a9a3664": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:ca89c5466ab0": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:be20f93ac1a8": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:bc96564754da": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:face81e234ec": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:5fffb529a36a": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:4:b0c2d5b6cfa7": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:4:ae0c0e12455d": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:4:c27f229988cd": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:4:b6504631e5e6": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:4:b3d7d9c54002": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:4:d6451f570a06": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:4:5b9c855150dd": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:4:4774435fb50d": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:4:5b9d91b75855": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:4:7d8e0eb6730e": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:4:a2de084daf07": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:4:e22421c1894b": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:4:281523bb3779": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    }
+   },
+   "rejected": [
+    {
+     "clause": "33",
+     "level": "mandatory",
+     "condition": "в стационарных условиях",
+     "quote": "определение концентрации аФЛ: ВА, аКЛ IgG и (или) IgM изотипов, АТ к 2-ГП I IgG и (или) IgM изотипов – на этапе постановки диагноза; при изменении характера течения заболевания (обострении, подозрении на развитие осложнений) (исследование не дублируется, если было проведено на амбулаторном этапе);"
+    }
+   ]
+  },
+  "acb1eebaec325932:0:5": {
+   "items": {
+    "acb1eebaec325932:0:5:2a6c524945f5": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "acb1eebaec325932:0:5:8a244da068ed": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "acb1eebaec325932:0:5:d8b2dc4b4509": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "acb1eebaec325932:0:5:27c957e6f908": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:5:d469a6098cd3": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:5:9e8404c0d238": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:5:4db598e15360": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:5:2ac7aea5c2bb": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:5:2c73e9410e8c": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:5:44b1ba2f5b34": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:5:f57c0f4762b0": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:5:c4b241b73d3f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:5:0e207928d488": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:5:739acce49701": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:5:cb30d72833fd": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:5:68f76cb1e074": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:5:897b01421e37": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:5:d2f85bc8c365": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:5:8bd4a1587065": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:5:b9317b9a7220": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:5:0c09fa87e7aa": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:5:68db5531a587": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:5:74e4dc6c6574": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:5:17d1985379e9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:5:aa3eb114a6ab": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:5:040eae1ea20f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:5:be20f93ac1a8": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:5:c172e0a0aedd": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:5:51e930f56380": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:5:500ff8f96540": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "acb1eebaec325932:0:5:1e7f234c56f2": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:5:c8a1d8104e95": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:5:602387d950cc": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:5:ec6ddbc32825": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:5:49e7ebd6cc76": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:5:d6451f570a06": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:5:6349c4870c8a": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:5:9a2b2ae97fa6": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:5:c27f229988cd": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:5:09b36b7080a0": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:5:6adbce833357": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:5:20fc374ae7d1": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:5:ad956a5f03f0": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:5:758c8510fe7d": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:5:65c821106ffa": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:5:ab575a8311f2": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:5:6e265db200bc": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:5:e408fe14a33a": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:5:51492cf1085a": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:5:37a995bf3cc8": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:5:d15a372968a4": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:5:e7eca05245a5": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    }
+   },
+   "rejected": [
+    {
+     "clause": "48",
+     "level": "additional",
+     "condition": "",
+     "quote": "определение аФЛ: ВА, аКЛ, АТ к 2-ГП I;"
+    }
+   ]
+  },
+  "acb1eebaec325932:0:6": {
+   "items": {
+    "acb1eebaec325932:0:6:9d64b53fa8b5": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "acb1eebaec325932:0:6:8a244da068ed": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "acb1eebaec325932:0:6:d8b2dc4b4509": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "acb1eebaec325932:0:6:010362aaea7e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:6:2d56b5668b0d": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:6:f015bf2d7698": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:6:b86099d21c75": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:6:4a6801f8ae6b": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:6:c2a18f46deb2": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:6:159649b1975b": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:6:0e207928d488": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:6:962651eaa0ba": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:6:dfc571dc8f81": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:6:f1cef7fda37a": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:6:278e0aff974c": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:6:35c5620cdbfb": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:6:89c9b971b9d2": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:6:793800e01466": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:6:a8edf3794f5b": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:6:c159805e5243": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:6:bdb72666cec0": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:6:a96f3c97a4ea": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:6:5870fca2ba09": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:6:040eae1ea20f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:6:c172e0a0aedd": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:6:178b0f59672d": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:6:500ff8f96540": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "acb1eebaec325932:0:6:6b10c9e47410": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:6:49e7ebd6cc76": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:6:c27f229988cd": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:6:09b36b7080a0": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:6:6adbce833357": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:6:20fc374ae7d1": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:6:17d1985379e9": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:6:aa3eb114a6ab": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:6:be20f93ac1a8": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:6:65c821106ffa": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:6:ab575a8311f2": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:6:60ce2cedca46": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:6:5d74102540bc": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:6:e7eca05245a5": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    }
+   },
+   "rejected": [
+    {
+     "clause": "55",
+     "level": "additional",
+     "condition": "",
+     "quote": "определение аФЛ: ВА, аКЛ, АТ к 2-ГП I"
+    }
+   ]
+  },
+  "acb1eebaec325932:0:7": {
+   "items": {
+    "acb1eebaec325932:0:7:9d64b53fa8b5": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "acb1eebaec325932:0:7:8a244da068ed": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "acb1eebaec325932:0:7:d8b2dc4b4509": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "acb1eebaec325932:0:7:967efd2428c5": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:7:d21f5b203406": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:7:2b5b9b79d161": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:7:b86099d21c75": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:7:c2a18f46deb2": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:7:862c29286918": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:7:2c764428fc3d": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:7:0872213b16b2": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:7:0e207928d488": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:7:fbb7339fbd45": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:7:c6e78cfa5f72": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:7:6745d64a57a4": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:7:a8edf3794f5b": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:7:e0446e75cc3d": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:7:f67ce49eac06": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:7:bdb72666cec0": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:7:a96f3c97a4ea": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:7:e46fd3126667": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:7:ae33c67c9b23": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:7:c172e0a0aedd": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:7:178b0f59672d": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:7:500ff8f96540": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "acb1eebaec325932:0:7:6b10c9e47410": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:7:0d67ab7479d8": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:7:278e0aff974c": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:7:35c5620cdbfb": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:7:89c9b971b9d2": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:7:49e7ebd6cc76": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:7:c27f229988cd": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:7:09b36b7080a0": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:7:6adbce833357": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:7:20fc374ae7d1": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:7:17d1985379e9": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:7:aa3eb114a6ab": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:7:be20f93ac1a8": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:7:65c821106ffa": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:7:ab575a8311f2": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:7:60ce2cedca46": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:7:5d74102540bc": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:7:e7eca05245a5": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    }
+   },
+   "rejected": [
+    {
+     "clause": "62",
+     "level": "additional",
+     "condition": "",
+     "quote": "определение аФЛ: ВА, аКЛ, АТ к 2-ГП I;"
+    }
+   ]
+  },
+  "acb1eebaec325932:0:8": {
+   "items": {
+    "acb1eebaec325932:0:8:4ab3bc221264": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "acb1eebaec325932:0:8:8a244da068ed": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "acb1eebaec325932:0:8:d8b2dc4b4509": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:e67b9f888d62": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:bcca70ea785b": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:c97a6233539c": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:9e8404c0d238": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:4db598e15360": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:2c73e9410e8c": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:f9660496ff4d": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:fb7fc9aff700": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:b31a0b83ee7d": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:c971d1268ff4": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:cfda75302de0": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:4b3eaef83fb1": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:638bdcdb22b0": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:f3558c89348b": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:0068d96e9ee2": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "acb1eebaec325932:0:8:9b4655db82b5": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:d2f85bc8c365": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:4bb983ab506b": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:b459ab58b9d6": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:59aca21011cb": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:8ce57619cfa8": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:f9b353fdf2ca": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:17d1985379e9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:aa3eb114a6ab": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:e3103a9a3664": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:be20f93ac1a8": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:3117148bface": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "acb1eebaec325932:0:8:b0c2d5b6cfa7": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:8:ae0c0e12455d": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:8:c27f229988cd": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:8:b6504631e5e6": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:8:b3d7d9c54002": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:8:d6451f570a06": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:8:1be8ed16688a": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:8:ca89c5466ab0": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:8:13b520cc56c1": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:8:4774435fb50d": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:8:758c8510fe7d": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:8:5b9d91b75855": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:8:7d8e0eb6730e": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:8:a2de084daf07": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:8:e22421c1894b": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "acb1eebaec325932:0:8:281523bb3779": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    }
+   },
+   "rejected": [
+    {
+     "clause": "68",
+     "level": "mandatory",
+     "condition": "в стационарных условиях",
+     "quote": "определение концентрации аФЛ: ВА, аКЛ IgG и (или) IgM изотипов, АТ к 2-ГП I IgG и (или) IgM изотипов – на этапе постановки диагноза; при изменении характера течения заболевания (обострении, подозрении на развитие осложнений) (исследование не дублируется, если было проведено на амбулаторном этапе);"
+    }
+   ]
+  },
+  "463fac01d8c81166:0:0": {
+   "items": {
+    "463fac01d8c81166:0:0:62144ccb6529": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "463fac01d8c81166:0:0:61955c0bf19e": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "463fac01d8c81166:0:0:ac700d756a1f": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "463fac01d8c81166:0:0:53607bf4f288": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "463fac01d8c81166:0:0:0064774b3c3a": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    }
+   },
+   "rejected": []
+  },
+  "6a1329ae748e6072:0:3": {
+   "items": {
+    "6a1329ae748e6072:0:3:bc026d731745": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:3:866f61222707": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:3:c6a529aca1f4": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:3:099a3b3a74ff": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:3:0fc9950d16d4": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:3:69a2cca72c2e": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:3:58b06eb0eca8": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:3:ae1bf1652164": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    }
+   },
+   "rejected": []
+  },
+  "6a1329ae748e6072:0:6": {
+   "items": {
+    "6a1329ae748e6072:0:6:acc641563bbe": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:6:c4e2fe660948": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:6:c646e1cfda7b": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:6:c5b2411b2991": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:6:6d2b347c6b6b": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:6:ba0e6d47e799": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:6:efa18459ed9d": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:6:56f8dd7ecb6f": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:6:600f73e6db5f": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:6:069eb4762752": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:6:bdfc4413d2c8": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:6:ebffb9fb1058": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:6:6a0245eab6f8": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:6:32166f496841": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:6:25e1004216d0": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:6:31b9bbe07b68": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:6:f72f1f210d1f": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:6:8a1b07b33876": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:6:314be1c6d4ba": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:6:b716b0c7f87e": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    }
+   },
+   "rejected": []
+  },
+  "6a1329ae748e6072:0:10": {
+   "items": {
+    "6a1329ae748e6072:0:10:e53014b281ef": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:10:cc3d910d1c90": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:10:d0ccd3941dc9": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:10:0f2c87e1188e": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:10:f843973e6544": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:10:7f2798a54a4d": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:10:474954e1cf64": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:10:f03dc7e87caa": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:10:8d47a4bd8d87": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:10:45c5d8afd900": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    },
+    "6a1329ae748e6072:0:10:d73415fa4013": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": null
+    }
+   },
+   "rejected": []
+  },
+  "fcdaa2f93f70236c:0:3": {
+   "items": {
+    "fcdaa2f93f70236c:0:3:c0524439a65c": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:3:af2d14ca4289": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "fcdaa2f93f70236c:0:3:16bef687ed38": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:3:cddb261720bb": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:3:77b63f0a9116": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "fcdaa2f93f70236c:0:3:5c6755555a1e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:3:6397b7ab8fa4": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:3:8f7fb55c8334": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:3:e0a1dea4882e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:3:cbde8ae6deaa": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:3:25571c49a36f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:3:717c6500175c": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "fcdaa2f93f70236c:0:3:0eaf7af07a48": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "fcdaa2f93f70236c:0:3:9e60f2e7a2cc": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "fcdaa2f93f70236c:0:3:464afc109836": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "fcdaa2f93f70236c:0:3:d6faa6c5e8c0": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "fcdaa2f93f70236c:0:3:ac9a4b673b34": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "fcdaa2f93f70236c:0:3:51e51f611ece": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "fcdaa2f93f70236c:0:3:33011e781ef4": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "fcdaa2f93f70236c:0:3:6311ad8f9e8a": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "fcdaa2f93f70236c:0:3:7362887631df": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "fcdaa2f93f70236c:0:3:da627cb0afa5": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "fcdaa2f93f70236c:0:3:9937c21ea390": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "fcdaa2f93f70236c:0:3:1296aff96987": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "fcdaa2f93f70236c:0:3:34140b52d1e1": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "fcdaa2f93f70236c:0:3:0cdef0363ed5": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "fcdaa2f93f70236c:0:3:df4202a2b067": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "fcdaa2f93f70236c:0:3:131ec42520a8": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "УЗИ сосудов нижних конечностей;",
+     "clause": "14"
+    },
+    "fcdaa2f93f70236c:0:3:8cbcf19cff6a": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "УЗИ брахиоцефальных артерий и их ветвей;",
+     "clause": "14"
+    },
+    "fcdaa2f93f70236c:0:3:a756029c0c88": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "эхокардиография;",
+     "clause": "14"
+    },
+    "fcdaa2f93f70236c:0:3:d21ce4941ddb": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "коронароангиография;",
+     "clause": "14"
+    },
+    "fcdaa2f93f70236c:0:3:1fae9cf5bcbe": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "биопсия медиастинальных лимфоузлов выполняется при медиастиноскопии, трансбронхиальной игольной биопсии (группы лимфоузлов № 1, 2, 4, 7) и чреспищеводной ультразвуковой эндоскопии (группы лимфоузлов № 1, 2, 4, 7, 8, 9), парастернальной медиастиноскопии или видео-ассистированной торакоскопии (далее – ВАТС);",
+     "clause": "15"
+    },
+    "fcdaa2f93f70236c:0:3:cd0606bfe08c": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "ВАТС (при наличии КТ-признаков распространения опухолевого процесса на структуры средостения (аорту, легочный ствол, структуры сердца, позвоночник, верхнюю полую вену), диссеминации по плевре и наличия метастазов в паренхиме или бронхопульмональных лимфоузлах противоположного легкого);",
+     "clause": "15"
+    },
+    "fcdaa2f93f70236c:0:3:addab929c342": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "диагностическая торакотомия – в качестве завершающего метода диагностики распространенности опухоли (в случае невозможности проведения ВАТС, а также при ее неинформативности).",
+     "clause": "15"
+    }
+   },
+   "rejected": []
+  },
+  "fcdaa2f93f70236c:0:8": {
+   "items": {
+    "fcdaa2f93f70236c:0:8:17042ecc437e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:8:af2d14ca4289": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:8:77b63f0a9116": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:8:ac9a4b673b34": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:8:96b6d4b0cf4e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:8:0bb3d7a14d58": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:8:2dd01b62d333": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:8:236d8d33a0c7": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:8:bbdbf3a55909": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:8:d15a372968a4": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:8:3e650cad2c5f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:8:d8334c207940": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:8:0e77a234c10f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:8:be20f93ac1a8": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:8:1ba41bb50766": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:8:5444028e2370": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "fcdaa2f93f70236c:0:8:c83faa51793b": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "fcdaa2f93f70236c:0:8:587d3951fa3d": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "fcdaa2f93f70236c:0:8:75a436800d58": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "fcdaa2f93f70236c:0:8:b7cd25753143": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "fcdaa2f93f70236c:0:8:8747d38d2df8": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    }
+   },
+   "rejected": []
+  },
+  "fcdaa2f93f70236c:0:12": {
+   "items": {
+    "fcdaa2f93f70236c:0:12:17042ecc437e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:12:af2d14ca4289": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:12:77b63f0a9116": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:12:f293bf879d42": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:12:236d8d33a0c7": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:12:356db34b2678": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:12:21c98ac66a69": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:12:bbdbf3a55909": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:12:f652e536f767": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:12:8ffda9a773e7": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:12:c25a3566ce94": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "fcdaa2f93f70236c:0:12:5cf96ccf6994": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:12:ddf15177543e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:12:b811ab45276e": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "fcdaa2f93f70236c:0:12:416716a67c41": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "fcdaa2f93f70236c:0:12:b3b06c036c62": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "fcdaa2f93f70236c:0:12:f94e9e784cd3": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:12:f5c87d2e334a": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:12:d959bd0cc32e": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    },
+    "fcdaa2f93f70236c:0:12:c99ca023c647": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "mandatory"
+    }
+   },
+   "rejected": []
+  },
+  "fcdaa2f93f70236c:0:14": {
+   "items": {
+    "fcdaa2f93f70236c:0:14:17042ecc437e": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "monitoring"
+    },
+    "fcdaa2f93f70236c:0:14:b82a8635df96": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "monitoring"
+    },
+    "fcdaa2f93f70236c:0:14:3c2b4909b143": {
+     "status": "uncertain",
+     "rules": "listed",
+     "llm": "monitoring"
+    }
+   },
+   "rejected": []
+  },
+  "487d49eae946cc0d:0:2": {
+   "items": {
+    "487d49eae946cc0d:0:2:bc2685ab5971": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "487d49eae946cc0d:0:2:0a4a6043ba65": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "487d49eae946cc0d:0:2:b37893d4a138": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "487d49eae946cc0d:0:2:cbf47831c2a9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "487d49eae946cc0d:0:2:7d3a0fabb664": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "487d49eae946cc0d:0:2:3d38b7f0ce8a": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "487d49eae946cc0d:0:2:0e5edf849d80": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "487d49eae946cc0d:0:2:a5c957e3daf9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "487d49eae946cc0d:0:2:77b63f0a9116": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "487d49eae946cc0d:0:2:47ae15111bdc": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "487d49eae946cc0d:0:2:2089a730b8c3": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "487d49eae946cc0d:0:2:5b0088960605": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "487d49eae946cc0d:0:2:d2d5a66747c9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "487d49eae946cc0d:0:2:b12c1d64c302": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "487d49eae946cc0d:0:2:0fd56b22efb8": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "487d49eae946cc0d:0:2:40dbda8a81b7": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "487d49eae946cc0d:0:2:fe094d0844f4": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "487d49eae946cc0d:0:2:3ba6dcb42cf6": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "487d49eae946cc0d:0:2:b9790a68d7c2": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "487d49eae946cc0d:0:2:34c425603b8f": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "487d49eae946cc0d:0:2:9d000226f27f": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "487d49eae946cc0d:0:2:7a5245b003bd": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "487d49eae946cc0d:0:2:f843bfdb3330": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "487d49eae946cc0d:0:2:83206190cc3e": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "487d49eae946cc0d:0:2:d8b2dc4b4509": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "487d49eae946cc0d:0:2:62f08ca80012": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    }
+   },
+   "rejected": []
+  },
+  "6b93c9d0bd9593d5:0:2": {
+   "items": {
+    "6b93c9d0bd9593d5:0:2:17042ecc437e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b93c9d0bd9593d5:0:2:0a4a6043ba65": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b93c9d0bd9593d5:0:2:b37893d4a138": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b93c9d0bd9593d5:0:2:cbf47831c2a9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b93c9d0bd9593d5:0:2:4fbec9338590": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b93c9d0bd9593d5:0:2:f2074ddcbb9b": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b93c9d0bd9593d5:0:2:0e5edf849d80": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b93c9d0bd9593d5:0:2:3c4cbd0cb1b0": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b93c9d0bd9593d5:0:2:a5c957e3daf9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b93c9d0bd9593d5:0:2:77b63f0a9116": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b93c9d0bd9593d5:0:2:2a9eaf6ee1a0": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b93c9d0bd9593d5:0:2:8b9211b9b440": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b93c9d0bd9593d5:0:2:b12c1d64c302": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b93c9d0bd9593d5:0:2:0fd56b22efb8": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b93c9d0bd9593d5:0:2:48e8c0fc68ee": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b93c9d0bd9593d5:0:2:c15501778c60": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b93c9d0bd9593d5:0:2:d8b2dc4b4509": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b93c9d0bd9593d5:0:2:62f08ca80012": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "6b93c9d0bd9593d5:0:2:06443213aa82": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b93c9d0bd9593d5:0:2:33e37d2c9ca0": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b93c9d0bd9593d5:0:2:eb1322315ab6": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "6b93c9d0bd9593d5:0:2:96d91c55b0e3": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b93c9d0bd9593d5:0:2:40dbda8a81b7": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b93c9d0bd9593d5:0:2:7bba0964b1ef": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b93c9d0bd9593d5:0:2:574dc9f988fc": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b93c9d0bd9593d5:0:2:ecfd3e88299f": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b93c9d0bd9593d5:0:2:589e655828d0": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b93c9d0bd9593d5:0:2:be20f93ac1a8": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b93c9d0bd9593d5:0:2:35e701667af8": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b93c9d0bd9593d5:0:2:57c702d2b84f": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b93c9d0bd9593d5:0:2:841565407b6e": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b93c9d0bd9593d5:0:2:f502d23518a0": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b93c9d0bd9593d5:0:2:586afbdd1406": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "6b93c9d0bd9593d5:0:2:d5027327d4b1": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    }
+   },
+   "rejected": []
+  },
+  "4a1f10f7845bbe69:0:2": {
+   "items": {
+    "4a1f10f7845bbe69:0:2:17042ecc437e": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "4a1f10f7845bbe69:0:2:0a4a6043ba65": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "4a1f10f7845bbe69:0:2:b37893d4a138": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "4a1f10f7845bbe69:0:2:cbf47831c2a9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "4a1f10f7845bbe69:0:2:4fbec9338590": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "4a1f10f7845bbe69:0:2:f2074ddcbb9b": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "4a1f10f7845bbe69:0:2:0e5edf849d80": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "4a1f10f7845bbe69:0:2:3c4cbd0cb1b0": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "4a1f10f7845bbe69:0:2:a5c957e3daf9": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "4a1f10f7845bbe69:0:2:77b63f0a9116": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "4a1f10f7845bbe69:0:2:ecfd3e88299f": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "4a1f10f7845bbe69:0:2:c4e603b596dd": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "4a1f10f7845bbe69:0:2:fbfe1a4fefa8": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "4a1f10f7845bbe69:0:2:b12c1d64c302": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "4a1f10f7845bbe69:0:2:0fd56b22efb8": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "4a1f10f7845bbe69:0:2:d8b2dc4b4509": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "4a1f10f7845bbe69:0:2:62f08ca80012": {
+     "status": "uncertain",
+     "rules": "additional",
+     "llm": null
+    },
+    "4a1f10f7845bbe69:0:2:0753c04bb918": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "4a1f10f7845bbe69:0:2:fd9dcb75e0e0": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "4a1f10f7845bbe69:0:2:96d91c55b0e3": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "4a1f10f7845bbe69:0:2:40dbda8a81b7": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "4a1f10f7845bbe69:0:2:7bba0964b1ef": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "4a1f10f7845bbe69:0:2:574dc9f988fc": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "4a1f10f7845bbe69:0:2:589e655828d0": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "4a1f10f7845bbe69:0:2:992705f1d06d": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "4a1f10f7845bbe69:0:2:57bd79b9bc42": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "4a1f10f7845bbe69:0:2:841565407b6e": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    }
+   },
+   "rejected": []
   }
  }
 }
