@@ -19,7 +19,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import kb  # noqa: E402
 
-PAGE = (Path(__file__).resolve().parent / "web" / "index.html").read_text(encoding="utf-8")
+VERSION = "1.1"  # shown on the page; bump on user-visible changes
+PAGE = (Path(__file__).resolve().parent / "web" / "index.html").read_text(encoding="utf-8").replace("__VERSION__", VERSION)
 LOCK = threading.Lock()
 FEEDBACK_LOG = Path(__file__).resolve().parent / "kb" / "feedback.jsonl"
 ANSWERS: dict = {}  # recent answers by id, so a rating is stored together with what was answered
@@ -138,7 +139,7 @@ def main():
     sys.stderr.reconfigure(encoding="utf-8")
     engine = kb.Engine(args.kb, args.reference, llm=args.llm)
     srv = ThreadingHTTPServer((args.host, args.port), make_handler(engine))
-    print(f"http://{args.host}:{args.port}/  (LLM {'on' if args.llm else 'off'}, KB {args.kb})", flush=True)
+    print(f"http://{args.host}:{args.port}/  (version {VERSION}, LLM {'on' if args.llm else 'off'}, KB {args.kb})", flush=True)
     srv.serve_forever()
 
 
