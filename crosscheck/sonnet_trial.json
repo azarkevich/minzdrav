@@ -1,0 +1,345 @@
+{
+ "sections": {
+  "bb6ac640f29fafcc:0:2": {
+   "items": {
+    "bb6ac640f29fafcc:0:2:f676bedc6c5d": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:60e4a96ac71d": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:a6cdb1c01085": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:a11ad3a93aa6": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:a411eafac80f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:5a485ed7bd7a": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:759b359629cf": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:343538bb956c": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:f0438335581d": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:7e0c102ae610": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:561b2fb976c2": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:016a54aa3d8f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:52a714994b1f": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:a2f2ac370678": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:8c4d983a09d2": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:427d24d5b310": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:02402f27c144": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:9c776781b933": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:3d1725324ec4": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "bb6ac640f29fafcc:0:2:be870574b0ad": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:487f81bf44bf": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:7c8ac051f438": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:88d0a8f7752b": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:9a1ad8bc2409": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:65be287c59a1": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:e439217cb8c0": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:3d1bdb243dda": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:a5b4810c3136": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:45d6e4b5f54d": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:a481570a412d": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:2b5a61a088cf": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:7374036b0432": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:e1aa4baf4ff1": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:401ed183873c": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:cb39eb57b36d": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:4bee89fda5d8": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    },
+    "bb6ac640f29fafcc:0:2:95fd8e03a3c4": {
+     "status": "verified",
+     "rules": "additional",
+     "llm": "additional"
+    }
+   },
+   "rejected": []
+  },
+  "e3dd94e4afd4daee:0:3": {
+   "items": {
+    "e3dd94e4afd4daee:0:3:8228cbb26d51": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "e3dd94e4afd4daee:0:3:1753bef624ec": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "e3dd94e4afd4daee:0:3:ade08f07eec8": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:c7506f98d6b2": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:305803a491cb": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:ba7e4702dd40": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:666e35971c78": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:16dacea186db": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:3209e834d2de": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:0bcaf86963d1": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:d5a0ab156edc": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:79fd4b5b65a4": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:61200b4a5a1a": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:b718d79d65b8": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:a1aadda8ebe9": {
+     "status": "uncertain",
+     "rules": "mandatory",
+     "llm": null
+    },
+    "e3dd94e4afd4daee:0:3:112d8eca7acf": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:c6d4e6efa123": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:243b3b42ee36": {
+     "status": "verified",
+     "rules": "mandatory",
+     "llm": "mandatory"
+    },
+    "e3dd94e4afd4daee:0:3:cde1cde0f867": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "ежедневный тщательный медицинский осмотр пациента;",
+     "clause": "15.4"
+    },
+    "e3dd94e4afd4daee:0:3:91ca696616d1": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "забор крови на бактериологическое исследование для верификации фунгемии;",
+     "clause": "15.4"
+    },
+    "e3dd94e4afd4daee:0:3:48f900d0749b": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "additional",
+     "quote": "бактериологические посевы из всех предполагаемых локусов инфекции.",
+     "clause": "15.4"
+    },
+    "e3dd94e4afd4daee:0:3:bd821aae9091": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "ежедневный контроль общего состояния пациента;",
+     "clause": "15.5"
+    },
+    "e3dd94e4afd4daee:0:3:17f400fc964e": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "контроль лабораторных показателей – общий анализ крови (далее – ОАК) не менее 1 раза в неделю, БИК (калий, магний, общий белок, мочевина, креатинин, аланинаминотрансфераза (далее – АлАТ), аспартатаминотрансфераза (далее – АсАТ), общий билирубин, С-реактивный белок (далее – СРБ) не менее 2 раз в неделю;",
+     "clause": "15.5"
+    },
+    "e3dd94e4afd4daee:0:3:431af374e79c": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "при терапии амфотерицином В (рекомендовано назначение липидных форм из-за меньшей нефротоксичности) производится контроль скорости клубочковой фильтрации (далее – СКФ) почек или КЭК не менее 2 раз в неделю. Если клиренс креатинина прогрессивно снижается на фоне терапии амфотерицином В, рекомендовано рассмотреть вопрос о смене группы противогрибкового ЛС;",
+     "clause": "15.5"
+    },
+    "e3dd94e4afd4daee:0:3:c44e3175c2ad": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "контроль динамики изменений уровня сывороточного галактоманана (при наличие возможности в организации здравоохранения) при условии его позитивности в начале заболевания (до назначения противогрибковой терапии) с целью оценки ответа на проводимое лечение;",
+     "clause": "15.5"
+    },
+    "e3dd94e4afd4daee:0:3:a1e8a1f75d2d": {
+     "status": "llm_only",
+     "rules": null,
+     "llm": "monitoring",
+     "quote": "контроль КТ пораженного органа проводится при стабилизации или улучшении клинического состояния по необходимости (не ранее, чем через 7 дней от предыдущего исследования). Для мониторинга ответа на терапию рекомендовано выполнение КТ пораженного органа не чаще 1 раза в 1–2 недели. Увеличение очага в объеме на фоне выхода из нейтропении (АЧН >500/мкл) не свидетельствует об отрицательной динамике грибковой инфекции. В данном случае необходим контроль КТ еще через 7 дней. При прогрессивном ухудшении клинического состояния пациента контроль КТ может быть выполнен в любые сроки. Плановый контроль КТ (после исчезновения патологических очагов грибковой инфекции) не проводится.",
+     "clause": "15.5"
+    }
+   },
+   "rejected": []
+  }
+ }
+}
