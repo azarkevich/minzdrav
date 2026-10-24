@@ -9,6 +9,7 @@ writes all failures to kb/probe_report.json:
   icd_name         an МКБ-10 rubric name resolves to that rubric (protocol-covered rubrics reported apart)
   chapter_name     a protocol chapter title («ДИАГНОСТИКА И ЛЕЧЕНИЕ ПСОРИАЗА») resolves to a code of the chapter
   perturb          eval questions keep diagnosis and verdict with «?», «Пациент, …», a typo, a different case
+  reverse_self     2–3 rarest list members of a section → the reverse search finds that section in the top 10
 """
 import argparse
 import json
@@ -120,8 +121,40 @@ def e_ref(e):
     return e.ref
 
 
+def probe_reverse_self(e, n, rnd):
+    """A section with its own codes, 2–3 of its rarest list members as the question → the reverse search
+    returns that section (or one with the same codes) among the top 10."""
+    idx = e.stem_index()
+    df = {k: len(v) for k, v in idx.items()}
+    secs = [s for s in e.kb["sections"] if e.usable(s) and s["icd10_source"] in ("classification", "title", "table")
+            and s["icd10"] and len(s["icd10"]) <= 8]
+    fails, total = [], 0
+    for s in rnd.sample(secs, min(n, len(secs))):
+        members = []
+        for it in s["items"]:
+            if it["level"] in ("mandatory", "additional", "listed"):
+                for seg in it["segments"]:
+                    for m in seg.get("members", []) or [seg]:
+                        stems = [x for x in m["stems"] if x not in kb.GENERIC]
+                        if 1 <= len(stems) <= 4 and 15 <= len(m.get("text", "")) <= 80:
+                            members.append((sum(df.get(x, 999) for x in stems) / len(stems), m["text"]))
+        members = sorted(dict.fromkeys(members))[:3]
+        if len(members) < 2:
+            continue
+        total += 1
+        services = [t.strip(" ;,.:") for _, t in members]
+        a = e.reverse_search(None, services, top=10)
+        entries = (a["results"] or [{}])[0].get("entries", [])
+        codes = set(s["icd10"])
+        if not any(codes & {d["code"] for d in en["diagnoses"]} or en["title"] == s["chapter_title"] for en in entries):
+            fails.append({"input": services, "section": s["chapter_title"], "expected": s["icd10"][:5],
+                          "got": [en["diagnoses"][0]["code"] if en["diagnoses"] else en["title"][:30] for en in entries[:5]],
+                          "found": [(x["text"][:30], x["sections"]) for x in a["services"]]})
+    return total, fails
+
+
 PROBES = {"service_not_dx": probe_service_not_dx, "icd_name": probe_icd_name,
-          "chapter_name": probe_chapter_name, "perturb": probe_perturb}
+          "chapter_name": probe_chapter_name, "perturb": probe_perturb, "reverse_self": probe_reverse_self}
 
 
 def main():

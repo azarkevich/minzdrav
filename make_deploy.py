@@ -13,6 +13,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 FILES = [("kb_all/kb.idx.json", "deploy/kb.idx.json"), ("kb_all/kb.items.bin", "deploy/kb.items.bin"),
+         ("kb_all/kb.stems.json", "deploy/kb.stems.json"),  # python -I kb.py index --kb kb_all/kb.idx.json
          ("reference/services.json", "deploy/reference/services.json"), ("reference/icd10.json", "deploy/reference/icd10.json")]
 
 for src, dst in FILES:

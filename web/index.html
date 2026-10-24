@@ -37,6 +37,7 @@ ul.lst{margin:4px 0 8px;padding-left:22px}ul.lst li{margin:2px 0}ul.lst:empty{di
 b.bad{color:var(--bad)}b.warn{color:var(--warn)}b.ok{color:var(--ok)}
 h1.top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}#setlink{font-size:14px;font-weight:400;white-space:nowrap}
 #settings label{cursor:pointer}
+.ins-excluded{color:var(--bad);border-color:var(--bad)}.ins-probable{color:var(--warn);border-color:var(--warn)}.ins-covered,.ins-limited{color:var(--ok);border-color:var(--ok)}
 details summary{cursor:pointer;color:var(--mut);font-size:13px}pre{white-space:pre-wrap;font-size:13px}
 </style></head><body><div class="wrap">
 <h1 class="top"><span>Проверка диагностики по клиническим протоколам МЗ РБ и правилам страхования <span class="meta" style="font-weight:400">версия __VERSION__</span></span><a href="#" id="setlink" class="meta">⚙ Настройки</a></h1>
@@ -49,7 +50,7 @@ details summary{cursor:pointer;color:var(--mut);font-size:13px}pre{white-space:p
  </div>
 </div>
 <div class="card">
- <textarea id="q" placeholder="Диагноз – аутоиммунный тиреоидит, разрешён ли анализ мочи по Нечипоренко&#10;или: сахарный диабет, перечень лабораторных анализов&#10;или только диагноз: псориаз"></textarea>
+ <textarea id="q" placeholder="Диагноз – аутоиммунный тиреоидит, разрешён ли анализ мочи по Нечипоренко&#10;или: сахарный диабет, перечень лабораторных анализов&#10;или только диагноз: псориаз&#10;или обратно — услуги без диагноза: ТТГ, свободный Т4, антитела к ТПО"></textarea>
  <div class="row">
   <button id="go">Проверить</button>
   <select id="pop"><option value="">возраст: определить</option><option value="adult">взрослые</option><option value="child">дети</option></select>
@@ -66,7 +67,7 @@ const $=id=>document.getElementById(id);
 let pdfMode="viewer";try{pdfMode=localStorage.getItem("pdfmode")||"viewer"}catch(e){}
 const view=(u,q)=>{if(pdfMode=="orig")return u;const m=String(u||"").match(/^(https:[^#]*\.pdf)#page=(\d+)/i);return m?`/view?u=${encodeURIComponent(m[1])}&p=${m[2]}&q=${encodeURIComponent((q||"").slice(0,600))}`:u};
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const EX=["Диагноз – аутоиммунный тиреоидит, разрешён ли анализ мочи по Нечипоренко","Диагноз – псориаз, разрешено ли определение СОЭ","Диагноз – болезнь Аддисона, разрешен ли тест с инсулиновой гипогликемией","Диагноз E06.3, ТТГ","Сахарный диабет 2 типа, определение гликированного гемоглобина","Сахарный диабет, перечень лабораторных анализов","Ангиомиолипома, какой вид КТ используется для диагностики","Сахарный диабет 2 типа"];
+const EX=["Диагноз – аутоиммунный тиреоидит, разрешён ли анализ мочи по Нечипоренко","Диагноз – псориаз, разрешено ли определение СОЭ","Диагноз – болезнь Аддисона, разрешен ли тест с инсулиновой гипогликемией","Диагноз E06.3, ТТГ","Сахарный диабет 2 типа, определение гликированного гемоглобина","Сахарный диабет, перечень лабораторных анализов","Ангиомиолипома, какой вид КТ используется для диагностики","При каких диагнозах назначают метанефрины","ТТГ, свободный Т4, антитела к ТПО","Сахарный диабет 2 типа"];
 $("examples").innerHTML=EX.map((e,i)=>`<span class="ex" data-i="${i}">${esc(e.length>48?e.slice(0,48)+"…":e)}</span>`).join("");
 $("examples").onclick=e=>{if(e.target.dataset.i){$("q").value=EX[e.target.dataset.i];ask()}};
 const ilvl={unclear:"v-warn",excluded:"v-bad",probable:"v-warn",limited:"v-warn",covered:"v-ok"};
@@ -125,8 +126,30 @@ function renderList(a){
  (a.text_only||[]).forEach(t=>h+=`<div class="verdict v-warn">В тексте, не перечнем (проверьте по главе): <a href="${esc(view(t.url,''))}" target="_blank">${esc(t.protocol)}, ${t.chapter!=null?"глава "+esc(t.chapter)+" «"+esc(t.chapter_title)+"»":esc(t.chapter_title)}</a></div>`);
  return h;
 }
+function renderReverse(a){
+ const ins={excluded:["не страховой","v-bad"],probable:["вероятно не страховой","v-warn"],limited:["страховой, с ограничениями","v-ok"],covered:["страховой","v-ok"]};
+ let h=`<div class="card"><div class="meta"><b>Обратный поиск</b> — при каких диагнозах протоколы предусматривают:</div><ul class="lst">`
+  +a.services.map(x=>`<li>«${esc(x.text)}»`+(x.catalogue&&x.catalogue[0]?` <span class="meta">→ пост. №123: ${esc(x.catalogue[0].code)} ${esc(x.catalogue[0].name)}</span>`:"")
+   +(x.found?` <span class="tag">в ${x.sections} разделах протоколов</span>`:` <span class="tag" style="color:var(--bad)">не найдена в перечнях протоколов</span>`)+`</li>`).join("")+`</ul>`;
+ if(a.population)h+=`<div class="meta"><b>Население:</b> ${a.population=="child"?"дети":"взрослые"}</div>`;
+ h+=`<div class="verdict ${(a.results||[]).length?"v-ok":"v-bad"}">${esc(a.verdict)}</div>`;
+ if(a.generic_warning)h+=`<div class="verdict v-warn">${esc(a.generic_warning)}</div>`;
+ ((a.results||[])[0]?.entries||[]).forEach((e,i)=>{
+  const codes=e.diagnoses.map(d=>`<b>${esc(d.code)}</b> ${esc(d.name)}`).join("; ")+(e.more_codes?` <span class="meta">и ещё ${e.more_codes}</span>`:"");
+  const iv=e.insurance?ins[e.insurance.verdict_level]:null;
+  h+=`<div class="ev"><b>[${i+1}] ${esc(e.title)}</b> <span class="tag">совпало ${esc(e.coverage)}</span>`
+   +(e.population!="население не указано"?` <span class="tag">${esc(e.population)}</span>`:"")
+   +(iv?` <span class="tag ins-${e.insurance.verdict_level}">страхование: ${iv[0]}${e.insurance.clauses.length?" (п. "+e.insurance.clauses.map(c=>esc(c.clause)).join(", ")+")":""}</span>`:"")
+   +`<div class="meta">МКБ-10: ${codes||"коды не указаны"}</div><div class="meta">${esc(e.protocol)}</div><ul class="lst">`
+   +e.matched.map(m=>{const p=m.pdf_pages.length>1?`${m.pdf_pages[0]}–${m.pdf_pages.at(-1)}`:m.pdf_pages[0];
+     return `<li><b>${esc(m.service)}</b>: ${esc(m.level_label||m.level)} — ${esc(m.text)} <a href="${esc(view(m.url,m.quote))}" target="_blank" rel="noopener" class="meta">п. ${esc(m.clause)}, стр. ${esc(p)}</a></li>`}).join("")
+   +`</ul>`+(e.missing.length?`<div class="meta">нет в перечнях этого раздела: ${esc(e.missing.join(", "))}</div>`:"")+`</div>`;
+ });
+ return h;
+}
 function render(a){
  if(a.error)return `<div class="card"><div class="verdict v-bad">${esc(a.error)}</div></div>`;
+ if(a.mode=="reverse")return feedback(a)+renderReverse(a)+tail(a);
  if(a.mode=="list")return tabs(a,renderList(a)+tail(a));
  const d=a.diagnosis||{},svc=a.service_catalogue||[];
  let h=`<div class="card"><div class="meta"><b>Диагноз:</b> ${esc(d.code||"")} ${esc(d.name||"")} <span class="tag">из «${esc(a.diagnosis_text)}»</span>`;

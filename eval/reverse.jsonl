@@ -1,0 +1,24 @@
+# reverse search (services → diagnoses): a code starting with one of expect_any must be among the diagnoses of the top `top` entries
+# cases 1-8 were looked at while writing the code; 9-22 written blind (2026-10-24) before running them
+{"question": "При каких диагнозах назначают сцинтиграфию щитовидной железы", "mode": "reverse", "expect_any": ["E05", "E04"], "top": 3}
+{"question": "Для чего назначают метанефрины", "mode": "reverse", "expect_any": ["E27", "D35"], "top": 3}
+{"question": "МРТ гипофиза — при каком диагнозе", "mode": "reverse", "expect_any": ["E22", "E23", "E24", "D35.2"], "top": 3}
+{"question": "кариотип", "mode": "reverse", "expect_any": ["Q96"], "top": 5}
+{"question": "ТТГ, свободный Т4, антитела к ТПО, УЗИ щитовидной железы", "mode": "reverse", "expect_any": ["E06", "E03", "E05"], "top": 3}
+{"question": "HbA1c; глюкоза; C-пептид", "mode": "reverse", "expect_any": ["E10", "E11"], "top": 5}
+{"question": "ТТГ, свободный Т4, антитела к ТПО", "mode": "reverse", "expect_any": ["E06", "E03"], "top": 3}
+{"question": "общий анализ крови", "mode": "reverse", "expect_any": [], "top": 15, "generic": true}
+{"question": "При каких заболеваниях проводится спирометрия", "mode": "reverse", "expect_any": ["J44", "J45"], "top": 5}
+{"question": "паратгормон, кальций, фосфор", "mode": "reverse", "expect_any": ["E20", "E21", "E83", "N25"], "top": 3}
+{"question": "Для чего назначают определение ИФР-1", "mode": "reverse", "expect_any": ["E22", "E23"], "top": 3}
+{"question": "кортизол, АКТГ, дексаметазоновая проба", "mode": "reverse", "expect_any": ["E24", "E27"], "top": 3}
+{"question": "альдостерон, ренин", "mode": "reverse", "expect_any": ["E26"], "top": 3}
+{"question": "При каких диагнозах назначают денситометрию", "mode": "reverse", "expect_any": ["M80", "M81"], "top": 5}
+{"question": "холтеровское мониторирование ЭКГ, эхокардиография", "mode": "reverse", "expect_any": ["I"], "top": 3}
+{"question": "Показания к колоноскопии", "mode": "reverse", "expect_any": ["K", "D12", "C18", "D50"], "top": 5}
+{"question": "соскоб на чесоточного клеща", "mode": "reverse", "expect_any": ["B86"], "top": 3}
+{"question": "антимюллеров гормон, ФСГ, ЛГ, эстрадиол", "mode": "reverse", "expect_any": ["E28", "N97", "N91", "E23"], "top": 3}
+{"question": "в каких протоколах есть тест с десмопрессином", "mode": "reverse", "expect_any": ["E23.2", "N25.1"], "top": 3}
+{"question": "Для чего назначают определение антител к рецептору ТТГ", "mode": "reverse", "expect_any": ["E05", "H06.2"], "top": 3}
+{"question": "проба Манту, рентгенография органов грудной клетки", "mode": "reverse", "expect_any": ["A15", "A16", "J"], "top": 5}
+{"question": "УЗИ органов брюшной полости, амилаза, липаза", "mode": "reverse", "expect_any": ["K85", "K86"], "top": 3}

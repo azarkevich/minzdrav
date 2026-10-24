@@ -263,6 +263,23 @@ python -I kb.py ask "…" --llm                          # LLM fallback for unre
   the first comma: «Сахарный диабет 2 типа, определение гликированного гемоглобина». Eval: `eval/lists.jsonl`
   (`mode: list`, `contains` = item substrings that must be listed). Known gap: chapters covering many
   diseases (child neurology ch. 2) list every disease's items for any of them.
+- Reverse search (`Engine.reverse_search`, answer `mode: "reverse"`): services → diagnoses. Questions
+  «при каких диагнозах назначают X», «для чего назначают X», «X — при каком диагнозе», «показания к X», «в каких
+  протоколах есть X» (`parse_reverse_question`, tried first; misspelt trigger / verb tolerated), or a bare list of
+  services «ТТГ, свободный Т4, антитела к ТПО» (`split_services` on `, ; + newline –`, every part `service_like`:
+  a method word / `SERVICE_STEM_RE`, an analyte from `ANALYTES`, not an МКБ name ≥ 0.95, or catalogue beats diagnosis;
+  tried after the list question). Index `kb.stems.json` (stem → usable section indexes, 9.5k stems, 0.6 MB; `kb.py
+  index --kb kb_all/kb.idx.json`, `make_deploy.py` copies it; built in memory in 1.5 s if absent): candidates =
+  sections holding every stem of the service (keys matched with `contains`), confirmed by `find()`. A stem no list has
+  («назанчают») is dropped. Score per section = Σ level weight (`REVERSE_WEIGHT`) × idf of the service; entries =
+  sections merged by protocol + codes, sorted by number of matched services, then score × (1.0 own codes / 0.6
+  protocol scope / 0.4 no codes); top 15, each with the insurance verdict of its first code. `generic_warning` when
+  every service is in > 5% of sections (ОАК in 711). 0.02–1.4 s per query. Letter-hyphen tokens whose only other
+  stem is ambiguous («C-пептид» → «пептид» = also «натрийуретический пептид») must occur literally in the item
+  (`literal_tokens`, also used by check and list modes). Eval `eval/reverse.jsonl` (`expect_any` code prefixes in
+  top `top`): 22 cases, 14 written blind → 10/14 blind, 21/22 after fixes; the miss — «УЗИ ОБП, амилаза, липаза»:
+  the acute pancreatitis protocol has no lipase, a rare-disease chapter with all three ranks first. Probe
+  `reverse_self` 58/64: misses are urology table rows with only generic services (indistinguishable by design).
 - Eval (2026-10-23), `kb.py eval`: golden 34/34 (written while tuning); endocrinology held-out
   17/20 blind → 19/20; cross-specialty `holdout_all` 11/20 blind → 20/20; `holdout_all2` 13/14
   blind → 14/14. Every blind miss was diagnosis recognition, not service matching. Remaining
@@ -278,7 +295,7 @@ python -I kb.py ask "…" --llm                          # LLM fallback for unre
 `claude mcp add minzdrav -- python -I C:/w/minzdrav/kb_mcp.py` (or the same command in Claude
 Desktop's config). Tools: `check_service(diagnosis, service, population?)` (= `kb.py ask`, rendered
 text with excerpts and links), `find_diagnosis(text)`, `list_diagnostics(diagnosis, category?, service?, population?)`
-(= list mode; category lab / instrumental / consult).
+(= list mode; category lab / instrumental / consult), `find_diagnoses(services[], population?)` (= reverse search).
 Hand-written newline-delimited JSON-RPC over stdio (no `mcp` package); KB from `$KB_PATH`, else
 `kb_all/kb.json`, else `kb/kb.json`. Smoke test: pipe `initialize`, `tools/list`, `tools/call`
 JSON lines into it.
@@ -290,7 +307,7 @@ JSON lines into it.
 `text` = `kb.render`). The page shows diagnosis/service recognition, a coloured verdict per
 population, each excerpt with a `url#page=N` link, and the plain-text form for copying; query
 history is in the browser's localStorage. The page header shows `VERSION` from `kb_web.py`
-(substituted for `__VERSION__` in `web/index.html`; 1.1 = list mode, 1.2 = Enter sends / Shift+Enter new line, spinner, 1.3 = insurance block, 1.4 = insurance / protocols tabs, 1.5 = rating panel between the question and the answer, 1.6 = «уточните диагноз», Google Sheet log, 1.7 = diagnosis-only question → all diagnostic measures, compact rating panel, 2.0 = own PDF viewer, 2.1 = ⚙ settings: open PDFs in the viewer or on the original site, 2.2 = PDFs shipped in deploy/pdf) — bump it on user-visible changes. Binds to 127.0.0.1 only (no auth). `--llm` needs
+(substituted for `__VERSION__` in `web/index.html`; 1.1 = list mode, 1.2 = Enter sends / Shift+Enter new line, spinner, 1.3 = insurance block, 1.4 = insurance / protocols tabs, 1.5 = rating panel between the question and the answer, 1.6 = «уточните диагноз», Google Sheet log, 1.7 = diagnosis-only question → all diagnostic measures, compact rating panel, 2.0 = own PDF viewer, 2.1 = ⚙ settings: open PDFs in the viewer or on the original site, 2.2 = PDFs shipped in deploy/pdf, 2.3 = reverse search) — bump it on user-visible changes. Binds to 127.0.0.1 only (no auth). `--llm` needs
 `KB_OPENROUTER_API_KEY` in the environment of the server process.
 
 Feedback: under each answer the page shows a 3-star rating, tags (диагноз/услуга распознаны неверно, вердикт неверный, цитата не по теме, не нашёл) and a comment. `POST /api/feedback` appends one line to `kb/feedback.jsonl` with the rating and a summary of the answer (diagnosis, service, verdict, evidence links) — low-rated lines are candidates for `eval/` cases.

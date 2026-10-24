@@ -23,7 +23,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import kb  # noqa: E402
 from sheet_log import SheetLog, mask  # noqa: E402
 
-VERSION = "2.2"  # shown on the page; bump on user-visible changes
+VERSION = "2.3"  # shown on the page; bump on user-visible changes
 PAGE = (Path(__file__).resolve().parent / "web" / "index.html").read_text(encoding="utf-8").replace("__VERSION__", VERSION)
 VIEWER = (Path(__file__).resolve().parent / "web" / "viewer.html").read_text(encoding="utf-8")
 LOCK = threading.Lock()
@@ -45,6 +45,7 @@ def summary(question, ans):
     return {"question": mask(question), "diagnosis_text": mask(ans.get("diagnosis_text")),
             "diagnosis": (ans.get("diagnosis") or {}).get("code"), "service_text": mask(ans.get("service_text")),
             "service": [s["code"] for s in (ans.get("service_catalogue") or [])[:2]],
+            "services": [x["text"] for x in ans.get("services", [])],
             "population": ans.get("population"), "verdict_level": ans.get("verdict_level"),
             "verdict": ans.get("verdict"), "evidence": ev, "method": ans.get("method"),
             "insurance": {k: (ans.get("insurance") or {}).get(k) for k in ("verdict_level", "verdict")}}
@@ -161,7 +162,7 @@ def make_handler(engine):
                     ans = engine.ask(question, population=req.get("population") or None)
                 if not ans.get("error"):
                     for r in ans.get("results", []):
-                        for e in r["evidence"]:
+                        for e in r["evidence"] + [m for x in r.get("entries", []) for m in x["matched"]]:
                             e["level_label"] = kb.LEVELS[e["level"]][1]
                     ans["text"] = kb.render(ans)
                     ans["answer_id"] = uuid.uuid4().hex[:12]
@@ -172,8 +173,10 @@ def make_handler(engine):
                 sm = summary(question, ans)
                 SHEET.send("Запросы", {
                     "время": SHEET.now(), "answer_id": ans.get("answer_id", ""), "вопрос": sm["question"],
-                    "режим": "перечень" if ans.get("mode") == "list" else "проверка", "население": req.get("population") or "",
-                    "диагноз": " ".join(x for x in [sm["diagnosis"], (ans.get("diagnosis") or {}).get("name")] if x),
+                    "режим": {"list": "перечень", "reverse": "обратный"}.get(ans.get("mode"), "проверка"), "население": req.get("population") or "",
+                    "диагноз": " ".join(x for x in [sm["diagnosis"], (ans.get("diagnosis") or {}).get("name")] if x)
+                               or "; ".join(d["code"] for e in ((ans.get("results") or [{}])[0].get("entries") or [])[:3]
+                                            for d in e["diagnoses"][:1]),
                     "услуга": sm["service_text"], "вердикт протокола": sm["verdict"] or "",
                     "страховой вердикт": (ans.get("insurance") or {}).get("verdict", ""),
                     "ошибка": mask(ans.get("error", "")), "время ответа, с": round(time.time() - t0, 1), "версия": VERSION})

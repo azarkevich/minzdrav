@@ -5,6 +5,7 @@ Tools:
   check_service(diagnosis, service, population?)  — is the service provided for? verdict +
                                                     verbatim excerpts + <url>#page=N links
   find_diagnosis(text)                             — МКБ-10 candidates for a diagnosis wording
+  find_diagnoses(services[], population?) — reverse search: diagnoses whose protocols list the services
   list_diagnostics(diagnosis, category?, service?, population?) — diagnostics list items for a
                                                     diagnosis: all, lab / instrumental / consult, or one service
 
@@ -54,6 +55,15 @@ TOOLS = [
             "service": {"type": "string", "description": "услуга-фильтр, например «КТ», «УЗИ», «гормоны»"},
             "population": POPULATION}, "required": ["diagnosis"]},
     },
+    {
+        "name": "find_diagnoses",
+        "description": "Обратный поиск: при каких диагнозах протоколы предусматривают перечисленные услуги "
+                       "(исследования, анализы). Диагнозы ранжированы по числу совпавших услуг, редкости услуги "
+                       "и уровню (обязательная выше «по показаниям»); с кодами МКБ-10, цитатами и страховым вердиктом.",
+        "inputSchema": {"type": "object", "properties": {
+            "services": {"type": "array", "items": {"type": "string"}, "description": "услуги, например [\"ТТГ\", \"свободный Т4\"]"},
+            "population": POPULATION}, "required": ["services"]},
+    },
 ]
 
 _engine = None
@@ -81,6 +91,8 @@ def call_tool(name: str, args: dict) -> str:
         a = engine().list_services(None, args["diagnosis"], args.get("category"), args.get("service"),
                                    args.get("population"))
         return render(a)
+    if name == "find_diagnoses":
+        return render(engine().reverse_search(None, list(args["services"]), args.get("population")))
     raise KeyError(name)
 
 

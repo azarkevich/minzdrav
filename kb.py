@@ -6,7 +6,10 @@ a diagnosis? Answers with the verdict, a verbatim excerpt and a `<url>#page=N` l
     python -I kb.py ask "Сахарный диабет, перечень лабораторных анализов"   # list mode
     python -I kb.py ask "Ангиомиолипома, какой вид КТ используется"         # list filtered by a service
     python -I kb.py ask "…" --json                  # machine-readable answer
+    python -I kb.py ask "При каких диагнозах назначают метанефрины"           # reverse search
+    python -I kb.py ask "ТТГ, свободный Т4, антитела к ТПО"                     # reverse: a list of services
     python -I kb.py eval [eval/golden_endocrinology.jsonl]
+    python -I kb.py index --kb kb_all/kb.idx.json     # kb.stems.json for the reverse search
 
 Reads kb/kb.json (kb_build.py) and reference/ (reference_builder.py). Rule-based: the
 question is split into diagnosis and service by phrasing; diagnosis is matched to МКБ-10
@@ -57,7 +60,7 @@ DX_NEUTRAL = {"неуточнен", "уточнен", "друг", "форм", "�
 MIN_DX_SCORE = 0.6
 LLM_DX_SCORE = 0.95  # with --llm: below this the LLM is asked (exact name matches score ≥ 1.0)
 # stems of procedure names: «трахеоскопия», «флебография», «капилляроскопия», «инъекция», «катетеризация»
-SERVICE_STEM_RE = re.compile(r"(?:скоп|графи?|метри?|терапи?|грамм?)$|центез$|^(?:инъекц|катетериз|введен|получен|применен|сканирован|стимуляц|снимк|сбор$|пункц|биопс|рентген|гамма|ультразвук|узи$|кт$|мрт$|экг$)")
+SERVICE_STEM_RE = re.compile(r"(?:скоп|графи?|метри?|терапи?|грамм?)$|центез$|^(?:кариотип|инъекц|катетериз|введен|получен|применен|сканирован|стимуляц|снимк|сбор$|пункц|биопс|рентген|гамма|ультразвук|узи$|кт$|мрт$|экг$)")
 CHILD_RE = re.compile(r"\b(?:реб[её]н|дет[еи]й?|детск|новорожд|подрост|младен)\w*", re.I)
 ADULT_RE = re.compile(r"\bвзросл\w*", re.I)
 
@@ -141,6 +144,55 @@ def parse_list_question(q: str):
     return d, category, rest or None
 
 
+# reverse questions: «при каких диагнозах назначают X», «X — при каком диагнозе», «для чего назначают X»
+REVERSE_RE = re.compile(
+    r"при\s+как(?:их|ом|ой)\s+(?:диаг|заболев|болезн|состоян|патолог)\w*|"
+    r"(?:как(?:ие|ой|их)|что\s+за)\s+(?:диагноз|заболевани|болезн)\w*|"
+    r"для\s+(?:чего|каких\s+(?:диагноз|заболевани)\w*)|"
+    r"в\s+каких\s+(?:протокол|случа)\w*|"
+    r"показани[яей]\w*\s+(?:к|для)(?=\s)", re.I)
+REVERSE_FILLER_RE = re.compile(
+    r"(?<![\w-])(?:назнача\w*|проводит\w*|провод\w*|дела\w*|выполня\w*|сда[её]т\w*|сдают|нужн\w*|необходим\w*|"
+    r"предусмотр\w*|показан\w*|применя\w*|использу\w*|требу\w*|ли|по\s+протокол\w*|протокол\w*|согласно|"
+    r"есть|встреча\w*|упомина\w*|содерж\w*|входит|включ\w*)(?![\w-])", re.I)
+# substances measured by lab tests: «кальций, фосфор, паратгормон» is a list of tests, not diagnoses
+ANALYTES = ("гормон кальций фосфор калий натрий магний хлор железо ферритин трансферрин глюкоза холестерин триглицериды "
+            "креатинин мочевина билирубин альбумин кортизол альдостерон ренин инсулин тестостерон эстрадиол прогестерон "
+            "пролактин антитела антиген онкомаркер фермент амилаза липаза гемоглобин тропонин пептид витамин "
+            "иммуноглобулин кальцитонин тиреоглобулин метанефрины катехоламины электролиты липидограмма коагулограмма "
+            "фибриноген d-димер лактат прокальцитонин гликемия гормоны микроальбумин протеинурия").split()
+SERVICE_SPLIT_RE = re.compile(r"\s*(?:[,;+\n]|\s[–—-]\s)\s*")
+
+
+def parse_reverse_question(q: str):
+    """«При каких диагнозах назначают сцинтиграфию щитовидной железы» → ["сцинтиграфию щитовидной железы"];
+    None without a reverse wording (a bare list of services is recognised in Engine.ask)."""
+    m = REVERSE_RE.search(q)
+    if not m:
+        return None
+    rest = REVERSE_FILLER_RE.sub(" ", q[:m.start()] + " " + q[m.end():])
+    # a misspelt question verb: «назанчают», «проовдят»
+    rest = re.sub(r"[А-Яа-яЁё]{6,}", lambda w: " " if any(close(w.group(0).lower(), v) for v in REVERSE_VERBS) else w.group(0), rest)
+    return split_services(rest) or None
+
+
+REVERSE_VERBS = ("назначают", "назначается", "назначаются", "проводят", "проводится", "выполняют", "выполняется",
+                 "используют", "используется", "применяют", "применяется", "показано", "показаны")
+
+
+def split_services(text: str) -> list:
+    parts = [re.sub(r"\s+", " ", x).strip(" ,.;:?!–—-") for x in SERVICE_SPLIT_RE.split(text)]
+    return list(dict.fromkeys(x for x in parts if len(x) >= 2))
+
+
+def lookalike(text: str) -> str:
+    """Lower case, Cyrillic look-alike letters → Latin, so «С-пептид» (Cyrillic С) = «C-пептид»."""
+    return text.lower().replace("ё", "е").translate(str.maketrans("асеорхук", "aceopxyk"))
+
+
+REVERSE_WEIGHT = {"mandatory": 1.0, "additional": 0.8, "listed": 0.7, "differential": 0.5, "monitoring": 0.5}
+
+
 # Kind of a list member (lab / instrumental / consult / exam): words of the text first,
 # the code of the matched catalogue service (пост. №123) when the words say nothing.
 KIND_WORDS = [
@@ -219,8 +271,27 @@ class LazySection(dict):
         return _read_items(self._blob, *self["_blob"])
 
 
+def build_stem_index(engine) -> dict:
+    """stem → sorted indexes of usable sections whose list items (not text mentions) contain it."""
+    idx = {}
+    for i, s in enumerate(engine.kb["sections"]):
+        if not engine.usable(s):
+            continue
+        items = _read_items(engine.kb_path.parent / engine.kb["packed"], *s["_blob"]) if "_blob" in s else s["items"]
+        for it in items:
+            if it["level"] == "text":
+                continue
+            for seg in it["segments"]:
+                for st in list(seg["stems"]) + [x for m in seg.get("members", []) for x in m["stems"]]:
+                    idx.setdefault(st, set()).add(i)
+    return {k: sorted(v) for k, v in idx.items()}
+
+
 class Engine:
     def __init__(self, kb_path: Path, ref: Path, llm: bool = False):
+        self.kb_path = kb_path
+        self._stem_index = None  # reverse search: stem → usable section indexes (kb.stems.json)
+        self._analytes = None
         self.kb = json.loads(kb_path.read_text(encoding="utf-8"))
         if self.kb.get("packed"):  # kb.idx.json: section items stay on disk (see kb_pack.py)
             blob = kb_path.parent / self.kb["packed"]
@@ -265,7 +336,8 @@ class Engine:
 
     # ---------------------------------------------------------------- diagnosis
     def resolve_diagnosis(self, text: str, top=5):
-        m = ICD_CODE_RE.search(text.translate(CYR2LAT) if text[:1] in "АВЕКМНОРСТХ" else text)
+        up = text.upper()  # «e06.3» typed in lower case
+        m = ICD_CODE_RE.search(up.translate(CYR2LAT) if up[:1] in "АВЕКМНОРСТХ" else up)
         if m:
             code = m.group(1).translate(CYR2LAT) + m.group(2) + (f".{m.group(3)}" if m.group(3) else "")
             if code in self.icd:
@@ -355,7 +427,16 @@ class Engine:
     def covers(stems: list[str], required: list[str]) -> bool:
         return all(contains(stems, r) for r in required)
 
-    def find(self, sections, required):
+    def literal_tokens(self, service: str) -> list:
+        """«C-пептид»: the stemmer drops the one-letter part and «пептид» alone also matches «натрийуретический
+        пептид», so «c-пепт» must occur in the item text. Only when one stem is left — «С-реактивный белок»
+        keeps two stems and may be written «СРБ» or «С-реактивного»."""
+        if len(self.required_stems(service)) > 1:
+            return []
+        return [lookalike(m.group(1) + "-" + m.group(2)[:4])
+                for m in re.finditer(r"(?<![\w-])([A-Za-zА-Яа-яЁёα-ω])-([A-Za-zА-Яа-яЁё]{3,})", service)]
+
+    def find(self, sections, required, literal=()):
         hits = []
         for s in sections:
             for it in s["items"]:
@@ -366,6 +447,10 @@ class Engine:
                         break
                     if self.covers(seg["stems"], required):
                         how = how or ("exact" if it["level"] == "text" else "segment")
+                if how and literal:
+                    text = lookalike(it["text"] + " " + (it.get("header") or ""))
+                    if not all(t in text for t in literal):
+                        how = None
                 if how:
                     hits.append((s, it, how))
         hits.sort(key=lambda h: (h[0].get("tier", 0), LEVELS[h[1]["level"]][0], h[2] != "exact",
@@ -453,6 +538,146 @@ class Engine:
                    verdict=f"УТОЧНИТЕ ДИАГНОЗ — «{diagnosis.strip()}» может означать разные заболевания. " + "; ".join(parts))
         return ins
 
+    # ---------------------------------------------------------------- reverse search
+    def usable(self, s) -> bool:
+        """Table-layout and scanned documents count only through their extracted table rows."""
+        return self.kb["documents"][s["doc_id"]]["kind"] not in ("table", "scan") or s["icd10_source"] == "table"
+
+    def stem_index(self) -> dict:
+        """stem → indexes of usable sections having a list item with that stem. Read from kb.stems.json
+        next to the KB (`kb.py index`), else built once from the items (a few seconds) and kept."""
+        if self._stem_index is None:
+            f = self.kb_path.parent / "kb.stems.json"
+            if f.exists():
+                self._stem_index = json.loads(f.read_text(encoding="utf-8"))
+            else:
+                self._stem_index = build_stem_index(self)
+        return self._stem_index
+
+    def service_like(self, text: str) -> bool:
+        """«ТТГ», «метанефрины», «сцинтиграфия щитовидной железы» name a service; «гипотиреоз»,
+        «мочекаменная болезнь», «псориаз СОЭ» do not (a diagnosis wins or is part of it)."""
+        if ICD_CODE_RE.search(text.translate(CYR2LAT)):
+            return False
+        stems = self.norm.stems(text)
+        if not stems:
+            return False
+        if any(x in GENERIC or x in METHOD or SERVICE_STEM_RE.search(x) for x in stems):
+            return True
+        dx = self.resolve_diagnosis(text)
+        dx_score = dx[0]["score"] if dx else 0
+        if dx_score >= LLM_DX_SCORE:  # the very name of a diagnosis: «недостаточность витамина D»
+            return False
+        if self._analytes is None:
+            self._analytes = {x for w in ANALYTES for x in self.norm.stems(w)}
+        if any(x in self._analytes for x in stems) or dx_score < MIN_DX_SCORE:
+            return True
+        # «Комплекс исследований для диагностики мочекаменной болезни» names the disease, not a test
+        svc = [c for c in self.cat.match(stems, top=3, min_score=0.25, query=True)
+               if not re.search(r"диагностик|комплекс", c["name"], re.I)]
+        return bool(svc) and svc[0]["score"] >= 0.85 and svc[0]["score"] > dx_score + 0.1
+
+    def reverse_search(self, question, services: list, population: str | None = None, top: int = 15):
+        """Diagnoses whose protocols list the services: sections ranked by how many of the services
+        they list (rare ones weigh more, mandatory more than «по показаниям»)."""
+        import math
+        idx = self.stem_index()
+        sections = self.kb["sections"]
+        n_usable = max(1, len({i for v in idx.values() for i in v}))
+        keys = list(idx)
+        if population is None and question:
+            population = "child" if CHILD_RE.search(question) else "adult" if ADULT_RE.search(question) else None
+        svc_out, per_section = [], {}
+        for svc in services:
+            req = self.required_stems(svc)
+            posting = {}
+            for r in req:  # sections holding the stem (typo-tolerant over the index keys)
+                posting[r] = {i for k in keys if contains([k], r) for i in idx[k]}
+            # a word no protocol list has («назанчают» — a misspelt verb) is dropped if others remain
+            if len(req) > 1 and any(posting[r] for r in req):
+                req = [r for r in req if posting[r]]
+            cand = None
+            for r in req:
+                cand = posting[r] if cand is None else cand & posting[r]
+            hits = [h for h in self.find([sections[i] for i in sorted(cand or [])], req, self.literal_tokens(svc))
+                    if h[1]["level"] != "text"]
+            secs = {}
+            for sec, it, how in hits:
+                if population and sec["population"] and population not in sec["population"]:
+                    continue
+                best = secs.get(sec["id"])
+                if best is None or LEVELS[it["level"]][0] < LEVELS[best[1]["level"]][0]:
+                    secs[sec["id"]] = (sec, it, how)
+            df = len(secs)
+            svc_out.append({"text": svc, "catalogue": self.resolve_service(svc)[:1], "sections": df, "found": df > 0})
+            idf = math.log((n_usable + 1) / (df + 1)) + 0.1
+            for sid, (sec, it, how) in secs.items():
+                e = per_section.setdefault(sid, {"sec": sec, "matched": {}, "score": 0.0})
+                e["matched"][svc] = (it, how)
+                e["score"] += REVERSE_WEIGHT.get(it["level"], 0.5) * idf
+        found = [x["text"] for x in svc_out if x["found"]]
+        # one entry per protocol + set of codes (a chapter split into table rows or populations)
+        merged = {}
+        for e in per_section.values():
+            sec = e["sec"]
+            key = (sec["doc_id"], tuple(sorted(sec["icd10"])) or sec["chapter_title"])
+            m = merged.setdefault(key, {"secs": [], "matched": {}, "score": 0.0})
+            m["secs"].append(sec)
+            for svc, (it, how) in e["matched"].items():
+                if svc not in m["matched"] or LEVELS[it["level"]][0] < LEVELS[m["matched"][svc][1]["level"]][0]:
+                    m["matched"][svc] = (sec, it, how)
+            m["score"] = max(m["score"], e["score"])
+        entries = []
+        for m in merged.values():
+            sec = m["secs"][0]
+            # chapters bound only by a protocol's scope or with no codes are weaker evidence of «the» diagnosis
+            weight = 1.0 if sec["icd10_source"] in ("classification", "title", "table") else 0.6 if sec["icd10"] else 0.4
+            doc = self.kb["documents"][sec["doc_id"]]
+            codes = [c for c in dict.fromkeys(c for x in m["secs"] for c in x["icd10"]) if c in self.icd]
+            entries.append({
+                "diagnoses": [{"code": c, "name": self.icd[c]} for c in codes[:6]], "more_codes": max(0, len(codes) - 6),
+                "title": sec["chapter_title"] or (sec.get("names") or [""])[0], "names": sec.get("names", [])[:3],
+                "protocol": sec["protocol"] or doc["title"], "decree": doc["decree"], "url": doc["url"],
+                "chapter": sec["chapter"], "population": pop_label(sec["population"]),
+                "icd10_source": sec["icd10_source"],
+                "matched": [dict(self.cite(x, it), service=svc, text=it["text"], match=how)
+                            for svc, (x, it, how) in sorted(m["matched"].items(), key=lambda kv: found.index(kv[0]))],
+                "missing": [x for x in found if x not in m["matched"]],
+                "coverage": f"{len(m['matched'])} из {len(found)}",
+                "score": round(m["score"] * weight, 3), "_n": len(m["matched"]),
+            })
+        entries.sort(key=lambda e: (-e["_n"], -e["score"]))
+        entries = entries[:top]
+        for e in entries:
+            e.pop("_n")
+            if self.insurance and e["diagnoses"]:
+                d0 = e["diagnoses"][0]
+                ins = self.insurance.check(d0["code"], d0["name"])
+                e["insurance"] = {"verdict_level": ins["verdict_level"], "short": insurance.SHORT.get(ins["verdict_level"], ""),
+                                  "clauses": [{"clause": x["clause"], "short": x["short"], "url": x["url"], "quote": x["quote"]}
+                                              for x in ins["excluded"]]}
+        share = [x["sections"] / n_usable for x in svc_out if x["found"]]
+        generic = bool(share) and min(share) > 0.05
+        n = len(entries)
+        word = "диагноз" + ("" if n % 10 == 1 and n % 100 != 11 else "а" if 2 <= n % 10 <= 4 and not 12 <= n % 100 <= 14 else "ов")
+        all_found = bool(entries) and len(found) > 1 and entries[0]["missing"] == []
+        return {
+            "mode": "reverse", "question": question, "population": population,
+            "services": svc_out, "not_found": [x["text"] for x in svc_out if not x["found"]],
+            "results": [{"population": "все", "verdict_level": "reverse", "entries": entries, "verdict": f"{n} {word}",
+                         # flat list, so consumers of check answers (feedback summary) keep working
+                         "evidence": [x for e in entries[:3] for x in e["matched"]]}] if entries else [],
+            "verdict_level": "reverse" if entries else None,
+            "verdict": (f"ОБРАТНЫЙ ПОИСК: {n} {word}" + (" — у первых в протоколе есть все перечисленные услуги" if all_found else ""))
+                       if entries else "Услуги не найдены в перечнях диагностики протоколов",
+            "generic_warning": (f"Все указанные услуги общие (каждая — в {round(100 * min(share))}% и более разделов протоколов): "
+                                "по ним диагноз не определить, добавьте специфичные исследования") if generic else None,
+            "evidence": [x for e in entries[:3] for x in e["matched"]],
+            "unparsed": [],
+            "method": ("правила: услуги → разделы протоколов, ранжирование по числу совпавших услуг, "
+                       "редкости услуги и уровню (обязательная диагностика выше «по показаниям»)"),
+        }
+
     def _choose(self, dx):
         """The top МКБ-10 candidate, or a close one the protocols cover when it isn't covered."""
         chosen = dx[0]
@@ -468,10 +693,19 @@ class Engine:
     def ask(self, question: str | None = None, diagnosis: str | None = None, service: str | None = None,
             population: str | None = None):
         llm_used = None
+        if question and not (diagnosis or service):
+            # «при каких диагнозах назначают X»; a bare list of services «ТТГ, свободный Т4, АТ к ТПО»
+            rev = parse_reverse_question(question)
+            if rev:
+                return self.reverse_search(question, rev, population=population)
         if question and not (diagnosis and service):
             lst = parse_list_question(question)
             if lst:
                 return self.list_services(question, *lst, population=population)
+            if not (diagnosis or service) and not any(rx.match(question.strip()) for rx in SPLIT_RES):
+                parts = split_services(WHO_RE.sub("", question))
+                if parts and all(self.service_like(x) for x in parts):
+                    return self.reverse_search(question, parts, population=population)
             d, s = split_question(question)
             if not (d or s or diagnosis or service):
                 # only a diagnosis («сахарный диабет 2 типа», «E06.3»): insurance verdict + every
@@ -521,7 +755,7 @@ class Engine:
         results = []
         for label in sorted(groups, key=lambda l: POP_ORDER.index(l)):
             secs = groups[label]
-            hits = self.find(secs, required)
+            hits = self.find(secs, required, self.literal_tokens(service))
             listed = [h for h in hits if h[1]["level"] != "text"]
             texts = [h for h in hits if h[1]["level"] == "text"]
             level = listed[0][1]["level"] if listed else ("text" if texts else None)
@@ -614,7 +848,7 @@ class Engine:
         picked = []  # (section, [(item, match)])
         for s in usable:
             if required:
-                hits = [(it, how) for _, it, how in self.find([s], required) if it["level"] != "text"]
+                hits = [(it, how) for _, it, how in self.find([s], required, self.literal_tokens(service)) if it["level"] != "text"]
             else:
                 hits = [(it, None) for it in s["items"] if it["level"] != "text"]
             if category:
@@ -725,9 +959,44 @@ def render_list(a: dict) -> str:
     return "\n".join(out)
 
 
+def render_reverse(a: dict) -> str:
+    out = ["Обратный поиск: при каких диагнозах протоколы предусматривают услуги"]
+    for x in a["services"]:
+        cat = f" → пост. №123: {x['catalogue'][0]['code']} {x['catalogue'][0]['name']}" if x["catalogue"] else ""
+        out.append(f"  «{x['text']}»{cat} — " + (f"в {x['sections']} разделах протоколов" if x["found"] else "не найдена в перечнях протоколов"))
+    if a["population"]:
+        out.append(f"Население: {'дети' if a['population'] == 'child' else 'взрослые'}")
+    out.append("")
+    out.append(a["verdict"])
+    if a.get("generic_warning"):
+        out.append("ВНИМАНИЕ: " + a["generic_warning"])
+    for i, e in enumerate((a["results"] or [{}])[0].get("entries", []), 1):
+        out.append("")
+        codes = "; ".join(f"{d['code']} {d['name']}" if j < 2 else d["code"] for j, d in enumerate(e["diagnoses"])) \
+            + (f" и ещё {e['more_codes']}" if e["more_codes"] else "")
+        out.append(f"[{i}] {e['title']} — совпало {e['coverage']}" + (f" ({e['population']})" if e["population"] != "население не указано" else ""))
+        out.append(f"    МКБ-10: {codes or 'коды не указаны'}")
+        dec = e["decree"]
+        out.append(f"    {e['protocol']}" + (f" (пост. МЗ от {dec['date']} № {dec['number']})" if dec and dec['number'] not in e['protocol'] else ""))
+        if e.get("insurance"):
+            ins = e["insurance"]
+            out.append(f"    Страхование ({e['diagnoses'][0]['code']}): {ins['short']}" + (f" — п. {', '.join(c['clause'] for c in ins['clauses'])}" if ins["clauses"] else ""))
+        for m in e["matched"]:
+            out.append(f"    + {m['service']}: {LEVELS[m['level']][1]}, п. {m['clause']}, стр. {m['pdf_pages'][0]}")
+            out.append(f"      «{m['quote']}»")
+            out.append(f"      {m['url']}")
+        if e["missing"]:
+            out.append(f"    − нет в перечнях этого раздела: {', '.join(e['missing'])}")
+    out.append("")
+    out.append(f"Метод: {a['method']}.")
+    return "\n".join(out)
+
+
 def render(a: dict) -> str:
     if a.get("error"):
         return "Ошибка: " + a["error"]
+    if a.get("mode") == "reverse":
+        return render_reverse(a)
     text = render_list(a) if a.get("mode") == "list" else render_check(a)
     return text + ("\n" + insurance.render(a["insurance"]) if a.get("insurance") else "")
 
@@ -791,6 +1060,19 @@ def run_eval(engine: Engine, path: Path):
     ok = 0
     for c in cases:
         a = engine.ask(c["question"])
+        if c.get("mode") == "reverse":  # a code starting with one of expect_any among the top entries' diagnoses
+            entries = (a.get("results") or [{}])[0].get("entries", [])[:c.get("top", 3)]
+            got = [d["code"] for e in entries for d in e["diagnoses"]]
+            good = a.get("mode") == "reverse" and (
+                any(g.startswith(x) for g in got for x in c["expect_any"]) if c["expect_any"] else True) \
+                and (not c.get("generic") or bool(a.get("generic_warning")))
+            ok += good
+            print(f"{'OK  ' if good else 'FAIL'} {c['question']}")
+            if not good:
+                print(f"       expected one of {c['expect_any']} in top {c.get('top', 3)}; got {a.get('mode')} "
+                      f"{[e['diagnoses'][0]['code'] if e['diagnoses'] else e['title'][:30] for e in entries]} "
+                      f"services {[(x['text'], x['sections']) for x in a.get('services', [])]}  {a.get('error', '')}")
+            continue
         if c.get("insurance"):  # insurance verdict: level and the excluding clause
             ins = a.get("insurance") or {}
             got = [m["clause"] for m in ins.get("excluded", [])]
@@ -839,7 +1121,8 @@ def main():
     a.add_argument("--json", action="store_true")
     e = sub.add_parser("eval")
     e.add_argument("file", nargs="?", type=Path, default=Path("eval/golden_endocrinology.jsonl"))
-    for p in (a, e):
+    ix = sub.add_parser("index", help="write kb.stems.json (reverse search index) next to the KB")
+    for p in (a, e, ix):
         p.add_argument("--llm", action="store_true", help="use Claude when the diagnosis is not recognized confidently")
         p.add_argument("--kb", type=Path, default=Path("kb/kb.json"))
         p.add_argument("--reference", type=Path, default=Path("reference"))
@@ -847,6 +1130,12 @@ def main():
     sys.stdout.reconfigure(encoding="utf-8")
 
     engine = Engine(args.kb, args.reference, llm=args.llm)
+    if args.cmd == "index":
+        idx = build_stem_index(engine)
+        out = args.kb.parent / "kb.stems.json"
+        out.write_text(json.dumps(idx, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+        print(f"{out}: {len(idx)} stems, {out.stat().st_size / 2**20:.1f} MB")
+        return
     if args.cmd == "eval":
         sys.exit(0 if run_eval(engine, args.file) else 1)
     ans = engine.ask(args.question, args.diagnosis, args.service, args.population)
