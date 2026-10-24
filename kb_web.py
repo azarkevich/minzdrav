@@ -23,7 +23,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import kb  # noqa: E402
 from sheet_log import SheetLog, mask  # noqa: E402
 
-VERSION = "2.4"  # shown on the page; bump on user-visible changes
+VERSION = "2.5"  # shown on the page; bump on user-visible changes
 PAGE = (Path(__file__).resolve().parent / "web" / "index.html").read_text(encoding="utf-8").replace("__VERSION__", VERSION)
 VIEWER = (Path(__file__).resolve().parent / "web" / "viewer.html").read_text(encoding="utf-8")
 LOCK = threading.Lock()
@@ -38,6 +38,15 @@ ANSWERS: dict = {}  # recent answers by id, so a rating is stored together with 
 SHEET = SheetLog()  # $KB_SHEET_URL: questions and ratings → Google Sheet (personal data masked)
 
 
+def debug_brief(ans):
+    """The trace without the LLM prompts, personal data masked: where the answer went wrong, for the feedback record."""
+    d = ans.get("debug") or {}
+    return {"route": [mask(x) for x in d.get("route", [])], "parse": [mask(x) for x in d.get("parse", [])],
+            "llm": [c["purpose"] + (" (ошибка)" if c.get("error") else "") for c in d.get("llm", [])],
+            "llm_status": d.get("llm_status"), "problems": [mask(x) for x in d.get("problems", [])],
+            "ms": (d.get("timing") or {}).get("total")}
+
+
 def summary(question, ans):
     """What a reviewer needs to judge the answer later (and to turn it into an eval case)."""
     ev = [{"protocol": e["protocol"], "clause": e["clause"], "pages": e["pdf_pages"], "url": e["url"]}
@@ -48,7 +57,7 @@ def summary(question, ans):
             "services": [x["text"] for x in ans.get("services", [])],
             "population": ans.get("population"), "verdict_level": ans.get("verdict_level"),
             "verdict": ans.get("verdict"), "evidence": ev, "method": ans.get("method"),
-            "mode": ans.get("mode"),
+            "mode": ans.get("mode"), "debug": debug_brief(ans),
             "insurance": {k: (ans.get("insurance") or {}).get(k) for k in ("verdict_level", "verdict")}
                          | {"clauses": [m["clause"] for m in (ans.get("insurance") or {}).get("excluded", [])
                                         + (ans.get("insurance") or {}).get("program", [])]}}

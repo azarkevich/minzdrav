@@ -24,6 +24,7 @@ to a temp `input.pdf`. No test suite: verify with eval sets, `kb_probe.py`, the 
 | `protocol_parser.py` | stage 1: PDF → JSON tree (pages, clauses, МКБ-10) | `parsed/` |
 | `kb_build.py`, `kb.py`, `kb_text.py`, `table_extract.py`, `kb_llm.py`, `kb_pack.py` | stages 2–4: KB, answers, eval, LLM | `kb_all/`, `kb/` |
 | `insurance.py` | Правила №20 ЗАСО «ТАСК»: is it an insured event | `data/insurance/*.json` (committed) |
+| `kb_trace.py` | trace of one question (route, parse, candidates, every LLM call) → `debug` in the answer | |
 | `kb_mcp.py` | MCP server (stdio, hand-written JSON-RPC) | |
 | `kb_web.py` + `web/` | website, PDF viewer | |
 | `sheet_log.py` | question / rating log to a Google Sheet | |
@@ -45,7 +46,8 @@ python -I kb.py ask "Диагноз – аутоиммунный тиреоид�
 python -I kb.py ask --diagnosis E06.3 --service ТТГ --json
 python -I kb.py eval [eval/<set>.jsonl] --kb kb_all/kb.idx.json
 python -I kb.py index --kb kb_all/kb.idx.json                             # reverse-search stem index kb.stems.json
-python -I kb_probe.py [--n 400] [--only icd_name,service_not_dx,chapter_name,perturb]   # ~5 min
+python -I kb.py ask "…" --debug                                          # print the trace
+python -I kb_probe.py [--n 400] [--llm] [--only icd_name,service_not_dx,chapter_name,perturb]   # ~5 min
 python -I insurance.py build | check E06.3 --service ТТГ
 python -I kb_llm.py crosscheck --dry-run
 python -I kb_web.py --kb kb_all/kb.json --llm --port 8000                 # http://127.0.0.1:8000/
@@ -53,8 +55,18 @@ claude mcp add minzdrav -- python -I C:/w/minzdrav/kb_mcp.py
 ```
 
 LLM: `KB_OPENROUTER_API_KEY` | `KB_ANTHROPIC_API_KEY` | `KB_LLM_PROVIDER=claude-cli`, models
-`KB_LLM_MODEL` / `KB_LLM_QUESTION_MODEL`; asked only when the diagnosis is not an exact name match
-(score < `LLM_DX_SCORE` = 0.95); every call logged to `kb/llm_usage.jsonl`.
+`KB_LLM_MODEL` / `KB_LLM_QUESTION_MODEL`. The OpenRouter key on this machine is rejected (401) — use
+`KB_LLM_PROVIDER=claude-cli` for local runs. Every call goes through `kb_llm.call(..., purpose=…)`
+and is logged to `kb/llm_usage.jsonl`. Without `--llm` answers must not change.
+
+**The LLM only rephrases** (diagnosis, service name, question type, diagnosis / service split);
+search, verdict and verbatim quotes stay rule-based. It is asked when the diagnosis is not an
+exact name match (score < `LLM_DX_SCORE` = 0.95), when a service is not found (`suggest_service`,
+guarded by `_variant_ok`: a variant that merely drops the user's words is refused), when the rules
+can't read the question or the split is suspicious (`suspicious_split` → `parse_question`). Misspelt
+trigger words are fixed without the LLM (`fix_trigger_words`), only as a second try of the patterns.
+Personal data are cut before parsing (`sheet_log.strip_personal`). If the LLM fails, the rules'
+answer stands and the error is in the trace. Details: `docs/DETAILS.md` §5.
 
 ## 1. Scraper — gotchas
 
@@ -89,8 +101,12 @@ LLM: `KB_OPENROUTER_API_KEY` | `KB_ANTHROPIC_API_KEY` | `KB_LLM_PROVIDER=claude-
   bare list of services (reverse) → check.
 - `table` / `scan` docs are used only through extracted table rows, otherwise reported as
   "requires manual check".
-- Eval sets in `eval/`: golden, holdout*, `lists.jsonl`, `reverse.jsonl`, `insurance.jsonl` — all
-  must stay green; misses are almost always diagnosis recognition, not service matching.
+- Eval sets in `eval/`: golden, holdout*, `lists.jsonl`, `reverse.jsonl`, `insurance.jsonl`,
+  `llm_triggers` / `llm_split` / `llm_service.jsonl` (cases with `"llm": true` are skipped without
+  `--llm`) — all must stay green; misses are almost always diagnosis recognition, not service matching.
+- Debug trace (`kb_trace.Trace`, a ContextVar, answer key `debug`): route, parse, diagnosis
+  candidates, service, every LLM prompt / response, problems, timing. `kb.render` / eval / MCP leave
+  it out; the Google Sheet never gets it, `feedback.jsonl` gets `debug_brief` (no prompts).
 - Low-memory form: `kb.idx.json` + `kb.items.bin` (`LazySection`), ~50 MB instead of ~530 MB,
   identical answers. Website and MCP use it by default; `kb_pack.py` converts an old `kb.json`.
 

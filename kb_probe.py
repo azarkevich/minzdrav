@@ -1,4 +1,4 @@
-"""Invariant probes of the expert system: thousands of inputs from the reference dictionaries, no labels, no LLM.
+"""Invariant probes of the expert system: thousands of inputs from the reference dictionaries, no labels (no LLM unless --llm).
 
     python -I kb_probe.py [--kb kb_all/kb.idx.json] [--n 400] [--only icd_name,service_not_dx] [--seed 1]
 
@@ -89,6 +89,9 @@ def typo(word, rnd):
     return word[:i] + word[i + 1] + word[i] + word[i + 2:]
 
 
+LLM_CALLS = [0]  # LLM calls made while probing (--llm)
+
+
 def probe_perturb(e, n, rnd):
     cases = []
     for f in sorted((HERE / "eval").glob("*.jsonl")):
@@ -98,6 +101,7 @@ def probe_perturb(e, n, rnd):
     cases = rnd.sample(cases, min(n, len(cases)))
 
     def key(a):
+        LLM_CALLS[0] += len((a.get("debug") or {}).get("llm", []))
         return ((a.get("diagnosis") or {}).get("code"), a.get("mode"), a.get("verdict_level"),
                 (a.get("insurance") or {}).get("verdict_level"))
 
@@ -164,10 +168,11 @@ def main():
     ap.add_argument("--n", type=int, default=400, help="inputs per probe")
     ap.add_argument("--only", help="comma-separated probe names")
     ap.add_argument("--seed", type=int, default=1)
+    ap.add_argument("--llm", action="store_true", help="engine with the LLM (perturb: misspelt questions may be rescued by it); counts the calls")
     ap.add_argument("--show", type=int, default=12, help="failing examples printed per probe")
     args = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8")
-    e = kb.Engine(args.kb, args.reference)
+    e = kb.Engine(args.kb, args.reference, llm=args.llm)
     e.ref = args.reference
     report = {}
     for name, fn in PROBES.items():
@@ -185,6 +190,8 @@ def main():
     out = HERE / "kb" / "probe_report.json"
     out.parent.mkdir(exist_ok=True)
     out.write_text(json.dumps(report, ensure_ascii=False, indent=1), encoding="utf-8")
+    if args.llm:
+        print(f"\nLLM calls: {LLM_CALLS[0]}")
     print(f"\nreport: {out}")
 
 

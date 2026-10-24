@@ -1,0 +1,12 @@
+# Extra text in the question: ФИО, dates, policy numbers, case history (plan §3). Without an LLM, personal data are cut by
+# sheet_log.strip_personal before parsing; "llm": true cases need the LLM re-parse (--llm). `service_text` = the service as parsed.
+{"question": "Диагноз – аутоиммунный тиреоидит, разрешено ли УЗИ щитовидной железы, Ковалёва А.В.", "icd": "E06.3", "level": "mandatory", "clause": 73, "service_text": "УЗИ щитовидной железы"}
+{"question": "Пациентка Иванова И.И., диагноз – аутоиммунный тиреоидит, разрешена ли сцинтиграфия щитовидной железы", "icd": "E06.3", "level": "additional", "clause": 74}
+{"question": "Диагноз – подагра, разрешено ли УЗИ почек, полис № 123456", "level": "mandatory", "clause": 10, "service_text": "УЗИ почек"}
+{"question": "12.03.2024 Диагноз – тиреотоксикоз, разрешено ли ЭКГ", "level": "mandatory", "clause": 44}
+{"question": "Диагноз – аутоиммунный тиреоидит, разрешена ли МРТ головного мозга, тел. +375 29 123-45-67", "icd": "E06.3", "level": null}
+{"question": "Диагноз – сахарный диабет 2 типа, определение гликированного гемоглобина, Петров Пётр Петрович", "level": "monitoring", "service_text": "гликированного гемоглобина"}
+{"question": "Пациентка 45 лет, жалобы на слабость и зябкость, диагноз – гипотиреоз, нужно ли определение ТТГ", "level": "mandatory", "llm": true}
+{"question": "Больной поступил в стационар с жалобами на одышку и кашель, диагноз – ХОБЛ, положена ли спирометрия", "level": "mandatory", "clause": 16, "llm": true}
+{"question": "Направлен эндокринологом после обращения 12.05.2024: тиреотоксикоз, необходима ли консультация офтальмолога", "level": "additional", "llm": true}
+{"question": "Иванов, 1980 г.р., наблюдается с 2015 года, гипотиреоз; разрешен ли анализ на свободный Т4", "level": "mandatory", "llm": true}

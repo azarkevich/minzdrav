@@ -1,0 +1,16 @@
+# Misspelt service words of the question patterns (plan .plan/llm-improve.md §2): `route` = the kind of question the engine must
+# understand (check | list | reverse | insurance | diagnosis_only). Cases 1-7 are fixed by kb.Engine.fix_trigger_words without
+# an LLM; "llm": true cases only the LLM's question type (--llm) can route. Written before the implementation.
+{"question": "Преечень лаборатонрых анализов при гипотиреозе", "route": "list", "icd": "E03", "category": "lab"}
+{"question": "какеи исследования назначают при сахарном диабете 2 типа", "route": "list", "icd": "E11"}
+{"question": "Сахарный диабет, перечнь инструменатльных исследований", "route": "list", "icd": "E10", "category": "instrumental"}
+{"question": "При каикх диагнозах назначают метанефрины", "route": "reverse"}
+{"question": "при каких диагонзах назанчают сцинтиграфию щитовидной железы", "route": "reverse"}
+{"question": "Страховой ли слчай – подбор контактных линз", "route": "insurance"}
+{"question": "Диагноз – аутоиммунный тиреоидит, разрешенно ли УЗИ щитовидной железы", "route": "check", "icd": "E06.3"}
+{"question": "Диагноз – аутоиммунный тиреоидит, разрешено ли УЗИ щитовидной железы", "route": "check", "icd": "E06.3"}
+{"question": "Диагноз – тиреотоксикоз, можно ли ЭКГ", "route": "check"}
+{"question": "Сахарный диабет 2 типа", "route": "diagnosis_only", "icd": "E11"}
+{"question": "Подскажите, что обычно назначают из анализов, если у человека гипотиреоз", "route": "list", "icd": "E03", "llm": true}
+{"question": "Для каких болезней вообще делают сцинтиграфию щитовидной железы", "route": "reverse", "llm": true}
+{"question": "Входит ли в страховку лечение аутоиммунного тиреоидита", "route": "insurance", "llm": true}
