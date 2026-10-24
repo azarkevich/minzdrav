@@ -17,3 +17,5 @@ __pycache__/
 # Output of kb_build.py / kb_llm.py
 /kb/
 /kb_all/
+
+/.plan/
