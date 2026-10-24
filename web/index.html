@@ -83,7 +83,7 @@ function insurance(i){
    +(m.unless?`<div class="meta">Оговорка: ${esc(m.unless)}</div>`:"")
    +(m.examples?`<div class="meta">В перечне: ${esc(m.examples.slice(0,3).join("; "))}${m.examples.length>3?` и ещё ${m.examples.length-3}`:""}</div>`:"")
    +(q?`<blockquote>${esc(m.quote)}</blockquote>`:"")+a(view(m.url,m.quote),`Правила, стр. ${m.page}`)+`</div>`).join("")+`</div>`:"";
- let h=`<div class="card ins"><div class="meta">${a(i.url,i.rules)}</div>`;
+ let h=`<div class="card ins"><div class="meta">${a(view(i.url+"#page=1",""),i.rules)}</div>`;
  if(i.variants){
   const S={program:"не страховой, если Программа не предусматривает",excluded:"не страховой",probable:"вероятно не страховой",limited:"страховой, с ограничениями",covered:"страховой"};
   h+=`<div class="verdict v-warn">Уточните диагноз — «${esc(a0(i))}» может означать разные заболевания с разным страховым решением</div><ul class="lst">`
