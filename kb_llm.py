@@ -25,14 +25,18 @@ Usage:
     python -I kb_llm.py parse "Диагноз – болезнь Аддисона, разрешен ли тест с инсулином"
 """
 import argparse
+import contextvars
 import hashlib
 import json
 import os
 import re
 import sys
+import threading
+import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # `python -I` drops the script dir
+import kb_trace  # noqa: E402
 
 MODEL = os.environ.get("KB_LLM_MODEL", "claude-opus-5-5")  # knowledge-base cross-check
 # runtime question parsing: a short, simple task — a cheap model is enough
@@ -50,8 +54,27 @@ QUESTION_SCHEMA = {
             "description": "1–3 наиболее вероятных кода МКБ-10, самый вероятный первым"},
         "service": {"type": "string", "description": "диагностическая услуга как в вопросе; пустая строка, если услуги в вопросе нет"},
         "population": {"type": "string", "enum": ["adult", "child", "unknown"]},
+        "mode": {"type": "string", "enum": ["check", "list", "reverse", "insurance", "diagnosis_only"],
+                 "description": "тип вопроса: check — разрешена ли услуга при диагнозе; list — перечень исследований при диагнозе; "
+                                "reverse — при каких диагнозах назначают услугу(и); insurance — страховой ли случай; "
+                                "diagnosis_only — только диагноз"},
+        "category": {"type": "string", "enum": ["lab", "instrumental", "consult", ""],
+                     "description": "для list: лабораторные / инструментальные / консультации; иначе пустая строка"},
+        "services": {"type": "array", "items": {"type": "string"},
+                     "description": "для reverse: услуги из вопроса, по одной; иначе пустой список"},
     },
-    "required": ["diagnosis", "icd10", "service", "population"],
+    "required": ["diagnosis", "icd10", "service", "population", "mode", "category", "services"],
+    "additionalProperties": False,
+}
+
+SERVICE_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "variants": {"type": "array", "items": {"type": "string"},
+                     "description": "2–5 вариантов названия услуги; пустой список, если услугу назвать нельзя"},
+        "note": {"type": "string", "description": "короткое пояснение или пустая строка"},
+    },
+    "required": ["variants", "note"],
     "additionalProperties": False,
 }
 
@@ -89,8 +112,29 @@ QUESTION_PROMPT = """Вопрос сотрудника страховой ком
 клиническим протоколом при диагнозе. Выдели диагноз и услугу, предложи коды МКБ-10 для диагноза
 (учти синонимы, эпонимы и опечатки) и определи, о ребенке или взрослом речь (если не сказано — unknown).
 Если в вопросе только диагноз, без услуги, service — пустая строка.
+В вопросе могут быть лишние данные (ФИО, даты, жалобы, номер полиса) — в diagnosis и service их не включай.
+Определи тип вопроса (mode): check — разрешена ли услуга при диагнозе («…, разрешено ли УЗИ»); list — просят перечень
+или виды исследований при диагнозе («перечень анализов при …», «какие исследования …»; category — lab / instrumental /
+consult, если названа, service — уточнение вроде «КТ»); reverse — при каких диагнозах назначают услугу (services — услуги
+по одной); insurance — «страховой ли случай …» (diagnosis и service — предмет вопроса); diagnosis_only — только диагноз.
+В служебных словах вопроса могут быть опечатки.
 
 Вопрос: {question}"""
+
+SERVICE_PROMPT = """Сотрудник страховой компании спросил, предусмотрена ли протоколом диагностическая услуга при диагнозе, но
+в перечнях протоколов этого диагноза услуга по формулировке вопроса не нашлась. Возможные причины: опечатка,
+сокращение, бытовое название, устаревшее написание.
+
+Услуга в вопросе: «{service}»
+Диагноз: {diagnosis}
+
+Строки из перечней диагностики протоколов для этого диагноза (кандидаты):
+{candidates}
+
+Верни 2–5 вариантов, как эта услуга названа в протоколе. Если подходит строка из кандидатов — используй её формулировку
+(можно её часть: само название услуги без перечисления других). Если среди кандидатов услуги нет — верни каноническое
+название по Перечню медицинских услуг (пост. МЗ №123). Не выдумывай услугу и не подменяй её более общей или другой:
+«УЗИ молочных желез» нельзя заменять на «УЗИ». Если понять, о какой услуге речь, нельзя — верни пустой список."""
 
 
 def client():
@@ -102,17 +146,47 @@ def client():
     return anthropic.Anthropic(api_key=key) if key else anthropic.Anthropic()
 
 
-def call(prompt: str, schema: dict, model: str, effort: str, max_tokens: int = 16000) -> dict:
+PURPOSE: contextvars.ContextVar = contextvars.ContextVar("kb_llm_purpose", default="")
+_LAST = threading.local()  # usage record of the call this thread made last (for the trace)
+
+
+def call(prompt: str, schema: dict, model: str, effort: str, max_tokens: int = 16000, purpose: str = "") -> dict:
     """One structured-output request: OpenRouter if KB_OPENROUTER_API_KEY is set (and no
-    KB_ANTHROPIC_API_KEY), else the Anthropic API — unless KB_LLM_PROVIDER says otherwise."""
+    KB_ANTHROPIC_API_KEY), else the Anthropic API — unless KB_LLM_PROVIDER says otherwise.
+    `purpose` goes to kb/llm_usage.jsonl; with a question trace active (kb_trace) the prompt,
+    the answer, timing, usage and any error are recorded in it too."""
     provider = os.environ.get("KB_LLM_PROVIDER") or (
         "openrouter" if os.environ.get("KB_OPENROUTER_API_KEY") and not os.environ.get("KB_ANTHROPIC_API_KEY")
         else "anthropic")
-    if provider == "claude-cli":
-        return call_claude_cli(prompt, schema, model, effort)
-    if provider == "openrouter":
-        return call_openrouter(prompt, schema, model, effort, max_tokens)
-    return call_anthropic(prompt, schema, model, effort, max_tokens)
+    tok = PURPOSE.set(purpose)
+    _LAST.rec = {}
+    t0 = time.time()
+    result, err = None, None
+    try:
+        if provider == "claude-cli":
+            result = call_claude_cli(prompt, schema, model, effort)
+        elif provider == "openrouter":
+            result = call_openrouter(prompt, schema, model, effort, max_tokens)
+        else:
+            result = call_anthropic(prompt, schema, model, effort, max_tokens)
+        return result
+    except Exception as e:  # noqa: BLE001 — recorded, then re-raised
+        err = f"{type(e).__name__}: {e}"
+        raise
+    finally:
+        PURPOSE.reset(tok)
+        u = getattr(_LAST, "rec", {}) or {}
+        kb_trace.current().llm_call({
+            "purpose": purpose, "provider": provider, "model": u.get("model") or model,
+            "prompt": prompt, "response": result, "error": err, "sec": round(time.time() - t0, 2),
+            "input": u.get("input"), "output": u.get("output"),
+            "cost_usd": u.get("cost_usd") if u.get("cost_usd") is not None else u.get("cost_usd_list")})
+
+
+def configured() -> bool:
+    """A provider with credentials is set up (the SDK's own login is not detected here)."""
+    return bool(os.environ.get("KB_LLM_PROVIDER") == "claude-cli" or os.environ.get("KB_OPENROUTER_API_KEY")
+                or os.environ.get("KB_ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_API_KEY"))
 
 
 USAGE_LOG = Path("kb/llm_usage.jsonl")
@@ -138,7 +212,6 @@ def call_claude_cli(prompt: str, schema: dict, model: str, effort: str) -> dict:
     """Claude Code in headless mode (`claude -p`): runs on the user's subscription limits
     instead of an API key. No tools, no MCP, no session saved; prompt goes via stdin."""
     import subprocess
-    import time
     alias = {"claude-opus-5-5": "opus", "claude-sonnet-5-5": "sonnet", "claude-haiku-5-5": "haiku"}.get(model, model)
     cmd = ["claude", "-p", "--output-format", "json", "--model", alias, "--effort", effort,
            "--tools", "", "--strict-mcp-config", "--no-session-persistence",
@@ -215,7 +288,19 @@ def call_anthropic(prompt: str, schema: dict, model: str, effort: str, max_token
 
 
 def parse_question(question: str, model: str = QUESTION_MODEL) -> dict:
-    return call(QUESTION_PROMPT.format(question=question), QUESTION_SCHEMA, model, effort="low", max_tokens=4000)
+    return call(QUESTION_PROMPT.format(question=question), QUESTION_SCHEMA, model, effort="low", max_tokens=4000,
+                purpose="parse_question")
+
+
+def suggest_service(service: str, diagnosis: str, candidates: list, model: str = QUESTION_MODEL) -> dict:
+    """Names the protocols may use for a service the rules did not find: {"variants": [...], "note": ""}.
+    `candidates` — list items of the diagnosis's protocols closest to the wording; the LLM only
+    renames, the rules then look every variant up in the lists."""
+    prompt = SERVICE_PROMPT.format(service=service, diagnosis=diagnosis,
+                                   candidates="\n".join(f"- {c}" for c in candidates) or "(нет)")
+    got = call(prompt, SERVICE_SCHEMA, model, effort="low", max_tokens=2000, purpose="suggest_service")
+    got["variants"] = [v.strip() for v in got.get("variants", []) if isinstance(v, str) and v.strip()][:5]
+    return got
 
 
 # ------------------------------------------------------------------ cross-check

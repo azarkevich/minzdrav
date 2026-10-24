@@ -15,6 +15,7 @@ Each tool is a standalone Python 3 script in this directory. Git repository; scr
 | `reference_builder.py` | Expert system stage 0: service catalogue (пост. МЗ №123) + МКБ-10 dictionaries (`./reference`) |
 | `protocol_parser.py` | Expert system stage 1: every protocol PDF → JSON tree with pages, clauses, МКБ-10 codes (`./parsed`) |
 | `kb_build.py`, `kb.py`, `kb_text.py`, `table_extract.py`, `kb_llm.py` | Expert system: knowledge base (`./kb_all`, `./kb`), question answering CLI + eval, LLM cross-check |
+| `kb_trace.py` | Trace of one question (route, parse, diagnosis candidates, every LLM call) → `debug` in the answer |
 | `kb_mcp.py` | MCP server (stdio, stdlib) exposing the expert system to Claude Desktop / Claude Code |
 | `kb_probe.py` | Invariant probes over thousands of dictionary inputs (no labels, no LLM) — run before engine changes |
 | `insurance.py` | Insurance rules (Правила №20 ЗАСО «ТАСК»): is the diagnosis an insured event — a separate block in every answer |
@@ -291,6 +292,54 @@ python -I kb.py ask "…" --llm                          # LLM fallback for unre
   Haiku 5.5): all 88 eval questions correct; the LLM is asked only when the diagnosis is not an exact
   name match (score < LLM_DX_SCORE = 0.95) — 6 calls of 88, ~$0.00016 per call; among its codes the
   one covered by protocols wins. Every call is logged to kb/llm_usage.jsonl.
+- LLM assistance (`--llm`, plan `.plan/llm-improve.md`): the LLM only **rephrases** — diagnosis, service, question
+  type; search, verdict and verbatim quotes stay rule-based. Every call is `kb_llm.call(..., purpose=…)` (Haiku 5.5,
+  `effort="low"`, logged with `purpose` in `kb/llm_usage.jsonl`); without `--llm` nothing changes. Three uses:
+  1. *Service not found* (`suggest_service`, `Engine._llm_service_retry`): check mode with no listed hit (verdict «не
+     предусмотрено» / only «упоминается в тексте»), list mode with a service filter that removed everything, reverse
+     search for a service no index stem matches. The prompt gets the service, the diagnosis and ~40 list members of the
+     diagnosis's sections closest to the wording (`_candidate_lines`; reverse: the nearest index stems) and returns 2–5
+     protocol names. Each is looked up by the usual rules (`find`); the first listed hit is accepted, the answer says
+     «услуга уточнена LLM: «X» → «Y»» (`service_llm`, `method`, a tag on the page). Guard `_variant_ok`: a variant that
+     only drops words of the user's wording («УЗИ молочных желез» → «УЗИ») is refused, and one sharing words with it is
+     refused when shorter by more than one significant stem; a pure rename without a common stem («запись мозговых волн»
+     → «электроэнцефалография») is allowed — the plan's literal «not shorter by more than one stem» refused those.
+     Cache `(service stems, code)` → variants, LRU 512 (`_svc_cache`); ≤ 3 `suggest_service` calls per question.
+  2. *Question type* (`parse_question` has `mode` check / list / reverse / insurance / diagnosis_only, `category`,
+     `services`): asked when the rules cannot read the question (no diagnosis / service) or the split is suspicious;
+     `Engine._llm_route` runs that branch with the LLM's fields («тип вопроса определён LLM: list»). Misspelt trigger words
+     are handled before it for free: `fix_trigger_words` («преечень», «лаборатонрых», «при каикх диагнозах», «слчай»; words of
+     5+ letters one typo from `TRIGGER_WORDS`, not a medical term) — its corrected question is used **only as a second
+     try of the wording patterns** (`_route_patterns`), the user's wording goes on unchanged.
+  3. *Broken diagnosis / service split*: `sheet_log.strip_personal` cuts ФИО, dates, phones, policy numbers, birth year
+     before parsing (no LLM); `suspicious_split` gives reasons (personal data left, a multi-part service with a non-service
+     part, case-history words / > 8 words in the diagnosis, only generic words, no word of the service in any protocol list)
+     → `parse_question` re-parse, «вопрос переразобран LLM: <причина>»; without `--llm` the answer gets `hint` («оставьте
+     только диагноз и услугу»). A comma list whose parts are a case history is no longer taken for a list of services.
+     The question sent to the LLM is the one with personal data cut. The LLM is asked once per question (`Trace.cache`);
+     if it fails or finds no diagnosis, the rules' answer stands and the error is in the trace. 25 of 153 existing
+     questions (16 %) make a call: 12 `suggest_service` (every «не предусмотрено» answer), 13 `parse_question`.
+  Eval: `eval/llm_triggers.jsonl` (`route` = check / list / reverse / insurance / diagnosis_only), `eval/llm_split.jsonl`,
+  `eval/llm_service.jsonl`; a case with `"llm": true` is skipped without `--llm`; `service_llm: true` requires the
+  «уточнена LLM» note; `kb.py eval --llm` prints the number of LLM calls. On the real LLM (Haiku via `claude -p`):
+  triggers 13/13, split 10/10, service 14/14 (the LLM-only service cases were written before the implementation; two
+  expectations were corrected afterwards because the rules already found «кардиограмма» / «функция внешнего дыхания»).
+  Without `--llm`: 10/10, 6/6, 9/9 (the rest skipped) and all older sets unchanged. Older sets with the real LLM:
+  golden 34/34, holdout_endocrinology 20/20 (Аддисон now right), holdout_all 20/20, holdout_all2 14/14, insurance 34/34,
+  reverse 21/22 (as before), lists 8/9 (the «ангиомиолипома» case: the LLM's D30.0 instead of D30 — the same on the code
+  before this change); calls per question 0.0–0.35. Probe `perturb` without `--llm`: 746/763 (98 %) before →
+  925/948 (98 %) after (more cases: the new eval files); what is left are two-letter typos in trigger words («перчеень»),
+  typos in a service («контактынх»), and upper / lower-cased surnames that `strip_personal` does not see.
+  Note: the `KB_OPENROUTER_API_KEY` in this machine's environment is rejected by OpenRouter (401 «User not found») —
+  these runs used `KB_LLM_PROVIDER=claude-cli`; on a failed call the rules' answer stands and the error is in the trace.
+- Debug trace (`kb_trace.Trace`, answer key `debug`): `Engine.ask` creates it (a ContextVar, so `kb_llm.call` records into
+  it without plumbing; nested `ask` calls share the outer one) — `route` (which pattern fired / didn't), `parse`
+  (cleanup, `split_question`, suspicious reasons), `diagnosis` (top-5 candidates with scores, chosen code, ambiguity,
+  `weak`, the LLM's codes and dropped ones), `service` (stems, literal tokens, пост. №123, sections per population,
+  result per group, the LLM's variants and which was accepted), `llm` (purpose, provider, model, **prompt**, **response**,
+  seconds, tokens, cost, error; or `llm_status` — off / not needed / no key), `problems` (ambiguous diagnosis, table / scan
+  documents not parsed, only generic words, `rules_only` quotes, LLM failures), `timing` (ms). `kb.py ask --debug`
+  prints it; `kb.render` / eval / MCP leave it out. `--json` contains it.
 - Coverage on all 400 docs: 23.5k list items, 96% reachable by an МКБ-10 code; 50 parsed docs
   still have no lists found (other wordings / appendices «согласно приложению N» not extracted).
 
@@ -311,8 +360,14 @@ JSON lines into it.
 `text` = `kb.render`). The page shows diagnosis/service recognition, a coloured verdict per
 population, each excerpt with a `url#page=N` link, and the plain-text form for copying; query
 history is in the browser's localStorage. The page header shows `VERSION` from `kb_web.py`
-(substituted for `__VERSION__` in `web/index.html`; 1.1 = list mode, 1.2 = Enter sends / Shift+Enter new line, spinner, 1.3 = insurance block, 1.4 = insurance / protocols tabs, 1.5 = rating panel between the question and the answer, 1.6 = «уточните диагноз», Google Sheet log, 1.7 = diagnosis-only question → all diagnostic measures, compact rating panel, 2.0 = own PDF viewer, 2.1 = ⚙ settings: open PDFs in the viewer or on the original site, 2.2 = PDFs shipped in deploy/pdf, 2.3 = reverse search, 2.4 = «страховой ли случай» questions, п. 4.3+ of the rules ignored) — bump it on user-visible changes. Binds to 127.0.0.1 only (no auth). `--llm` needs
+(substituted for `__VERSION__` in `web/index.html`; 1.1 = list mode, 1.2 = Enter sends / Shift+Enter new line, spinner, 1.3 = insurance block, 1.4 = insurance / protocols tabs, 1.5 = rating panel between the question and the answer, 1.6 = «уточните диагноз», Google Sheet log, 1.7 = diagnosis-only question → all diagnostic measures, compact rating panel, 2.0 = own PDF viewer, 2.1 = ⚙ settings: open PDFs in the viewer or on the original site, 2.2 = PDFs shipped in deploy/pdf, 2.3 = reverse search, 2.4 = «страховой ли случай» questions, п. 4.3+ of the rules ignored, 2.5 = «Отладка» block, «услуга уточнена LLM», hint about extra text) — bump it on user-visible changes. Binds to 127.0.0.1 only (no auth). `--llm` needs
 `KB_OPENROUTER_API_KEY` in the environment of the server process.
+
+«Отладка» (2.5): a collapsed `<details class="card debug">` between the answer and the history (the `debugopen` flag in
+localStorage keeps it open): route, parse, diagnosis candidates, service, every LLM call with the prompt and the answer in
+`<pre>` (copy buttons), problems, timings. `/api/ask` always returns `debug` (the server listens on 127.0.0.1 / has basic
+auth); the Google Sheet never gets it, `feedback.jsonl` gets `debug_brief` — route, parse, LLM purposes / errors, problems,
+total ms, personal data masked, no prompts.
 
 Feedback: under each answer the page shows a 3-star rating, tags (диагноз/услуга распознаны неверно, вердикт неверный, цитата не по теме, не нашёл) and a comment. `POST /api/feedback` appends one line to `kb/feedback.jsonl` with the rating and a summary of the answer (diagnosis, service, verdict, evidence links) — low-rated lines are candidates for `eval/` cases.
 
@@ -382,7 +437,7 @@ the engine still gets the raw question. Personal data in the question also break
 
 ## 10. `kb_probe.py` — invariant probes
 
-`python -I kb_probe.py [--n 400] [--seed 1] [--only icd_name,service_not_dx,chapter_name,perturb]` (~5 min at n=300),
+`python -I kb_probe.py [--n 400] [--seed 1] [--llm] [--only icd_name,service_not_dx,chapter_name,perturb]` (~5 min at n=300),
 failures → `kb/probe_report.json`. Probes: a service name of пост. №123 is not taken for a diagnosis; an МКБ-10 rubric
 name resolves to that rubric (names with a code inside or «…в других рубриках» skipped); a protocol chapter title
 resolves to a code of the chapter; eval questions keep diagnosis / verdicts with «?», «Пациент, …», a swapped-letter

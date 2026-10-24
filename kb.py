@@ -21,12 +21,15 @@ import json
 import re
 import sys
 import zlib
+from collections import OrderedDict
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # `python -I` drops the script dir
 from kb_text import GENERIC, METHOD, Normalizer, close, contains, trigram_sim
 from kb_build import Catalogue
 import insurance
+import kb_trace
+from sheet_log import mask, strip_personal
 
 LEVELS = {  # priority order and wording for the answer
     "mandatory": (1, "обязательная диагностика"),
@@ -217,6 +220,32 @@ REVERSE_VERBS = ("назначают", "назначается", "назнача
                  "используют", "используется", "применяют", "применяется", "показано", "показаны")
 
 
+# Service words of the question patterns (LIST_RE / REVERSE_RE / SPLIT_RES / INSURANCE_RES): a misspelt one
+# («преечень», «лаборатонрых», «при каикх диагнозах») makes the question miss every pattern.
+TRIGGER_WORDS = ("перечень перечня список списка объем какие какой какая какое каких лабораторных лабораторные "
+                 "инструментальных инструментальные консультации консультаций диагнозах диагнозе диагноз заболеваниях "
+                 "назначают назначается назначаются проводят проводится выполняют используют используется применяют "
+                 "разрешено разрешена разрешен разрешены предусмотрено предусмотрена предусмотрен допустимо положено "
+                 "страховой страховым страховая случай случаем протоколах показания анализов исследования исследований "
+                 "обследования входит").split()
+NOT_TRIGGERS = {"такие", "такой", "такая", "такое", "таких", "какая-то", "каком", "какой-то"}  # real words one letter away
+ANAMNESIS_RE = re.compile(r"жалоб|\b\d+\s*(?:лет|год|мес)\w*|\bлет\b|поступил|направлен|обратил|анамнез|госпитализ|осмотр\w*\s+врач|"
+                          r"наблюдается|болеет|\bс\s+\d{4}\s*г", re.I)
+
+
+def typo_of(word: str, target: str) -> bool:
+    """One typo (wrong / missing / extra letter, two neighbours swapped) in words of 5+ letters —
+    `close` for whole words, with a lower length threshold."""
+    if word == target or min(len(word), len(target)) < 5 or abs(len(word) - len(target)) > 1:
+        return False
+    if len(word) == len(target):
+        diff = [i for i, (x, y) in enumerate(zip(word, target)) if x != y]
+        return len(diff) == 1 or (len(diff) == 2 and diff[1] == diff[0] + 1
+                                  and word[diff[0]] == target[diff[1]] and word[diff[1]] == target[diff[0]])
+    a, b = sorted((word, target), key=len)
+    return any(b[:i] + b[i + 1:] == a for i in range(len(b)))
+
+
 def split_services(text: str) -> list:
     parts = [re.sub(r"\s+", " ", x).strip(" ,.;:?!–—-") for x in SERVICE_SPLIT_RE.split(text)]
     return list(dict.fromkeys(x for x in parts if len(x) >= 2))
@@ -348,6 +377,8 @@ class Engine:
         self._stem_index = None  # reverse search: stem → usable section indexes (kb.stems.json)
         self._analytes = None
         self._name_index = None  # name stem → diagnosis names (resolve_diagnosis pre-filter)
+        self._known = None  # stems of names and protocol lists (fix_trigger_words)
+        self._svc_cache = OrderedDict()  # (service, code) → variants of the LLM (suggest_service), LRU 512
         self.kb = json.loads(kb_path.read_text(encoding="utf-8"))
         if self.kb.get("packed"):  # kb.idx.json: section items stay on disk (see kb_pack.py)
             blob = kb_path.parent / self.kb["packed"]
@@ -438,6 +469,84 @@ class Engine:
         dx = self.resolve_diagnosis(diagnosis)
         return not dx or dx[0]["score"] < LLM_DX_SCORE or (
             len(dx) > 1 and dx[1]["score"] >= dx[0]["score"] - 0.03 and dx[1]["code"][:3] != dx[0]["code"][:3])
+
+    # ---------------------------------------------------------------- question cleanup (rules, no LLM)
+    def known_stem(self, word: str) -> bool:
+        """A stem of a diagnosis name or of a protocol list: such a word is a medical term, not a typo."""
+        if self._known is None:
+            self._known = {x for ns in self.name_stems.values() for x in ns} | set(self.stem_index())
+        return any(st in self._known for st in self.norm.stems(word))
+
+    def fix_trigger_words(self, q: str):
+        """Misspelt service words of the question patterns → the right ones: «преечень лаборатонрых анализов» →
+        «перечень лабораторных анализов». Only words of 5+ letters one typo away from a trigger word, and not
+        a medical term (a stem of a diagnosis name or of a protocol list). Returns (question, [(was, now)])."""
+        fixes = []
+
+        def repl(m):
+            w = m.group(0)
+            low = w.lower().replace("ё", "е")
+            if len(low) < 5 or low in TRIGGER_WORDS or low in NOT_TRIGGERS:
+                return w
+            for t in TRIGGER_WORDS:
+                # a medical term one typo away from a trigger word stays — unless it is the trigger's own stem
+                # («перечнь» → «перечень»: «перечень» occurs in the protocols too)
+                if typo_of(low, t) and (self.norm.stems(low) == self.norm.stems(t) or not self.known_stem(low)):
+                    fixes.append((w, t))
+                    return t.capitalize() if w[:1].isupper() else t
+            return w
+        out = re.sub(r"[А-Яа-яЁё]{5,}", repl, q)
+        return (out, fixes) if fixes else (q, [])
+
+    def suspicious_split(self, diagnosis: str | None, service: str | None) -> list:
+        """Reasons to doubt the rules' split of a question into diagnosis and service (empty = fine): leftover
+        personal data, a service of several parts that are not all services, a case history in the diagnosis,
+        a service of method words only, a service none of whose words any protocol list has."""
+        why = []
+        for label, part in (("диагнозе", diagnosis), ("услуге", service)):
+            if part and mask(part) != part:
+                why.append(f"в {label} остались персональные данные: «{part}»")
+        if diagnosis:
+            if len(diagnosis.split()) > 8:
+                why.append(f"в диагнозе больше 8 слов ({len(diagnosis.split())})")
+            m = ANAMNESIS_RE.search(diagnosis)
+            if m:
+                why.append(f"в диагнозе слова анамнеза: «{m.group(0)}»")
+        if service:
+            parts = split_services(service)
+            odd = [p for p in parts if not self.service_like(p)] if len(parts) > 1 else []
+            if odd:
+                why.append("в услуге несколько частей, не все похожи на услугу: " + "; ".join(f"«{p}»" for p in odd))
+            stems = list(dict.fromkeys(self.norm.stems(service)))
+            if not stems or all(s in GENERIC for s in stems):
+                why.append("услуга состоит только из общих слов")
+            elif not self.resolve_service(service) and not any(self.matching_keys(r) for r in self.required_stems(service)):
+                why.append("ни одно слово услуги не встречается в перечнях протоколов и в перечне пост. №123")
+        return why
+
+    # ---------------------------------------------------------------- trace
+    @staticmethod
+    def _trace() -> "kb_trace.Trace":
+        return kb_trace.current()
+
+    def _trace_dx(self, text: str, dx: list, chosen: dict | None, ambiguous: bool = False):
+        t = self._trace()
+        t.set("diagnosis", text=text, top=[{"code": d["code"], "name": d["name"], "score": d["score"]} for d in dx[:5]],
+              chosen=chosen["code"] if chosen else None, ambiguous=ambiguous,
+              weak=bool(not dx or dx[0]["score"] < LLM_DX_SCORE or ambiguous))
+        if ambiguous:
+            t.problem(f"диагноз неоднозначен: {dx[0]['code']} и {dx[1]['code']} набрали {dx[0]['score']} / {dx[1]['score']}")
+        if chosen and dx and chosen["code"] != dx[0]["code"]:
+            t.parse(f"выбран {chosen['code']} вместо {dx[0]['code']}: по нему есть протоколы (_choose)")
+
+    def _trace_service(self, service: str, required: list, secs_by_group: dict | None = None):
+        t = self._trace()
+        t.set("service", text=service, required_stems=required, literal_tokens=self.literal_tokens(service),
+              catalogue=[f"{c['code']} {c['name']}" for c in self.resolve_service(service)[:3]])
+        if secs_by_group is not None:
+            t.set("service", sections=secs_by_group)
+        if required and all(r in GENERIC for r in required):
+            t.problem("услуга слишком общая: в ней только общие слова («исследование», «анализ») — по ним ничего не различить")
 
     # ---------------------------------------------------------------- sections
     def primary(self, doc_id: str, dx_stems: list[str]) -> bool:
@@ -559,21 +668,104 @@ class Engine:
         st = self.crosscheck.get(item_key(sec["id"], it["text"]))
         return st["status"] if st else "rules_only"
 
+    def _llm_question(self, question: str):
+        """The LLM's reading of the question (kb_llm.parse_question), asked once per question: the trace keeps
+        it for every later step. None when the call failed (the rules' answer stands, the error is in the trace)."""
+        t = self._trace()
+        if "parsed" not in t.cache:
+            from kb_llm import parse_question  # needs the anthropic package and credentials
+            try:
+                t.cache["parsed"] = parse_question(question)
+            except Exception as e:  # noqa: BLE001 — network, quota, refusal: fall back to the rules
+                t.problem(f"LLM parse_question не ответил: {type(e).__name__}: {e}")
+                t.cache["parsed"] = None
+        return t.cache["parsed"]
+
     def _llm_parse(self, question: str):
         """(diagnosis — the LLM's МКБ-10 code the protocols cover, else its first code or wording;
-        service; population or None; note for the answer)."""
-        from kb_llm import parse_question  # needs the anthropic package and credentials
-        parsed = parse_question(question)
+        service; population or None; note for the answer), or None when the LLM did not answer."""
+        parsed = self._llm_question(question)
+        if parsed is None:
+            return None
         codes = [c["code"].translate(CYR2LAT) for c in parsed["icd10"] if c["code"].translate(CYR2LAT) in self.icd]
         # prefer the LLM's code that the protocols cover (E27.1 over E27.2 for Аддисон)
         covered = [c for c in codes if c in self.covered
                    or any(x.startswith(c + ".") or c.startswith(x + ".") for x in self.covered)]
-        service = parsed["service"].strip()
+        service = parsed["service"].strip(" \"'«»")  # the LLM sometimes answers `""` for «no service»
         if re.fullmatch(r"(?:не\s+)?(?:указан\w*|нет|отсутству\w*|-|—)(?:\s+в\s+вопросе)?\.?", service, re.I):
             service = ""  # «не указана в вопросе»
+        dropped = [c["code"] for c in parsed["icd10"] if c["code"].translate(CYR2LAT) not in self.icd]
+        t = self._trace()
+        t.set("diagnosis", llm_codes=codes, llm_covered=covered, llm_dropped=dropped)
+        if dropped:
+            t.parse(f"коды LLM не из МКБ-10 отброшены: {', '.join(dropped)}")
         return ((covered or codes or [parsed["diagnosis"]])[0], service or None,
                 parsed["population"] if parsed["population"] != "unknown" else None,
                 f"диагноз выделен LLM: «{parsed['diagnosis']}» → {', '.join(codes) or 'код не предложен'}")
+
+    # ---------------------------------------------------------------- service names from the LLM
+    SERVICE_CALLS_MAX = 3  # LLM calls for service names per question (one per service of a reverse search)
+
+    def _variant_ok(self, service: str, variant: str) -> bool:
+        """A variant may not be a more general service: «УЗИ молочных желез» → «УЗИ» (all stems of the variant are in
+        the user's wording and some are dropped) is refused; so is a variant that keeps some of the user's words but is
+        shorter by more than one significant stem. A pure rename («запись мозговых волн» → «электроэнцефалография»,
+        no common stem) is fine — the rules still have to find it in a protocol list."""
+        sig = lambda x: [s for s in dict.fromkeys(self.norm.stems(x)) if s not in GENERIC]  # noqa: E731
+        sv, so = sig(variant), sig(service)
+        if not sv:
+            return False
+        shared = [x for x in sv if contains(so, x)]
+        if len(shared) == len(sv) and len(sv) < len(so):
+            return False
+        return not shared or len(sv) >= len(so) - 1
+
+    def _candidate_lines(self, sections, service: str, n: int = 40) -> list:
+        """List members of the diagnosis's sections closest to the user's wording — the dictionary the LLM
+        picks the protocol's name of the service from."""
+        req = self.required_stems(service)
+        scored, seen = [], set()
+        for s in sections:
+            for it in s["items"]:
+                if it["level"] == "text":
+                    continue
+                texts = [(m["text"], m["stems"]) for seg in it["segments"] for m in seg.get("members", [])]
+                for text, stems in texts or [(it["text"], [x for seg in it["segments"] for x in seg["stems"]])]:
+                    key = text.lower()
+                    if key in seen:
+                        continue
+                    seen.add(key)
+                    hit = sum(1 for r in req if contains(stems, r))
+                    scored.append((hit + trigram_sim(service, text), text[:160]))
+                if len(scored) > 4000:
+                    break
+        scored.sort(key=lambda x: -x[0])
+        return [t for _, t in scored[:n]]
+
+    def _service_variants(self, service: str, code: str, diagnosis: str, candidates) -> list:
+        """Names of the service the LLM suggests (cached per service and diagnosis code, LRU 512); [] when the
+        LLM is off, over the per-question limit or failed. `candidates`: a list or a function returning it."""
+        t = self._trace()
+        if not self.llm:
+            return []
+        key = (" ".join(self.norm.stems(service)), code)
+        if key in self._svc_cache:
+            self._svc_cache.move_to_end(key)
+            t.parse(f"варианты названия услуги «{service}» взяты из кэша: {self._svc_cache[key]}")
+            return self._svc_cache[key]
+        if t.calls.get("suggest_service", 0) >= self.SERVICE_CALLS_MAX:
+            return []
+        from kb_llm import suggest_service
+        cands = candidates() if callable(candidates) else candidates
+        try:
+            variants = suggest_service(service, diagnosis, cands)["variants"]
+        except Exception as e:  # noqa: BLE001
+            t.problem(f"LLM suggest_service не ответил: {type(e).__name__}: {e}")
+            return []
+        self._svc_cache[key] = variants
+        while len(self._svc_cache) > 512:
+            self._svc_cache.popitem(last=False)
+        return variants
 
     def insurance_check(self, chosen, diagnosis: str, service, **kw):
         """Insurance block for the chosen code — unless the wording fits several МКБ-10 rubrics the rules
@@ -715,6 +907,12 @@ class Engine:
                if not re.search(r"диагностик|комплекс", c["name"], re.I)]
         return bool(svc) and svc[0]["score"] >= 0.85 and svc[0]["score"] > dx_score + 0.1
 
+    def _index_words(self, service: str, keys, n: int = 40) -> list:
+        """Index stems closest to the wording — the LLM's dictionary when no list has the service."""
+        req = self.required_stems(service)
+        scored = sorted(((max(trigram_sim(r, k) for r in req), k) for k in keys), reverse=True)
+        return [k for _, k in scored[:n]]
+
     def reverse_search(self, question, services: list, population: str | None = None, top: int = 15):
         """Diagnoses whose protocols list the services: sections ranked by how many of the services
         they list (rare ones weigh more, mandatory more than «по показаниям»)."""
@@ -726,9 +924,10 @@ class Engine:
         if population is None and question:
             population = "child" if CHILD_RE.search(question) else "adult" if ADULT_RE.search(question) else None
         # candidates of every service from the index alone (cheap); the items are read only to confirm
-        plan = []
-        for svc in services:
-            req = self.required_stems(svc)
+        plan, llm_names = [], {}
+
+        def build(text):
+            req = self.required_stems(text)
             keysets = {r: self.matching_keys(r) for r in req}  # typo-tolerant over the index keys
             posting = {r: {i for k in keysets[r] for i in idx[k]} for r in req}
             # a word no protocol list has («назанчают» — a misspelt verb) is dropped if others remain
@@ -737,7 +936,23 @@ class Engine:
             cand = None
             for r in req:
                 cand = posting[r] if cand is None else cand & posting[r]
-            plan.append((svc, req, keysets, cand or set()))
+            return req, keysets, cand or set()
+
+        for svc in services:
+            req, keysets, cand = build(svc)
+            if not cand and self.llm:  # no list has the wording: the LLM renames it, the rules look the name up
+                variants = self._service_variants(svc, "reverse", "(обратный поиск: диагноз не задан)",
+                                                  lambda: self._index_words(svc, keys))
+                tried = []
+                for v in variants:
+                    ok = self._variant_ok(svc, v)
+                    r2, k2, c2 = build(v) if ok else (None, None, set())
+                    tried.append(f"«{v}»: " + ("отклонён (слишком общий)" if not ok else f"{len(c2)} разделов"))
+                    if c2:
+                        req, keysets, cand, llm_names[svc] = r2, k2, c2, v
+                        break
+                self._trace().set("service", **{f"llm_variants[{svc}]": tried})
+            plan.append((svc, req, keysets, cand))
         # a common service (ОАК, глюкоза: hundreds of sections — reading them all takes seconds on the host) is
         # confirmed only where the rarer services of the question are; alone, in its first GENERIC_CAP sections
         rare = {i for _, _, _, c in plan if len(c) <= GENERIC_CAP for i in c}
@@ -746,7 +961,7 @@ class Engine:
         for svc, req, keysets, cand in sorted(plan, key=lambda x: len(x[3])):
             common = len(cand) > GENERIC_CAP
             look = sorted(cand & confirmed if common and rare else cand)[:GENERIC_CAP if common and not rare else None]
-            hits = [h for h in self.find([sections[i] for i in look], req, self.literal_tokens(svc), keysets)
+            hits = [h for h in self.find([sections[i] for i in look], req, self.literal_tokens(llm_names.get(svc, svc)), keysets)
                     if h[1]["level"] != "text"]
             secs = {}
             for sec, it, how in hits:
@@ -759,7 +974,7 @@ class Engine:
                 confirmed |= {pos[sid] for sid in secs}
             df = len(cand) if common else len(secs)  # a common service: the index count (not every one confirmed)
             svc_out.append({"text": svc, "catalogue": self.resolve_service(svc)[:1], "sections": df, "found": bool(secs) or (common and bool(cand)),
-                            "_order": services.index(svc)})
+                            "_order": services.index(svc), **({"llm_variant": llm_names[svc]} if svc in llm_names else {})})
             idf = math.log((n_usable + 1) / (df + 1)) + 0.1
             for sid, (sec, it, how) in secs.items():
                 e = per_section.setdefault(sid, {"sec": sec, "matched": {}, "score": 0.0})
@@ -826,7 +1041,8 @@ class Engine:
             "evidence": [x for e in entries[:3] for x in e["matched"]],
             "unparsed": [],
             "method": ("правила: услуги → разделы протоколов, ранжирование по числу совпавших услуг, "
-                       "редкости услуги и уровню (обязательная диагностика выше «по показаниям»)"),
+                       "редкости услуги и уровню (обязательная диагностика выше «по показаниям»)")
+                      + "".join(f"; услуга уточнена LLM: «{k}» → «{v}»" for k, v in llm_names.items()),
         }
 
     def _choose(self, dx):
@@ -843,27 +1059,144 @@ class Engine:
 
     def ask(self, question: str | None = None, diagnosis: str | None = None, service: str | None = None,
             population: str | None = None):
-        llm_used = None
-        if question and not (diagnosis or service):
+        """Answer a question. The answer carries `debug`: the trace of how it was parsed, which diagnosis
+        candidates and LLM calls there were (kb_trace). A nested call (insurance_answer → ask) records
+        into the outer trace."""
+        if kb_trace.CURRENT.get() is not None:
+            return self._ask(question, diagnosis, service, population)
+        trace = kb_trace.Trace(question)
+        tok = kb_trace.CURRENT.set(trace)
+        try:
+            ans = self._ask(question, diagnosis, service, population)
+        finally:
+            kb_trace.CURRENT.reset(tok)
+        if isinstance(ans, dict):
+            if question and "question" in ans:
+                ans["question"] = question  # the user's wording, not the cleaned one
+            if trace.data.get("hint"):
+                ans["hint"] = trace.data["hint"]
+            self._finish_trace(trace, ans)
+        return ans
+
+    def _finish_trace(self, trace, ans: dict):
+        d = trace.data
+        if not d["llm"] and not d["llm_status"]:
+            if not self.llm:
+                d["llm_status"] = "LLM выключен (--llm не задан)"
+            else:
+                top = (d["diagnosis"].get("top") or [{}])[0].get("score")
+                d["llm_status"] = ("LLM не понадобился: правила справились"
+                                   + (f" (диагноз распознан точно, score {top})" if top is not None and top >= LLM_DX_SCORE else ""))
+        if self.llm:
+            try:
+                import kb_llm
+                if not kb_llm.configured():
+                    trace.problem("LLM включён, но ключ не задан (KB_OPENROUTER_API_KEY / KB_ANTHROPIC_API_KEY)")
+            except ImportError:
+                pass
+        d["verdict_level"] = ans.get("verdict_level")
+        d["mode"] = ans.get("mode") or ("check" if ans.get("service_text") else None)
+        if ans.get("unparsed"):
+            trace.problem("документы table/scan не разобраны автоматически: " + "; ".join(u["protocol"][:60] for u in ans["unparsed"]))
+        if ans.get("verdict_level") in ("mandatory", "additional", "listed", "differential", "monitoring") \
+                and all(e.get("check") == "rules_only" for r in ans.get("results", []) for e in r.get("evidence", [])[:3]) \
+                and any(r.get("evidence") for r in ans.get("results", [])):
+            trace.problem("цитаты без перекрёстной проверки LLM (rules_only)")
+        ans["debug"] = trace.finish()
+
+    def _llm_route(self, question: str, population: str | None, why: str):
+        """The LLM's type of the question (list / reverse / insurance / diagnosis_only) → that branch of the engine,
+        with the diagnosis, category and services the LLM extracted. None for «check» or when it did not answer."""
+        parsed = self._llm_question(question)
+        got = self._llm_parse(question)
+        if parsed is None or got is None:
+            return None
+        mode = parsed.get("mode") or "check"
+        if mode == "check":
+            return None
+        t = self._trace()
+        code, service, pop, _ = got
+        population = population or pop
+        wording = parsed["diagnosis"].strip() or code
+        if mode == "list":
+            res = self.list_services(question, wording, parsed.get("category") or None, service, population)
+        elif mode == "reverse":
+            services = [x for x in parsed.get("services") or [] if x.strip()] or split_services(service or "")
+            if not services:
+                return None
+            res = self.reverse_search(question, services, population=population)
+        elif mode == "insurance":
+            res = self.insurance_answer(question, ", ".join(x for x in (wording, service) if x), population)
+        elif mode == "diagnosis_only":
+            if not wording:
+                return None
+            res = dict(self.list_services(None, wording, population=population), diagnosis_only=True)
+        else:
+            return None
+        note = f"тип вопроса определён LLM: {mode} ({why})"
+        t.route(note)
+        if isinstance(res, dict):
+            res["llm_mode"] = mode
+            if "method" in res:
+                res["method"] += "; " + note
+        return res
+
+    def _route_patterns(self, question: str, diagnosis, service, population):
+        """The question kinds recognised by wording: «страховой ли случай …», an excluded service alone, «при каких
+        диагнозах …», «перечень …», a bare list of services. The answer, or None when no pattern fits."""
+        t = self._trace()
+        if not (diagnosis or service):
             subject = parse_insurance_question(question)  # «страховой ли случай – …» comes first
             if subject is not None:
+                t.route(f"страховой вопрос («страховой ли случай …»), предмет: «{subject}»")
                 return self.insurance_answer(question, subject, population)
             subject = self.service_subject(question)  # «подбор контактных линз [разрешено ли]»
             if subject:
+                t.route(f"вопрос — только услуга, исключённая правилами страхования: «{subject}»")
                 return self.insurance_answer(question, subject, population)
             # «при каких диагнозах назначают X»; a bare list of services «ТТГ, свободный Т4, АТ к ТПО»
             rev = parse_reverse_question(question)
             if rev:
+                t.route(f"обратный поиск (шаблон «при каких диагнозах …»), услуги: {rev}")
                 return self.reverse_search(question, rev, population=population)
+        lst = parse_list_question(question)
+        if lst:
+            t.route(f"перечень (шаблон «перечень / какие …»): диагноз «{lst[0]}», категория {lst[1]}, фильтр услуги {lst[2]}")
+            return self.list_services(question, *lst, population=population)
+        if not (diagnosis or service) and not any(rx.match(question.strip()) for rx in SPLIT_RES):
+            parts = split_services(WHO_RE.sub("", question))
+            # not a case history: «Направлен эндокринологом после обращения: тиреотоксикоз, нужна ли консультация…»
+            if parts and not any(ANAMNESIS_RE.search(x) or len(x.split()) > 8 for x in parts) \
+                    and all(self.service_like(x) for x in parts):
+                t.route(f"обратный поиск: вопрос — список услуг {parts}")
+                return self.reverse_search(question, parts, population=population)
+        return None
+
+    def _ask(self, question: str | None, diagnosis: str | None, service: str | None, population: str | None):
+        t = self._trace()
+        llm_used = None
+        from_question = bool(question) and not (diagnosis and service)
+        if question and not (diagnosis or service):
+            question, removed = strip_personal(question)
+            if removed:
+                t.parse("вырезано из вопроса перед разбором (персональные данные): " + "; ".join(removed))
+                t.set("service", cleaned_question=question)
         if question and not (diagnosis and service):
-            lst = parse_list_question(question)
-            if lst:
-                return self.list_services(question, *lst, population=population)
-            if not (diagnosis or service) and not any(rx.match(question.strip()) for rx in SPLIT_RES):
-                parts = split_services(WHO_RE.sub("", question))
-                if parts and all(self.service_like(x) for x in parts):
-                    return self.reverse_search(question, parts, population=population)
+            routed = self._route_patterns(question, diagnosis, service, population)
+            if routed is None and not (diagnosis or service):
+                # misspelt service words («преечень», «при каикх диагнозах») hide the question from every pattern:
+                # the corrected question is only used for routing, the user's wording goes on as it was
+                fixed, fixes = self.fix_trigger_words(question)
+                if fixes:
+                    routed = self._route_patterns(fixed, diagnosis, service, population)
+                    if routed is not None:
+                        t.parse("опечатки в служебных словах исправлены: " + ", ".join(f"{x} → {y}" for x, y in fixes))
+            if routed is not None:
+                return routed
+            if not (diagnosis or service):
+                t.route("не подошли шаблоны: страховой вопрос, исключённая услуга, обратный поиск, перечень, список услуг")
             d, s = split_question(question)
+            t.parse(f"split_question: диагноз «{d}», услуга «{s}»")
             if not (d or s or diagnosis or service):
                 # only a diagnosis («сахарный диабет 2 типа», «E06.3»): insurance verdict + every
                 # diagnostic measure of the protocols
@@ -872,18 +1205,40 @@ class Engine:
                 is_service = any(x in GENERIC or x in METHOD or SERVICE_STEM_RE.search(x) for x in self.norm.stems(cand))
                 dx = self.resolve_diagnosis(cand) if cand and not is_service else []
                 if dx and dx[0]["score"] >= (LLM_DX_SCORE if self.llm else MIN_DX_SCORE):
+                    t.route(f"только диагноз «{cand}» → перечень всех диагностических мероприятий")
                     return dict(self.list_services(question, cand, population=population), diagnosis_only=True)
+                t.route("вопрос не разделился на диагноз и услугу, диагноз не распознан")
             diagnosis, service = diagnosis or d, service or s
         asked_diagnosis = diagnosis  # the user's wording, shown even when the LLM supplies the code
-        if self.llm and question and (not diagnosis or not service or self._weak(diagnosis)):
-            diagnosis, s, pop, llm_used = self._llm_parse(question)
-            service = service or s
-            population = population or pop
-            if diagnosis and not service:  # the LLM found only a diagnosis
-                res = self.list_services(None, diagnosis, population=population)
-                if "method" in res:
-                    res["method"] += f"; {llm_used}"
-                return dict(res, question=question, diagnosis_only=True)
+        reasons = self.suspicious_split(diagnosis, service) if from_question and diagnosis and service else []
+        if reasons:
+            t.parse("подозрительный разбор вопроса: " + "; ".join(reasons))
+            if not self.llm:
+                t.data["hint"] = "В вопросе, похоже, лишний текст (ФИО, дата, жалобы) — оставьте только диагноз и услугу."
+        rules_failed = not diagnosis or not service
+        weak = bool(self.llm and diagnosis and self._weak(diagnosis))
+        if self.llm and question and (rules_failed or weak or reasons):
+            if reasons or rules_failed:  # the rules could not read the question: maybe it is another kind of question
+                routed = self._llm_route(question, population, "; ".join(reasons) or "разбор правилами не удался")
+                if routed is not None:
+                    return routed
+            got = self._llm_parse(question)
+            if got is not None and not got[0].strip():
+                t.problem("LLM не выделила диагноз — остаётся разбор правилами")
+                got = None
+            if got is not None:
+                diagnosis, s, pop, llm_used = got
+                service = (s or service) if reasons else (service or s)
+                population = population or pop
+                if reasons:
+                    llm_used = f"вопрос переразобран LLM: {'; '.join(reasons)}; {llm_used}"
+                if diagnosis and not service:  # the LLM found only a diagnosis
+                    res = self.list_services(None, diagnosis, population=population)
+                    if "method" in res:
+                        res["method"] += f"; {llm_used}"
+                    return dict(res, question=question, diagnosis_only=True)
+        elif not self.llm:
+            t.llm_note("LLM выключен (--llm не задан)")
         if not diagnosis or not service:
             return {"error": "Не удалось выделить диагноз и услугу. Сформулируйте как «Диагноз – …, разрешено ли …», "
                              "«…, перечень лабораторных анализов» или укажите только диагноз (или код МКБ-10)."}
@@ -892,12 +1247,14 @@ class Engine:
 
         dx = self.resolve_diagnosis(diagnosis)
         if not dx or dx[0]["score"] < MIN_DX_SCORE:
+            self._trace_dx(diagnosis, dx, None)
             hint = "; ".join(f"{d['code']} {d['name']}" for d in dx[:4])
             return {"diagnosis_text": diagnosis, "service_text": service, "verdict_level": "unknown_diagnosis",
                     "error": f"Диагноз «{diagnosis}» не распознан уверенно"
                              + (f". Возможно: {hint}. Уточните или укажите код МКБ-10." if hint else ". Укажите код МКБ-10.")}
         chosen = self._choose(dx)
         ambiguous = len(dx) > 1 and dx[1]["score"] >= dx[0]["score"] - 0.03 and dx[1]["code"][:3] != dx[0]["code"][:3]
+        self._trace_dx(diagnosis, dx, chosen, ambiguous)
         sections = self.sections_for(chosen["code"], population, diagnosis)
         # Table-layout and scanned documents are not parsed into lists yet (stage 4):
         # their "text" is column soup, so they are only reported, never used for a verdict.
@@ -905,7 +1262,51 @@ class Engine:
                   or s["icd10_source"] == "table"]
         unparsed = sorted({s["doc_id"] for s in sections} - {s["doc_id"] for s in usable})
         required = self.required_stems(service)
+        self._trace_service(service, required, {lbl: sum(1 for s in usable if pop_label(s["population"]) == lbl)
+                                                for lbl in {pop_label(s["population"]) for s in usable}})
 
+        results = self._check_groups(usable, required, service)
+        service_llm = None
+        if results and service and not any(r["verdict_level"] not in (None, "text") for r in results):
+            retry = self._llm_service_retry(
+                service, chosen, usable, run=lambda v: self._check_groups(usable, self.required_stems(v), v),
+                ok=lambda res: any(r["verdict_level"] not in (None, "text") for r in res))
+            if retry:
+                variant, results, variants = retry
+                service_llm = {"variant": variant, "variants": variants}
+                llm_used = (llm_used + "; " if llm_used else "") + f"услуга уточнена LLM: «{service}» → «{variant}»"
+
+        main = results[0] if results else None
+        if not results and unparsed:
+            main = {"verdict_level": "manual", "evidence": [],
+                    "verdict": "ТРЕБУЕТ РУЧНОЙ ПРОВЕРКИ — протокол для этого диагноза есть, но не разобран автоматически"}
+        t.set("service", hits_by_group={r["population"]: r["verdict_level"] for r in results})
+        catalogue = self.resolve_service(service) or (self.resolve_service(service_llm["variant"]) if service_llm else [])
+        return {
+            "question": question,
+            "diagnosis_text": asked_diagnosis or diagnosis,
+            "diagnosis": chosen,
+            "diagnosis_alternatives": dx[1:4] if ambiguous else [],
+            "service_text": service,
+            "service_catalogue": catalogue,
+            **({"service_llm": service_llm} if service_llm else {}),
+            "population": population,
+            # headline = first population group (adults before children)
+            "verdict_level": main["verdict_level"] if main else None,
+            "verdict": main["verdict"] if main else "ПРОТОКОЛ НЕ НАЙДЕН для этого диагноза",
+            "evidence": main["evidence"] if main else [],
+            "results": results,
+            "unparsed": [{"protocol": self.kb["documents"][d]["title"], "url": self.kb["documents"][d]["url"],
+                          "kind": self.kb["documents"][d]["kind"]} for d in unparsed],
+            "method": ("правила + перекрёстная проверка LLM" if self.crosscheck else "правила (без перекрёстной проверки LLM)")
+                      + (f"; {llm_used}" if llm_used else ""),
+            # «not provided for» only when a protocol was checked: п. 4.1.50 of the insurance rules
+            "insurance": self.insurance_check(chosen, diagnosis, service,
+                                              protocol_level=main["verdict_level"] if results else "-"),
+        }
+
+    def _check_groups(self, usable: list, required: list, service: str) -> list:
+        """The verdict per population group for the service (stems `required`) over the usable sections."""
         groups = {}
         for s in usable:
             groups.setdefault(pop_label(s["population"]), []).append(s)
@@ -940,32 +1341,31 @@ class Engine:
                         res["notes"].append({"quote": other["text"], "clause": other["clause"],
                                              "url": f"{doc['url']}#page={other['page']}"})
             results.append(res)
+        return results
 
-        main = results[0] if results else None
-        if not results and unparsed:
-            main = {"verdict_level": "manual", "evidence": [],
-                    "verdict": "ТРЕБУЕТ РУЧНОЙ ПРОВЕРКИ — протокол для этого диагноза есть, но не разобран автоматически"}
-        return {
-            "question": question,
-            "diagnosis_text": asked_diagnosis or diagnosis,
-            "diagnosis": chosen,
-            "diagnosis_alternatives": dx[1:4] if ambiguous else [],
-            "service_text": service,
-            "service_catalogue": self.resolve_service(service),
-            "population": population,
-            # headline = first population group (adults before children)
-            "verdict_level": main["verdict_level"] if main else None,
-            "verdict": main["verdict"] if main else "ПРОТОКОЛ НЕ НАЙДЕН для этого диагноза",
-            "evidence": main["evidence"] if main else [],
-            "results": results,
-            "unparsed": [{"protocol": self.kb["documents"][d]["title"], "url": self.kb["documents"][d]["url"],
-                          "kind": self.kb["documents"][d]["kind"]} for d in unparsed],
-            "method": ("правила + перекрёстная проверка LLM" if self.crosscheck else "правила (без перекрёстной проверки LLM)")
-                      + (f"; {llm_used}" if llm_used else ""),
-            # «not provided for» only when a protocol was checked: п. 4.1.50 of the insurance rules
-            "insurance": self.insurance_check(chosen, diagnosis, service,
-                                              protocol_level=main["verdict_level"] if results else "-"),
-        }
+    def _llm_service_retry(self, service: str, chosen: dict, usable: list, run, ok):
+        """The rules found nothing for the service: the LLM names it the way the protocols might («ОАМ» → «общий
+        анализ мочи», «молочынх желез» → «молочных желез»), `run(variant)` looks every name up with the usual
+        rules and the first one `ok(result)` accepts wins. A name that is a much more general service is refused
+        (`_variant_ok`). Returns (variant, result, variants) or None; every step is in the trace."""
+        t = self._trace()
+        if not self.llm:
+            return None
+        variants = self._service_variants(service, chosen["code"], f"{chosen['code']} {chosen['name']}",
+                                          lambda: self._candidate_lines(usable, service))
+        tried = []
+        for v in variants:
+            if not self._variant_ok(service, v):
+                tried.append(f"«{v}»: отклонён — значимых основ меньше, чем в вопросе, больше чем на одну")
+                continue
+            res = run(v)
+            if ok(res):
+                tried.append(f"«{v}»: найден в перечне — принят")
+                t.set("service", llm_variants=tried, llm_accepted=v)
+                return v, res, variants
+            tried.append(f"«{v}»: в перечнях не найден")
+        t.set("service", llm_variants=tried, llm_accepted=None)
+        return None
 
     def list_services(self, question: str | None, diagnosis: str, category: str | None = None,
                       service: str | None = None, population: str | None = None):
@@ -974,8 +1374,10 @@ class Engine:
         llm_used = None
         asked_diagnosis = diagnosis
         if self.llm and question and self._weak(diagnosis):
-            diagnosis, _, pop, llm_used = self._llm_parse(question)
-            population = population or pop
+            got = self._llm_parse(question)
+            if got is not None:
+                diagnosis, _, pop, llm_used = got
+                population = population or pop
         if population is None and question:
             population = "child" if CHILD_RE.search(question) else "adult" if ADULT_RE.search(question) else None
         base = {"mode": "list", "question": question, "diagnosis_text": asked_diagnosis, "category": category,
@@ -989,6 +1391,7 @@ class Engine:
                               + (f". Возможно: {hint}. Уточните или укажите код МКБ-10." if hint else ". Укажите код МКБ-10."))
         chosen = self._choose(dx)
         ambiguous = len(dx) > 1 and dx[1]["score"] >= dx[0]["score"] - 0.03 and dx[1]["code"][:3] != dx[0]["code"][:3]
+        self._trace_dx(diagnosis, dx, chosen, ambiguous)
         dx_stems = [x for x in self.norm.stems(diagnosis) if x not in GENERIC and x not in DX_NEUTRAL] \
             if not ICD_CODE_RE.fullmatch(diagnosis.strip()) else []
         dx_stems = dx_stems or [x for x in self.norm.stems(chosen["name"]) if x not in GENERIC and x not in DX_NEUTRAL]
@@ -997,28 +1400,41 @@ class Engine:
                   or s["icd10_source"] == "table"]
         unparsed = sorted({s["doc_id"] for s in sections} - {s["doc_id"] for s in usable})
         required = self.required_stems(service) if service else None
+        if service:
+            self._trace_service(service, required)
 
         def about(s):  # the chapter / table row / protocol title names the diagnosis
             ns = [x for x in self.norm.stems(" ".join([s["chapter_title"]] + s.get("names", []))) if x not in GENERIC]
             return all(contains(ns, x) for x in dx_stems) or self.primary(s["doc_id"], dx_stems)
 
-        picked = []  # (section, [(item, match)])
-        for s in usable:
-            if required:
-                hits = [(it, how) for _, it, how in self.find([s], required, self.literal_tokens(service)) if it["level"] != "text"]
-            else:
-                hits = [(it, None) for it in s["items"] if it["level"] != "text"]
-            if category:
-                hits = [(it, how) for it, how in hits if category in item_kinds(it)]
-            seen, uniq = set(), []
-            for it, how in hits:
-                k = (it["text"], it["level"], it.get("condition"))
-                if k not in seen:
-                    seen.add(k)
-                    uniq.append((it, how))
-            if uniq:
-                uniq.sort(key=lambda h: LEVELS[h[0]["level"]][0])  # stable: protocol order within a level
-                picked.append((s, uniq, s["tier"] == 0 and about(s)))
+        def collect(required, svc):  # (section, [(item, match)], names the diagnosis) per section with something to list
+            picked = []
+            for s in usable:
+                if required:
+                    hits = [(it, how) for _, it, how in self.find([s], required, self.literal_tokens(svc)) if it["level"] != "text"]
+                else:
+                    hits = [(it, None) for it in s["items"] if it["level"] != "text"]
+                if category:
+                    hits = [(it, how) for it, how in hits if category in item_kinds(it)]
+                seen, uniq = set(), []
+                for it, how in hits:
+                    k = (it["text"], it["level"], it.get("condition"))
+                    if k not in seen:
+                        seen.add(k)
+                        uniq.append((it, how))
+                if uniq:
+                    uniq.sort(key=lambda h: LEVELS[h[0]["level"]][0])  # stable: protocol order within a level
+                    picked.append((s, uniq, s["tier"] == 0 and about(s)))
+            return picked
+
+        picked = collect(required, service)
+        service_llm = None
+        if required and not picked:  # the filter removed everything: the LLM may know the protocols' name of the service
+            retry = self._llm_service_retry(service, chosen, usable, run=lambda v: collect(self.required_stems(v), v), ok=bool)
+            if retry:
+                variant, picked, variants = retry
+                service_llm = {"variant": variant, "variants": variants}
+                llm_used = (llm_used + "; " if llm_used else "") + f"услуга уточнена LLM: «{service}» → «{variant}»"
         # chapters bound only by the scope of a protocol about another disease are noise when
         # anything closer exists; protocols about the diagnosis itself go first
         if any(s["tier"] != 1 for s, _, _ in picked):
@@ -1054,7 +1470,9 @@ class Engine:
                             "evidence": [e for x in secs for e in x["items"]]})
         return dict(
             base, diagnosis=chosen, diagnosis_alternatives=dx[1:4] if ambiguous else [],
-            service_catalogue=self.resolve_service(service) if service else [],
+            service_catalogue=(self.resolve_service(service) or (self.resolve_service(service_llm["variant"]) if service_llm else []))
+            if service else [],
+            **({"service_llm": service_llm} if service_llm else {}),
             verdict_level="list" if results else ("manual" if unparsed else None),
             verdict=("ПЕРЕЧЕНЬ: " + "; ".join(f"{r['population']} — {r['verdict']}" for r in results)) if results
             else VERDICTS["manual"] if unparsed
@@ -1149,7 +1567,46 @@ def render_reverse(a: dict) -> str:
     return "\n".join(out)
 
 
-def render(a: dict) -> str:
+def render(a: dict, debug: bool = False) -> str:
+    """The answer as text. `debug` appends the trace (kb_trace) — the CLI flag --debug; MCP and eval leave it off."""
+    text = _render(a)
+    if a.get("hint") and not a.get("error"):
+        text += "\nПодсказка: " + a["hint"]
+    if debug and a.get("debug"):
+        text += "\n\n" + render_debug(a["debug"])
+    return text
+
+
+def render_debug(d: dict) -> str:
+    out = ["=== ОТЛАДКА"]
+    for title, key in (("Маршрут", "route"), ("Разбор", "parse")):
+        if d.get(key):
+            out.append(f"{title}:")
+            out += [f"  - {x}" for x in d[key]]
+    dx = d.get("diagnosis") or {}
+    if dx.get("top"):
+        out.append(f"Диагноз «{dx.get('text')}»: выбран {dx.get('chosen')}, слабое распознавание: {'да' if dx.get('weak') else 'нет'}")
+        out += [f"  {c['score']:.3f}  {c['code']}  {c['name']}" for c in dx["top"]]
+    sv = d.get("service") or {}
+    if sv.get("text"):
+        out.append(f"Услуга «{sv['text']}»: основы {sv.get('required_stems')}, литералы {sv.get('literal_tokens')}, пост. №123: {sv.get('catalogue')}")
+        for k in ("sections", "hits_by_group", "llm_variants", "llm_accepted"):
+            if k in sv:
+                out.append(f"  {k}: {sv[k]}")
+    out.append(f"LLM: {d['llm_status']}" if not d.get("llm") else f"LLM: {len(d['llm'])} вызов(ов)")
+    for c in d.get("llm", []):
+        out.append(f"  [{c['purpose']}] {c['provider']} {c['model']}, {c['sec']} с, токены {c.get('input')}/{c.get('output')}, "
+                   f"${c.get('cost_usd')}" + (f", ОШИБКА {c['error']}" if c.get("error") else ""))
+        out.append("    --- запрос ---\n" + "\n".join("    " + x for x in c["prompt"].splitlines()))
+        out.append("    --- ответ ---\n" + "\n".join("    " + x for x in json.dumps(c["response"], ensure_ascii=False, indent=1).splitlines()))
+    if d.get("problems"):
+        out.append("Проблемы:")
+        out += [f"  ! {x}" for x in d["problems"]]
+    out.append("Время, мс: " + ", ".join(f"{k} {v}" for k, v in d.get("timing", {}).items()))
+    return "\n".join(out)
+
+
+def _render(a: dict) -> str:
     if a.get("error"):
         return "Ошибка: " + a["error"]
     if a.get("mode") == "reverse":
@@ -1168,7 +1625,9 @@ def render_check(a: dict) -> str:
     for alt in a["diagnosis_alternatives"]:
         out.append(f"   или? {alt['code']} {alt['name']}")
     svc = a["service_catalogue"]
-    out.append(f"Услуга:  «{a['service_text']}»" + (f" → пост. №123: {svc[0]['code']} {svc[0]['name']}" if svc else ""))
+    out.append(f"Услуга:  «{a['service_text']}»"
+               + (f" → уточнена LLM: «{a['service_llm']['variant']}»" if a.get("service_llm") else "")
+               + (f" → пост. №123: {svc[0]['code']} {svc[0]['name']}" if svc else ""))
     for alt in svc[1:]:
         out.append(f"   или? {alt['code']} {alt['name']}")
     if a["population"]:
@@ -1217,9 +1676,23 @@ def render_check(a: dict) -> str:
 
 def run_eval(engine: Engine, path: Path):
     cases = [json.loads(l) for l in path.read_text(encoding="utf-8").splitlines() if l.strip() and not l.startswith("#")]
+    skipped = [c for c in cases if c.get("llm") and not engine.llm]  # «llm»: true — only an LLM can answer it
+    cases = [c for c in cases if c not in skipped]
     ok = 0
+    calls = 0
     for c in cases:
         a = engine.ask(c["question"])
+        calls += len((a.get("debug") or {}).get("llm", []))
+        if c.get("route"):  # the kind of question the engine understood, and optionally the diagnosis / list category
+            got = route_of(a)
+            good = got == c["route"] and (not c.get("icd") or (a.get("diagnosis") or {}).get("code") == c["icd"]) \
+                and (not c.get("category") or a.get("category") == c["category"])
+            ok += good
+            print(f"{'OK  ' if good else 'FAIL'} {c['question']}")
+            if not good:
+                print(f"       expected {c['route']} {c.get('icd')} {c.get('category')}; got {got} "
+                      f"{(a.get('diagnosis') or {}).get('code')} {a.get('category')}  {a.get('error', '')}")
+            continue
         if c.get("mode") == "reverse":  # a code starting with one of expect_any among the top entries' diagnoses
             entries = (a.get("results") or [{}])[0].get("entries", [])[:c.get("top", 3)]
             got = [d["code"] for e in entries for d in e["diagnoses"]]
@@ -1261,14 +1734,33 @@ def run_eval(engine: Engine, path: Path):
         clause_ok = True
         if c.get("clause") and a.get("evidence"):
             clause_ok = any(str(e["clause"]).split(".")[0] == str(c["clause"]) for e in a["evidence"][:3])
-        good = got_level == c["level"] and (not c.get("icd") or got_code == c["icd"]) and (got_level is None or clause_ok)
+        good = got_level == c["level"] and (not c.get("icd") or got_code == c["icd"]) and (got_level is None or clause_ok) \
+            and (not c.get("service_text") or lookalike(a.get("service_text") or "") == lookalike(c["service_text"])) \
+            and (not c.get("service_llm") or bool(a.get("service_llm")))
         ok += good
         print(f"{'OK  ' if good else 'FAIL'} {c['question']}")
         if not good:
-            print(f"       expected {c.get('icd')} {c['level']} п.{c.get('clause')}; got {got_code} {got_level} "
-                  f"п.{[e['clause'] for e in a.get('evidence', [])[:3]]}  {a.get('error', '')}")
+            print(f"       expected {c.get('icd')} {c['level']} п.{c.get('clause')} service {c.get('service_text')}; got {got_code} {got_level} "
+                  f"п.{[e['clause'] for e in a.get('evidence', [])[:3]]} service {a.get('service_text')}  {a.get('error', '')}")
+    if skipped:
+        print(f"\n({len(skipped)} cases skipped: they need --llm)")
+    if engine.llm:
+        print(f"\nLLM calls: {calls} for {len(cases)} questions")
     print(f"\n{ok}/{len(cases)} correct")
     return ok == len(cases)
+
+
+def route_of(a: dict) -> str:
+    """The kind of question an answer belongs to (eval/llm_triggers.jsonl)."""
+    if a.get("insurance_question") or a.get("mode") == "insurance":
+        return "insurance"
+    if a.get("mode") == "reverse":
+        return "reverse"
+    if a.get("diagnosis_only"):
+        return "diagnosis_only"
+    if a.get("mode") == "list":
+        return "list"
+    return "check" if a.get("service_text") else "error"
 
 
 def main():
@@ -1280,6 +1772,7 @@ def main():
     a.add_argument("--service")
     a.add_argument("--population", choices=["adult", "child"])
     a.add_argument("--json", action="store_true")
+    a.add_argument("--debug", action="store_true", help="print the trace of the answer (route, candidates, LLM prompts)")
     e = sub.add_parser("eval")
     e.add_argument("file", nargs="?", type=Path, default=Path("eval/golden_endocrinology.jsonl"))
     ix = sub.add_parser("index", help="write kb.stems.json (reverse search index) next to the KB")
@@ -1300,7 +1793,7 @@ def main():
     if args.cmd == "eval":
         sys.exit(0 if run_eval(engine, args.file) else 1)
     ans = engine.ask(args.question, args.diagnosis, args.service, args.population)
-    print(json.dumps(ans, ensure_ascii=False, indent=1) if args.json else render(ans))
+    print(json.dumps(ans, ensure_ascii=False, indent=1) if args.json else render(ans, debug=args.debug))
 
 
 if __name__ == "__main__":

@@ -39,6 +39,9 @@ h1.top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
 #settings label{cursor:pointer}
 .ins-excluded{color:var(--bad);border-color:var(--bad)}.ins-program,.ins-needs_diagnosis{color:var(--warn);border-color:var(--warn)}.ins-probable{color:var(--warn);border-color:var(--warn)}.ins-covered,.ins-limited{color:var(--ok);border-color:var(--ok)}
 details summary{cursor:pointer;color:var(--mut);font-size:13px}pre{white-space:pre-wrap;font-size:13px}
+.debug pre{max-height:340px;overflow:auto;background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:8px;margin:4px 0;word-break:break-word}
+.debug .cp{padding:1px 10px;font-size:12px;margin-left:6px;background:var(--card);color:var(--acc)}.debug .meta b.warn{color:var(--warn)}
+.debug table{border-collapse:collapse;font-size:13px}.debug td{padding:1px 10px 1px 0;vertical-align:top}
 </style></head><body><div class="wrap">
 <h1 class="top"><span>Проверка диагностики по клиническим протоколам МЗ РБ и правилам страхования <span class="meta" style="font-weight:400">версия __VERSION__</span></span><a href="#" id="setlink" class="meta">⚙ Настройки</a></h1>
 <div class="card" id="settings" hidden><b>Настройки</b> <span class="meta">(сохраняются в этом браузере)</span>
@@ -59,6 +62,7 @@ details summary{cursor:pointer;color:var(--mut);font-size:13px}pre{white-space:p
  <div class="row" id="examples"></div>
 </div>
 <div id="out"></div>
+<div id="dbg"></div>
 <div class="card hist" id="hcard" hidden><div class="meta" style="margin-bottom:6px">История запросов <a href="#" id="hclear">очистить</a></div><div id="hist"></div></div>
 </div>
 <script>
@@ -102,11 +106,12 @@ function saveHist(q){hist=[q,...hist.filter(x=>x!==q)].slice(0,30);try{localStor
 function drawHist(){$("hcard").hidden=!hist.length;$("hist").innerHTML=hist.map((h,i)=>`<div data-i="${i}">${esc(h)}</div>`).join("")}
 $("hist").onclick=e=>{if(e.target.dataset.i){$("q").value=hist[e.target.dataset.i];ask()}};
 $("hclear").onclick=e=>{e.preventDefault();hist=[];try{localStorage.removeItem("hist")}catch(e){}drawHist()};
+const llmTag=a=>a.service_llm?` <span class="tag">уточнена LLM → «${esc(a.service_llm.variant)}» — проверьте, то ли это исследование</span>`:"";
 function renderList(a){
  const d=a.diagnosis||{};
  let h=`<div class="card"><div class="meta"><b>Диагноз:</b> ${esc(d.code||"")} ${esc(d.name||"")} <span class="tag">из «${esc(a.diagnosis_text)}»</span>`;
  (a.diagnosis_alternatives||[]).forEach(x=>h+=`<br>или? ${esc(x.code)} ${esc(x.name)}`);
- h+=`<br><b>Перечень:</b> ${esc(a.category_label)}`+(a.service_text?`, услуга «${esc(a.service_text)}»`:"")
+ h+=`<br><b>Перечень:</b> ${esc(a.category_label)}`+(a.service_text?`, услуга «${esc(a.service_text)}»`:"")+llmTag(a)
   +(a.diagnosis_only?` <span class="tag">указан только диагноз — показан весь раздел диагностики; для одного исследования спросите «…, разрешено ли …»</span>`:"");
  if(a.population)h+=`<br><b>Население:</b> ${a.population=="child"?"дети":"взрослые"}`;
  h+=`</div>`;
@@ -131,7 +136,7 @@ function renderList(a){
 function renderReverse(a){
  const ins={excluded:["не страховой","v-bad"],probable:["вероятно не страховой","v-warn"],limited:["страховой, с ограничениями","v-ok"],covered:["страховой","v-ok"]};
  let h=`<div class="card"><div class="meta"><b>Обратный поиск</b> — при каких диагнозах протоколы предусматривают:</div><ul class="lst">`
-  +a.services.map(x=>`<li>«${esc(x.text)}»`+(x.catalogue&&x.catalogue[0]?` <span class="meta">→ пост. №123: ${esc(x.catalogue[0].code)} ${esc(x.catalogue[0].name)}</span>`:"")
+  +a.services.map(x=>`<li>«${esc(x.text)}»`+(x.llm_variant?` <span class="tag">уточнена LLM → «${esc(x.llm_variant)}»</span>`:"")+(x.catalogue&&x.catalogue[0]?` <span class="meta">→ пост. №123: ${esc(x.catalogue[0].code)} ${esc(x.catalogue[0].name)}</span>`:"")
    +(x.found?` <span class="tag">в ${x.sections} разделах протоколов</span>`:` <span class="tag" style="color:var(--bad)">не найдена в перечнях протоколов</span>`)+`</li>`).join("")+`</ul>`;
  if(a.population)h+=`<div class="meta"><b>Население:</b> ${a.population=="child"?"дети":"взрослые"}</div>`;
  h+=`<div class="verdict ${(a.results||[]).length?"v-ok":"v-bad"}">${esc(a.verdict)}</div>`;
@@ -158,7 +163,7 @@ function render(a){
  const d=a.diagnosis||{},svc=a.service_catalogue||[];
  let h=`<div class="card"><div class="meta"><b>Диагноз:</b> ${esc(d.code||"")} ${esc(d.name||"")} <span class="tag">из «${esc(a.diagnosis_text)}»</span>`;
  (a.diagnosis_alternatives||[]).forEach(x=>h+=`<br>или? ${esc(x.code)} ${esc(x.name)}`);
- h+=`<br><b>Услуга:</b> «${esc(a.service_text)}»`+(svc[0]?` → пост. №123: ${esc(svc[0].code)} ${esc(svc[0].name)}`:"");
+ h+=`<br><b>Услуга:</b> «${esc(a.service_text)}»`+llmTag(a)+(svc[0]?` → пост. №123: ${esc(svc[0].code)} ${esc(svc[0].name)}`:"");
  svc.slice(1).forEach(x=>h+=`<br>или? ${esc(x.code)} ${esc(x.name)}`);
  if(a.population)h+=`<br><b>Население:</b> ${a.population=="child"?"дети":"взрослые"}`;
  h+=`</div>`;
@@ -197,6 +202,7 @@ function tabs(a,prot){
 }
 function tail(a){
  let h="";
+ if(a.hint)h+=`<div class="verdict v-warn">${esc(a.hint)}</div>`;
  (a.unparsed||[]).forEach(u=>h+=`<div class="verdict v-warn">Не разобран автоматически (${u.kind=="table"?"таблицы":"скан"}), проверьте вручную: <a href="${esc(u.url)}" target="_blank">${esc(u.protocol)}</a></div>`);
  h+=`<div class="meta">Метод: ${esc(a.method)}.</div>`;
  h+=`<details><summary>Текстовый вид (для копирования)</summary><pre>${esc(a.text)}</pre></details></div>`;
@@ -212,16 +218,50 @@ function feedback(a){
    <div class="row"><button id="fbsend">Отправить оценку</button><span class="meta" id="fbst"></span></div>
   </div></div>`;
 }
+// «Отладка»: how the question was parsed, candidates, every LLM call with its prompt and answer; collapsed, state kept
+let dbgOpen=false;try{dbgOpen=localStorage.getItem("debugopen")=="1"}catch(e){}
+function debugBlock(a){
+ const d=a&&a.debug;if(!d)return "";
+ const li=xs=>xs&&xs.length?`<ul class="lst">${xs.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:"";
+ const sec=(t,h)=>h?`<div class="ev"><div class="meta"><b>${t}</b></div>${h}</div>`:"";
+ const dx=d.diagnosis||{},sv=d.service||{},calls=d.llm||[];
+ let h=sec("Маршрут",li(d.route))+sec("Разбор вопроса",li(d.parse));
+ if((dx.top||[]).length)h+=sec(`Диагноз «${esc(dx.text)}» — выбран ${esc(dx.chosen)}, слабое распознавание: ${dx.weak?"да":"нет"}`,
+   `<table>${dx.top.map(c=>`<tr><td>${c.score.toFixed(3)}</td><td><b>${esc(c.code)}</b></td><td>${esc(c.name)}</td></tr>`).join("")}</table>`
+   +li([dx.llm_codes&&dx.llm_codes.length?"коды LLM: "+dx.llm_codes.join(", ")+(dx.llm_covered.length?" (с протоколами: "+dx.llm_covered.join(", ")+")":""):""].filter(Boolean)));
+ if(sv.text)h+=sec(`Услуга «${esc(sv.text)}»`,li([
+   "основы для поиска: "+(sv.required_stems||[]).join(", "),
+   (sv.literal_tokens||[]).length?"обязательные написания: "+sv.literal_tokens.join(", "):"",
+   "пост. №123: "+((sv.catalogue||[]).join("; ")||"не найдено"),
+   sv.sections?"разделов по группам населения: "+Object.entries(sv.sections).map(([k,v])=>k+" — "+v).join("; "):"",
+   sv.hits_by_group?"результат по группам: "+Object.entries(sv.hits_by_group).map(([k,v])=>k+" — "+(v||"не найдено")).join("; "):""].filter(Boolean))
+   +li(sv.llm_variants||[]));
+ h+=sec("LLM",calls.length?calls.map((c,i)=>`<div class="meta"><b>${esc(c.purpose)}</b> · ${esc(c.provider)} ${esc(c.model)} · ${c.sec} с · токены ${c.input??"?"}/${c.output??"?"}`
+    +(c.cost_usd!=null?` · $${c.cost_usd}`:"")+(c.error?` · <b class="bad">ошибка: ${esc(c.error)}</b>`:"")+`</div>`
+   +`<div class="meta">Запрос <button class="cp" data-cp="${i}.prompt">копировать</button></div><pre>${esc(c.prompt)}</pre>`
+   +`<div class="meta">Ответ <button class="cp" data-cp="${i}.response">копировать</button></div><pre>${esc(JSON.stringify(c.response,null,1))}</pre>`).join("")
+   :`<div class="meta">${esc(d.llm_status)}</div>`);
+ h+=sec("Проблемы",(d.problems||[]).length?`<ul class="lst">${d.problems.map(x=>`<li><b class="warn">!</b> ${esc(x)}</li>`).join("")}</ul>`:"");
+ h+=`<div class="meta" style="margin-top:8px">Время, мс: ${Object.entries(d.timing||{}).map(([k,v])=>k+" "+v).join(", ")}</div>`;
+ const n=(d.problems||[]).length;
+ return `<details class="card debug" id="dbgd"${dbgOpen?" open":""}><summary>Отладка · LLM: ${calls.length?calls.length+" вызов(ов)":"не вызывался"}${n?` · проблем: ${n}`:""}</summary>${h}</details>`;
+}
+$("dbg").addEventListener("toggle",e=>{if(e.target.id=="dbgd"){dbgOpen=e.target.open;try{localStorage.setItem("debugopen",dbgOpen?"1":"0")}catch(x){}}},true);
+$("dbg").addEventListener("click",e=>{
+ const k=e.target.dataset&&e.target.dataset.cp;if(!k||!last||!last.debug)return;
+ const [i,f]=k.split(".");const c=last.debug.llm[i],t=f=="prompt"?c.prompt:JSON.stringify(c.response,null,1);
+ (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{e.target.textContent="скопировано"},()=>{e.target.textContent="не удалось"});
+});
 let busy=false;
 async function ask(){
  const q=$("q").value.trim();if(!q||busy)return;
  busy=true;$("go").disabled=true;$("go").innerHTML=`<span class="spin"></span> Проверяю…`;
  const t0=Date.now();
- $("out").innerHTML=`<div class="card busy" role="status"><span class="spin"></span><div><b>Ищу в протоколах…</b><div class="meta" id="el">0 с</div></div></div>`;
+ $("dbg").innerHTML="";$("out").innerHTML=`<div class="card busy" role="status"><span class="spin"></span><div><b>Ищу в протоколах…</b><div class="meta" id="el">0 с</div></div></div>`;
  const tick=setInterval(()=>{const el=$("el");if(el)el.textContent=Math.round((Date.now()-t0)/1000)+" с"},1000);
  try{
   const r=await fetch("/api/ask",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({question:q,population:$("pop").value})});
-  const a=await r.json();last=a;$("out").innerHTML=render(a);if(!a.error)saveHist(q);
+  const a=await r.json();last=a;$("out").innerHTML=render(a);$("dbg").innerHTML=debugBlock(a);if(!a.error)saveHist(q);
  }catch(e){$("out").innerHTML=render({error:String(e)})}
  clearInterval(tick);busy=false;$("go").disabled=false;$("go").textContent="Проверить";
 }

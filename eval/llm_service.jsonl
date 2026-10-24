@@ -1,0 +1,19 @@
+# Service not found by the rules → names suggested by the LLM (plan .plan/llm-improve.md §1). "llm": true — only --llm finds it, and the
+# answer says «услуга уточнена LLM» ("service_llm": true); the cases without it are rule-only controls. The last block must stay
+# «не предусмотрено» with and without the LLM (the service is really absent). The LLM cases were written before the implementation;
+# the expected levels are those of the canonical wording of the service (checked with the rules).
+{"question": "Диагноз – тиреотоксикоз, разрешена ли кардиограмма", "level": "mandatory", "clause": 44}
+{"question": "Диагноз – ХОБЛ, положена ли функция внешнего дыхания", "level": "mandatory"}
+{"question": "Диагноз – ХОБЛ, разрешен ли рентген органов грудной полости", "level": "mandatory", "llm": true, "service_llm": true}
+{"question": "Диагноз – подагра, можно ли УЗИ мочевыделительной системы", "level": "mandatory", "clause": 10, "llm": true, "service_llm": true}
+{"question": "Диагноз – сахарный диабет 2 типа, разрешен ли анализ на сахар в крови", "level": "mandatory", "llm": true, "service_llm": true}
+{"question": "Диагноз – эпилепсия, разрешена ли запись мозговых волн", "level": "mandatory", "llm": true, "service_llm": true}
+{"question": "Диагноз – подагра, разрешено ли определение мочивой кислоты", "level": "mandatory", "clause": 10, "llm": true, "service_llm": true}
+{"question": "Диагноз – узловой зоб, разрешена ли тонкоигольная аспирацонная биопсия", "level": "additional", "clause": 13}
+# the service is not in the protocols: the answer stays «не предусмотрено»
+{"question": "Диагноз – аутоиммунный тиреоидит, разрешена ли колоноскопия", "icd": "E06.3", "level": null}
+{"question": "Диагноз – подагра, разрешена ли электроэнцефалография", "level": null}
+{"question": "Диагноз – диффузный нетоксический зоб, разрешена ли маммография", "icd": "E04.0", "level": null}
+{"question": "Диагноз – ХОБЛ, разрешена ли кольпоскопия", "level": null}
+{"question": "Диагноз – тиреотоксикоз, разрешена ли рентгенография черепа", "level": null}
+{"question": "Диагноз – аутоиммунный тиреоидит, разрешен ли анализ мочи по Ничипоренко", "icd": "E06.3", "level": null}

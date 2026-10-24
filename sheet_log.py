@@ -36,6 +36,8 @@ MASKS = [
     (re.compile(r"\b(?:[А-ЯЁ][а-яё]+\s+){1,2}[А-ЯЁ][а-яё]+(?:ович|евич|ич|овна|евна|ична|инична)\b"), "[ФИО]"),
     # «пациент Иванов», «застрахованная Петрова»: a capitalised word after who-words
     (re.compile(r"(?i)\b(пациент\w*|застрахованн\w*|больн(?:ой|ая|ого|ую)|клиент\w*|гр\.|гражданин\w*)\s+(?-i:[А-ЯЁ][а-яё]+\b)(?:\s+(?-i:[А-ЯЁ][а-яё]+\b))?(?!\s+[а-яё])"), r"\1 [ФИО]"),
+    # birth year: «1980 г.р.», «1980 года рождения»
+    (re.compile(r"\b(?:19|20)\d{2}\s*(?:г\.?\s?р\.?|года?\s+рождения)", re.I), "[дата]"),
     (re.compile(r"\d{6,}"), "[число]"),
 ]
 
@@ -49,6 +51,34 @@ def mask(text) -> str:
     for rx, repl in MASKS:
         s = rx.sub(repl, s)
     return s
+
+
+_PLACEHOLDER = r"\[(?:email|личный номер|паспорт|телефон|дата|номер|ФИО|число)\]"
+_LEAD_RE = re.compile(r"(?i)\b(?:тел(?:ефон)?\.?|моб(?:ильный)?\.?|e-?mail|пациент\w*|застрахованн\w*|больн(?:ой|ая|ого|ую)|клиент\w*|гр\.|гражданин\w*|"
+                      r"полис\w*|договор\w*|карт\w*|страхов\w*\s+свидетельств\w*|номер\w*|№)\s*" + _PLACEHOLDER)
+
+
+def strip_personal(text: str):
+    """The question without what mask() would hide (ФИО, dates, phones, numbers), for parsing:
+    «Диагноз – сахарный диабет, HbA1c, Ковалёва А.В.» → «Диагноз – сахарный диабет, HbA1c».
+    Returns (clean text, list of removed fragments); the text is unchanged when nothing was found."""
+    if not text:
+        return text or "", []
+    removed = []
+    s = str(text)
+    for rx, repl in MASKS:
+        def sub(m, repl=repl):
+            removed.append(m.group(0).strip())
+            return m.expand(repl)
+        s = rx.sub(sub, s)
+    s = _LEAD_RE.sub("", s)
+    s = re.sub(_PLACEHOLDER, "", s)
+    if not removed:
+        return str(text), []
+    s = re.sub(r"\s+([,.;:?])", r"\1", s)
+    s = re.sub(r"([,;:])(?:\s*[,;:])+", r"\1", s)  # commas left behind: «HbA1c, , »
+    s = re.sub(r"^[\s,;:]+|[\s,;:]+$", "", s)
+    return re.sub(r"\s{2,}", " ", s).strip(), removed
 
 
 class SheetLog:
