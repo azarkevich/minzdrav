@@ -274,7 +274,7 @@ python -I kb.py ask "…" --llm                          # LLM fallback for unre
   («назанчают») is dropped. Score per section = Σ level weight (`REVERSE_WEIGHT`) × idf of the service; entries =
   sections merged by protocol + codes, sorted by number of matched services, then score × (1.0 own codes / 0.6
   protocol scope / 0.4 no codes); top 15, each with the insurance verdict of its first code. `generic_warning` when
-  every service is in > 5% of sections (ОАК in 711). 0.02–0.7 s per query locally (Render free ~5–10× slower); speed:
+  every service is in > 5% of sections (ОАК in 711). A service with > `GENERIC_CAP` = 150 candidate sections is confirmed only in sections the rarer services of the question hit (alone: its first 150), its df taken from the index. 0.02–0.3 s per query locally (Render free ~5–10× slower); speed:
   `bucket_match` compares a stem only with index keys of length ±1 or the same first 3 letters (same result as a
   full `contains` scan, checked on 305 stems), `find(keysets=)` uses set lookups, `service_like` skips the diagnosis
   lookup for ≤ 2-word analytes / abbreviations; `resolve_diagnosis` pre-filters names through a name-stem index the

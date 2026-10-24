@@ -191,6 +191,7 @@ def lookalike(text: str) -> str:
     return text.lower().replace("ё", "е").translate(str.maketrans("асеорхук", "aceopxyk"))
 
 
+GENERIC_CAP = 150  # a service in more sections than this is «common» (see reverse_search)
 REVERSE_WEIGHT = {"mandatory": 1.0, "additional": 0.8, "listed": 0.7, "differential": 0.5, "monitoring": 0.5}
 
 
@@ -637,7 +638,8 @@ class Engine:
         keys = list(idx)
         if population is None and question:
             population = "child" if CHILD_RE.search(question) else "adult" if ADULT_RE.search(question) else None
-        svc_out, per_section = [], {}
+        # candidates of every service from the index alone (cheap); the items are read only to confirm
+        plan = []
         for svc in services:
             req = self.required_stems(svc)
             keysets = {r: self.matching_keys(r) for r in req}  # typo-tolerant over the index keys
@@ -648,7 +650,16 @@ class Engine:
             cand = None
             for r in req:
                 cand = posting[r] if cand is None else cand & posting[r]
-            hits = [h for h in self.find([sections[i] for i in sorted(cand or [])], req, self.literal_tokens(svc), keysets)
+            plan.append((svc, req, keysets, cand or set()))
+        # a common service (ОАК, глюкоза: hundreds of sections — reading them all takes seconds on the host) is
+        # confirmed only where the rarer services of the question are; alone, in its first GENERIC_CAP sections
+        rare = {i for _, _, _, c in plan if len(c) <= GENERIC_CAP for i in c}
+        pos = {s["id"]: i for i, s in enumerate(sections)}
+        svc_out, per_section, confirmed = [], {}, set()
+        for svc, req, keysets, cand in sorted(plan, key=lambda x: len(x[3])):
+            common = len(cand) > GENERIC_CAP
+            look = sorted(cand & confirmed if common and rare else cand)[:GENERIC_CAP if common and not rare else None]
+            hits = [h for h in self.find([sections[i] for i in look], req, self.literal_tokens(svc), keysets)
                     if h[1]["level"] != "text"]
             secs = {}
             for sec, it, how in hits:
@@ -657,13 +668,17 @@ class Engine:
                 best = secs.get(sec["id"])
                 if best is None or LEVELS[it["level"]][0] < LEVELS[best[1]["level"]][0]:
                     secs[sec["id"]] = (sec, it, how)
-            df = len(secs)
-            svc_out.append({"text": svc, "catalogue": self.resolve_service(svc)[:1], "sections": df, "found": df > 0})
+            if not common:
+                confirmed |= {pos[sid] for sid in secs}
+            df = len(cand) if common else len(secs)  # a common service: the index count (not every one confirmed)
+            svc_out.append({"text": svc, "catalogue": self.resolve_service(svc)[:1], "sections": df, "found": bool(secs) or (common and bool(cand)),
+                            "_order": services.index(svc)})
             idf = math.log((n_usable + 1) / (df + 1)) + 0.1
             for sid, (sec, it, how) in secs.items():
                 e = per_section.setdefault(sid, {"sec": sec, "matched": {}, "score": 0.0})
                 e["matched"][svc] = (it, how)
                 e["score"] += REVERSE_WEIGHT.get(it["level"], 0.5) * idf
+        svc_out.sort(key=lambda x: x.pop("_order"))
         found = [x["text"] for x in svc_out if x["found"]]
         # one entry per protocol + set of codes (a chapter split into table rows or populations)
         merged = {}
