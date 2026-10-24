@@ -12,7 +12,7 @@ textarea{width:100%;min-height:70px;font:inherit;padding:10px;border:1px solid v
 .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}
 button{font:inherit;padding:8px 16px;border-radius:8px;border:1px solid var(--acc);background:var(--acc);color:#fff;cursor:pointer}
 button:disabled{opacity:.6}select{font:inherit;padding:7px;border-radius:8px;border:1px solid var(--bd);background:var(--card);color:var(--fg)}
-.ex{color:var(--acc);cursor:pointer;font-size:13px;margin-right:12px;text-decoration:underline dotted}
+#help{margin-top:10px}.exg{margin:10px 0 4px}.ex{color:var(--acc);cursor:pointer;font-size:13px;margin:2px 0 2px 12px;text-decoration:underline dotted}.ex:hover{text-decoration:underline}
 .verdict{padding:10px 12px;border-radius:8px;font-weight:600;margin:8px 0}
 .v-ok{background:var(--okbg);color:var(--ok)}.v-warn{background:var(--warnbg);color:var(--warn)}.v-bad{background:var(--badbg);color:var(--bad)}
 .meta{color:var(--mut);font-size:13px}.meta b{color:var(--fg)}
@@ -59,7 +59,7 @@ details summary{cursor:pointer;color:var(--mut);font-size:13px}pre{white-space:p
   <select id="pop"><option value="">возраст: определить</option><option value="adult">взрослые</option><option value="child">дети</option></select>
   <span id="st" class="meta">Enter — отправить, Shift+Enter — новая строка</span>
  </div>
- <div class="row" id="examples"></div>
+ <details id="help"><summary>Примеры запросов и подсказки</summary><div id="examples"></div></details>
 </div>
 <div id="out"></div>
 <div class="card hist" id="hcard" hidden><div class="meta" style="margin-bottom:6px">История запросов <a href="#" id="hclear">очистить</a></div><div id="hist"></div></div>
@@ -71,9 +71,19 @@ const $=id=>document.getElementById(id);
 let pdfMode="viewer";try{pdfMode=localStorage.getItem("pdfmode")||"viewer"}catch(e){}
 const view=(u,q)=>{if(pdfMode=="orig")return u;const m=String(u||"").match(/^(https:[^#]*\.pdf)#page=(\d+)/i);return m?`/view?u=${encodeURIComponent(m[1])}&p=${m[2]}&q=${encodeURIComponent((q||"").slice(0,600))}`:u};
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const EX=["Страховой ли случай – подбор контактных линз","Диагноз – аутоиммунный тиреоидит, разрешён ли анализ мочи по Нечипоренко","Диагноз – псориаз, разрешено ли определение СОЭ","Диагноз – болезнь Аддисона, разрешен ли тест с инсулиновой гипогликемией","Диагноз E06.3, ТТГ","Сахарный диабет 2 типа, определение гликированного гемоглобина","Сахарный диабет, перечень лабораторных анализов","Ангиомиолипома, какой вид КТ используется для диагностики","При каких диагнозах назначают метанефрины","ТТГ, свободный Т4, антитела к ТПО","Сахарный диабет 2 типа"];
-$("examples").innerHTML=EX.map((e,i)=>`<span class="ex" data-i="${i}">${esc(e.length>48?e.slice(0,48)+"…":e)}</span>`).join("");
-$("examples").onclick=e=>{if(e.target.dataset.i){$("q").value=EX[e.target.dataset.i];ask()}};
+const EX=[
+ {t:"Проверка: предусмотрена ли услуга для диагноза",d:"Диагноз и услуга в одном вопросе — ответ с цитатой из протокола и ссылкой на страницу. Диагноз можно писать названием или кодом МКБ-10.",
+  q:["Диагноз – аутоиммунный тиреоидит, разрешён ли анализ мочи по Нечипоренко","Диагноз – псориаз, разрешено ли определение СОЭ","Диагноз E06.3, ТТГ","Сахарный диабет 2 типа, определение гликированного гемоглобина"]},
+ {t:"Перечень: что предусмотрено для диагноза",d:"Только диагноз (или «перечень …») — все диагностические мероприятия протокола, с вердиктом по страхованию.",
+  q:["Сахарный диабет, перечень лабораторных анализов","Сахарный диабет 2 типа","Псориаз"]},
+ {t:"Обратный поиск: диагнозы по услуге",d:"Услуги без диагноза или «при каких диагнозах …» — в каких протоколах и для каких диагнозов предусмотрена процедура. Несколько услуг через запятую сужают поиск.",
+  q:["При каких диагнозах назначают метанефрины","ТТГ, свободный Т4, антитела к ТПО","Ангиомиолипома, какой вид КТ используется для диагностики"]},
+ {t:"Страхование: страховой ли случай",d:"Проверка по Правилам № 20 ЗАСО «ТАСК»: исключённые услуги и состояния, ограничения, договоры не с теми лицами.",
+  q:["Страховой ли случай – подбор контактных линз","Страховой ли случай – сахарный диабет"]},
+ {t:"Уточнение",d:"«Взрослые» / «дети» выбираются списком рядом с кнопкой или определяются по тексту вопроса. Персональные данные из вопроса вырезаются до разбора.",
+  q:["Диагноз – болезнь Аддисона, разрешен ли тест с инсулиновой гипогликемией у детей"]}];
+$("examples").innerHTML=EX.map((g,gi)=>`<div class="exg"><b>${esc(g.t)}</b><div class="meta">${esc(g.d)}</div>`+g.q.map((e,i)=>`<div class="ex" data-g="${gi}" data-i="${i}">${esc(e)}</div>`).join("")+`</div>`).join("");
+$("examples").onclick=e=>{const t=e.target.closest(".ex");if(t){$("q").value=EX[t.dataset.g].q[t.dataset.i];ask()}};
 const ilvl={unclear:"v-warn",program:"v-warn",needs_diagnosis:"v-warn",excluded:"v-bad",probable:"v-warn",limited:"v-warn",covered:"v-ok"};
 const a0=i=>(i.verdict.match(/«(.*?)»/)||[,""])[1];
 function insurance(i){
