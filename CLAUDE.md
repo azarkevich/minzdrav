@@ -33,6 +33,12 @@ to a temp `input.pdf`. No test suite: verify with eval sets, `kb_probe.py`, the 
 `protocols/` (files + `manifest.json` + `index.csv`) is owned by the scraper; downstream tools
 read it and must not modify it. Don't hand-edit manifest `path` values.
 
+## Commits
+
+Commit every change you make, on the current branch (usually `master`) — no separate branch, no
+worktree. Exception: if the working tree already has uncommitted changes you didn't make, ask the
+user before committing (what to include, or whether to commit at all).
+
 ## Commands
 
 ```

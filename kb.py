@@ -256,7 +256,8 @@ def lookalike(text: str) -> str:
     return text.lower().replace("ё", "е").translate(str.maketrans("асеорхук", "aceopxyk"))
 
 
-GENERIC_CAP = 150  # a service in more sections than this is «common» (see reverse_search)
+FILLER_STEMS = {"как", "то", "что", "это", "чем", "кто", "так", "же", "ли", "бы", "вот", "такой", "какой", "любой"}  # not a service
+GENERIC_CAP = 150 # a service in more sections than this is «common» (see reverse_search)
 REVERSE_WEIGHT = {"mandatory": 1.0, "additional": 0.8, "listed": 0.7, "differential": 0.5, "monitoring": 0.5}
 
 
@@ -927,7 +928,7 @@ class Engine:
         plan, llm_names = [], {}
 
         def build(text):
-            req = self.required_stems(text)
+            req = [r for r in self.required_stems(text) if r not in FILLER_STEMS]  # «хрень какая-то» ≠ «как», «то»
             keysets = {r: self.matching_keys(r) for r in req}  # typo-tolerant over the index keys
             posting = {r: {i for k in keysets[r] for i in idx[k]} for r in req}
             # a word no protocol list has («назанчают» — a misspelt verb) is dropped if others remain
