@@ -274,7 +274,11 @@ python -I kb.py ask "…" --llm                          # LLM fallback for unre
   («назанчают») is dropped. Score per section = Σ level weight (`REVERSE_WEIGHT`) × idf of the service; entries =
   sections merged by protocol + codes, sorted by number of matched services, then score × (1.0 own codes / 0.6
   protocol scope / 0.4 no codes); top 15, each with the insurance verdict of its first code. `generic_warning` when
-  every service is in > 5% of sections (ОАК in 711). 0.02–1.4 s per query. Letter-hyphen tokens whose only other
+  every service is in > 5% of sections (ОАК in 711). 0.02–0.7 s per query locally (Render free ~5–10× slower); speed:
+  `bucket_match` compares a stem only with index keys of length ±1 or the same first 3 letters (same result as a
+  full `contains` scan, checked on 305 stems), `find(keysets=)` uses set lookups, `service_like` skips the diagnosis
+  lookup for ≤ 2-word analytes / abbreviations; `resolve_diagnosis` pre-filters names through a name-stem index the
+  same way (check answers ~0.7 s → 0.1 s locally). Letter-hyphen tokens whose only other
   stem is ambiguous («C-пептид» → «пептид» = also «натрийуретический пептид») must occur literally in the item
   (`literal_tokens`, also used by check and list modes). Eval `eval/reverse.jsonl` (`expect_any` code prefixes in
   top `top`): 22 cases, 14 written blind → 10/14 blind, 21/22 after fixes; the miss — «УЗИ ОБП, амилаза, липаза»:

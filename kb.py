@@ -160,7 +160,8 @@ ANALYTES = ("гормон кальций фосфор калий натрий м
             "креатинин мочевина билирубин альбумин кортизол альдостерон ренин инсулин тестостерон эстрадиол прогестерон "
             "пролактин антитела антиген онкомаркер фермент амилаза липаза гемоглобин тропонин пептид витамин "
             "иммуноглобулин кальцитонин тиреоглобулин метанефрины катехоламины электролиты липидограмма коагулограмма "
-            "фибриноген d-димер лактат прокальцитонин гликемия гормоны микроальбумин протеинурия").split()
+            "фибриноген d-димер лактат прокальцитонин гликемия гормоны микроальбумин протеинурия тироксин трийодтиронин "
+            "тиреотропин ттг т4 т3 hba1c сывороточный свободный общий").split()
 SERVICE_SPLIT_RE = re.compile(r"\s*(?:[,;+\n]|\s[–—-]\s)\s*")
 
 
@@ -271,6 +272,23 @@ class LazySection(dict):
         return _read_items(self._blob, *self["_blob"])
 
 
+def bucket_keys(keys) -> tuple:
+    """Stems grouped by length and by first 3 letters, for `bucket_match`."""
+    by_len, by_head = {}, {}
+    for k in keys:
+        by_len.setdefault(len(k), []).append(k)
+        by_head.setdefault(k[:3], []).append(k)
+    return by_len, by_head
+
+
+def bucket_match(buckets, r: str) -> set:
+    """The stems `contains` accepts for `r`, comparing only those that can match: a one-letter typo keeps the
+    length within ±1, a different suffix keeps the first letters (`prefix_match` needs 5 in common)."""
+    by_len, by_head = buckets
+    cand = set(by_head.get(r[:3], ())) | {k for n in (len(r) - 1, len(r), len(r) + 1) for k in by_len.get(n, ())}
+    return {k for k in cand if contains([k], r)}
+
+
 def build_stem_index(engine) -> dict:
     """stem → sorted indexes of usable sections whose list items (not text mentions) contain it."""
     idx = {}
@@ -292,6 +310,7 @@ class Engine:
         self.kb_path = kb_path
         self._stem_index = None  # reverse search: stem → usable section indexes (kb.stems.json)
         self._analytes = None
+        self._name_index = None  # name stem → diagnosis names (resolve_diagnosis pre-filter)
         self.kb = json.loads(kb_path.read_text(encoding="utf-8"))
         if self.kb.get("packed"):  # kb.idx.json: section items stay on disk (see kb_pack.py)
             blob = kb_path.parent / self.kb["packed"]
@@ -346,7 +365,18 @@ class Engine:
         q_norm = re.sub(r"\s+", " ", re.sub(r"[^а-яa-z0-9 ]", "", q.replace("ё", "е"))).strip()
         qs = [s for s in self.norm.stems(text) if s not in GENERIC and s not in DX_NEUTRAL]
         best = {}
-        for code, name in self.names:
+        # only names sharing a (fuzzy) stem with the question — the same filter as before, via a stem index
+        names = self.names
+        if qs:
+            if self._name_index is None:
+                self._name_index = {}
+                for n, ns in self.name_stems.items():
+                    for st in ns:
+                        self._name_index.setdefault(st, set()).add(n)
+                self._name_buckets = bucket_keys(self._name_index)
+            keep = {n for x in qs for k in bucket_match(self._name_buckets, x) for n in self._name_index[k]}
+            names = [(c, n) for c, n in self.names if n in keep]
+        for code, name in names:
             ns = self.name_stems[name]
             if qs and not any(contains(ns, x) for x in qs):
                 continue
@@ -436,16 +466,22 @@ class Engine:
         return [lookalike(m.group(1) + "-" + m.group(2)[:4])
                 for m in re.finditer(r"(?<![\w-])([A-Za-zА-Яа-яЁёα-ω])-([A-Za-zА-Яа-яЁё]{3,})", service)]
 
-    def find(self, sections, required, literal=()):
+    def find(self, sections, required, literal=(), keysets=None):
+        """`keysets`: {required stem: set of stems that match it} (reverse search, from the index) — set
+        lookups instead of fuzzy comparisons of every member."""
+        if keysets:
+            covers = lambda stems, req: all(not keysets[r].isdisjoint(stems) for r in req)  # noqa: E731
+        else:
+            covers = self.covers
         hits = []
         for s in sections:
             for it in s["items"]:
                 how = None
                 for seg in it["segments"]:
-                    if any(self.covers(m["stems"], required) for m in seg.get("members", [])):
+                    if any(covers(m["stems"], required) for m in seg.get("members", [])):
                         how = "exact"
                         break
-                    if self.covers(seg["stems"], required):
+                    if covers(seg["stems"], required):
                         how = how or ("exact" if it["level"] == "text" else "segment")
                 if how and literal:
                     text = lookalike(it["text"] + " " + (it.get("header") or ""))
@@ -554,6 +590,15 @@ class Engine:
                 self._stem_index = build_stem_index(self)
         return self._stem_index
 
+    def matching_keys(self, r: str) -> set:
+        """Index stems that `contains` accepts for `r`. Only keys that can match are compared: a one-letter
+        typo keeps the length within ±1, a different suffix keeps the first letters (`prefix_match` needs 5)."""
+        if not hasattr(self, "_key_buckets"):
+            self._key_buckets, self._key_cache = bucket_keys(self.stem_index()), {}
+        if r not in self._key_cache:
+            self._key_cache[r] = bucket_match(self._key_buckets, r)
+        return self._key_cache[r]
+
     def service_like(self, text: str) -> bool:
         """«ТТГ», «метанефрины», «сцинтиграфия щитовидной железы» name a service; «гипотиреоз»,
         «мочекаменная болезнь», «псориаз СОЭ» do not (a diagnosis wins or is part of it)."""
@@ -564,13 +609,18 @@ class Engine:
             return False
         if any(x in GENERIC or x in METHOD or SERVICE_STEM_RE.search(x) for x in stems):
             return True
+        if self._analytes is None:
+            self._analytes = {x for w in ANALYTES for x in self.norm.stems(w)}
+        analyte = any(x in self._analytes for x in stems)
+        # «ТТГ», «кальций», «антитела к ТПО»: an abbreviation or a substance, at most two words — no diagnosis
+        # lookup (it is the slow part); longer wordings may still be a diagnosis («недостаточность витамина D»)
+        if analyte and len(text.split()) <= 2 and not re.search(r"(?i)недостаточн|избыт|дефицит|отравлен|болезн|синдром", text):
+            return True
         dx = self.resolve_diagnosis(text)
         dx_score = dx[0]["score"] if dx else 0
         if dx_score >= LLM_DX_SCORE:  # the very name of a diagnosis: «недостаточность витамина D»
             return False
-        if self._analytes is None:
-            self._analytes = {x for w in ANALYTES for x in self.norm.stems(w)}
-        if any(x in self._analytes for x in stems) or dx_score < MIN_DX_SCORE:
+        if analyte or dx_score < MIN_DX_SCORE:
             return True
         # «Комплекс исследований для диагностики мочекаменной болезни» names the disease, not a test
         svc = [c for c in self.cat.match(stems, top=3, min_score=0.25, query=True)
@@ -590,16 +640,15 @@ class Engine:
         svc_out, per_section = [], {}
         for svc in services:
             req = self.required_stems(svc)
-            posting = {}
-            for r in req:  # sections holding the stem (typo-tolerant over the index keys)
-                posting[r] = {i for k in keys if contains([k], r) for i in idx[k]}
+            keysets = {r: self.matching_keys(r) for r in req}  # typo-tolerant over the index keys
+            posting = {r: {i for k in keysets[r] for i in idx[k]} for r in req}
             # a word no protocol list has («назанчают» — a misspelt verb) is dropped if others remain
             if len(req) > 1 and any(posting[r] for r in req):
                 req = [r for r in req if posting[r]]
             cand = None
             for r in req:
                 cand = posting[r] if cand is None else cand & posting[r]
-            hits = [h for h in self.find([sections[i] for i in sorted(cand or [])], req, self.literal_tokens(svc))
+            hits = [h for h in self.find([sections[i] for i in sorted(cand or [])], req, self.literal_tokens(svc), keysets)
                     if h[1]["level"] != "text"]
             secs = {}
             for sec, it, how in hits:
