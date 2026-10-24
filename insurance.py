@@ -23,6 +23,7 @@ RULES = HERE / "data" / "insurance" / "task20.rules.json"
 BUILT = HERE / "data" / "insurance" / "task20.json"
 PDF = HERE / "reference" / "raw" / "task20_rules.pdf"
 CLAUSE_START_RE = re.compile(r"^\s*(\d{1,2}\.\d{1,2}(?:\.\d{1,2})?)\.?\s+(\S.*)$")
+CUTOFF = (4, 3)  # nothing from п. 4.3 on is used (решение заказчика 2026-10-24)
 HEADER_RE = re.compile(r"^\s*\d{1,2}\.\s+[А-ЯЁ ,.]{6,}$")  # «4. РАСХОДЫ, НЕПОКРЫВАЕМЫЕ СТРАХОВЩИКОМ»
 
 VERDICTS = {
@@ -38,6 +39,11 @@ SHORT = {"excluded": "не страховой", "probable": "вероятно н
 
 
 # ---------------------------------------------------------------------------- build
+def clause_key(cid: str) -> tuple[int, ...]:
+    """«4.1.17#2» → (4, 1, 17)."""
+    return tuple(int(p) for p in cid.split("#")[0].split("."))
+
+
 def parse_clauses(pages: list[str]) -> dict:
     """Numbered clauses of the rules → {id: {"page", "text"}}; a repeated number (4.1.5 twice) gets «#2»."""
     out, cur = {}, None
@@ -49,6 +55,8 @@ def parse_clauses(pages: list[str]) -> dict:
                 cur = None
                 continue
             m = CLAUSE_START_RE.match(line)
+            if m and clause_key(m.group(1)) >= CUTOFF:
+                return finish(out)  # 4.3 and everything after it is dropped
             if m:
                 cid = m.group(1)
                 n = 2
@@ -58,6 +66,10 @@ def parse_clauses(pages: list[str]) -> dict:
                 cur = out[cid] = {"page": page_no, "lines": [m.group(2).strip()]}
             elif cur:
                 cur["lines"].append(line.strip())
+    return finish(out)
+
+
+def finish(out: dict) -> dict:
     for c in out.values():
         text = ""
         for ln in c.pop("lines"):
@@ -69,6 +81,10 @@ def parse_clauses(pages: list[str]) -> dict:
 def build():
     from protocol_chapter_extractor import pdf_to_pages  # pdftotext; not needed at answer time
     rules = json.loads(RULES.read_text(encoding="utf-8"))
+    late = [c["id"] for c in rules["clauses"] if clause_key(c["id"]) >= CUTOFF] + [
+        cid for cid in rules["general"] if clause_key(cid) >= CUTOFF]
+    if late:
+        sys.exit(f"clauses from п. {'.'.join(map(str, CUTOFF))} on are not used, remove them from the rules: {late}")
     if not PDF.exists():
         PDF.parent.mkdir(parents=True, exist_ok=True)
         urllib.request.urlretrieve(rules["url"], PDF)
@@ -119,7 +135,7 @@ def any_match(code: str, specs) -> tuple[str, str] | None:
 
 def in_ids(cid: str, ranges) -> bool:
     """«4.1.17» in ["4.1.12-4.1.28"]."""
-    key = lambda x: tuple(int(p) for p in x.split("#")[0].split("."))  # noqa: E731
+    key = clause_key
     for r in ranges:
         lo, _, hi = r.partition("-")
         if cid == r or (hi and key(lo) <= key(cid) <= key(hi)):
@@ -136,6 +152,8 @@ def word_match(s: str, t: str) -> bool:
 class Insurance:
     def __init__(self, path: Path = BUILT, norm: Normalizer | None = None):
         self.rules = json.loads(path.read_text(encoding="utf-8"))
+        # an older task20.json may still hold п. 4.3+: never used
+        self.rules["clauses"] = [c for c in self.rules["clauses"] if clause_key(c["id"]) < CUTOFF]
         self.norm = norm or Normalizer()
         self.url = self.rules["url"]
         self._stems = {}
@@ -230,7 +248,7 @@ class Insurance:
             "verdict_level": level,
             "verdict": VERDICTS[level] + (f" (п. {', '.join(m['clause'] for m in excluded or probable)})" if excluded or probable else ""),
             "excluded": excluded + probable, "limited": limited, "exceptions": exceptions,
-            "circumstances": circumstances, "person": person, "service_limits": limits, "notes": notes,
+            "circumstances": circumstances, "person": person, "service_excluded": limits, "notes": notes,
         }
 
 
@@ -255,7 +273,7 @@ def render(ins: dict) -> str:
     block("Исключение:", ins["excluded"])
     block("Не исключено (оговорка пункта):", ins["exceptions"])
     block("Ограничения по услугам для этого заболевания:", ins["limited"])
-    block("Лимиты и исключения по услуге (Программа «А»):", ins["service_limits"])
+    block("Услуга не оплачивается:", ins["service_excluded"])
     if ins["circumstances"]:
         c = ins["circumstances"]
         out.append("")
@@ -267,8 +285,6 @@ def render(ins: dict) -> str:
         out.append(f"п. {n['clause']}: {n['why']}")
         out.append(f"    «{n['quote']}»")
         out.append(f"    {n['url']}")
-    out.append("")
-    out.append("Программа страхования конкретного договора (Приложения 11–13) может расширять или сужать объём — сверяйте с договором.")
     return "\n".join(out)
 
 

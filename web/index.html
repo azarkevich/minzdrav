@@ -87,12 +87,12 @@ function insurance(i){
      +v.clauses.map(m=>` ${a(view(m.url,""),"п. "+m.clause)}`).join("")+`</li>`).join("")+`</ul><div class="meta">Задайте вопрос с уточнённым диагнозом или кодом МКБ-10.</div>`;
  }else h+=`<div class="verdict ${ilvl[i.verdict_level]}">${esc(i.verdict)}</div>`;
  h+=rows("Исключение:",i.excluded)+rows("Не исключено (оговорка пункта):",i.exceptions)
-   +rows("Ограничения по услугам для этого заболевания:",i.limited)+rows("Лимиты и исключения по услуге (Программа «А»):",i.service_limits);
+   +rows("Ограничения по услугам для этого заболевания:",i.limited)+rows("Услуга не оплачивается:",i.service_excluded);
  const c=i.circumstances;
  if(c.length)h+=`<div class="ev meta">Травма не оплачивается, если получена (п. ${esc(c[0].clause)}–${esc(c.at(-1).clause)}): ${esc(c.map(m=>m.short.replace(/^травма /,"")).join("; "))}. ${a(view(c[0].url,c[0].quote),"стр. "+c[0].page)}</div>`;
  if(i.person.length)h+=`<div class="ev meta">Договор не заключается с лицами этой группы (п. 1.4): ${esc(i.person.map(m=>m.how).join(", "))}. ${a(view(i.person[0].url,i.person[0].quote),"стр. "+i.person[0].page)}</div>`;
  i.notes.forEach(n=>h+=`<div class="ev"><div class="meta"><b>п. ${esc(n.clause)}:</b> ${esc(n.why)}</div><blockquote>${esc(n.quote)}</blockquote>${a(view(n.url,n.quote),"Правила, стр. "+n.page)}</div>`);
- return h+`<div class="meta" style="margin-top:10px">Программа конкретного договора (Приложения 11–13 Правил) может расширять или сужать объём — сверяйте с договором.</div></div>`;
+ return h+`</div>`;
 }
 const lvl={mandatory:"v-ok",additional:"v-ok",listed:"v-warn",differential:"v-warn",monitoring:"v-warn",text:"v-warn",manual:"v-warn"};
 let hist=[];try{hist=JSON.parse(localStorage.getItem("hist")||"[]")}catch(e){}

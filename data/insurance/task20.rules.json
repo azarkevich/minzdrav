@@ -1,5 +1,5 @@
 {
- "_comment": "Hand-written mapping of Правила №20 ЗАСО «ТАСК» clauses to МКБ-10 codes and words. insurance.py build adds the verbatim text and PDF page of each clause → task20.json. kind: disease = the disease is excluded (named: the code is an example named in the clause, class: only the group the clause names — answer «вероятно»); partial = the disease is insured but some services for it are not; program = only if the Программа страхования includes it; circumstance = an injury is excluded under these circumstances; person = contracts are not concluded with such persons (п. 1.4); service = a service excluded or limited whatever the diagnosis. codes: «A15-A19» is a range of 3-character rubrics, «E06.3» covers its subcodes. dx_words / service_words: every stem of one phrase must occur in the diagnosis / service text.",
+ "_comment": "Hand-written mapping of Правила №20 ЗАСО «ТАСК» clauses to МКБ-10 codes and words. insurance.py build adds the verbatim text and PDF page of each clause → task20.json. kind: disease = the disease is excluded (named: the code is an example named in the clause, class: only the group the clause names — answer «вероятно»); partial = the disease is insured but some services for it are not; program = only if the Программа страхования includes it; circumstance = an injury is excluded under these circumstances; person = contracts are not concluded with such persons (п. 1.4); service = a service excluded or limited whatever the diagnosis. codes: «A15-A19» is a range of 3-character rubrics, «E06.3» covers its subcodes. dx_words / service_words: every stem of one phrase must occur in the diagnosis / service text. Clauses from п. 4.3 on are not used (решение заказчика 2026-10-24).",
  "title": "Правила № 20 добровольного страхования медицинских расходов ЗАСО «ТАСК» (ред. приказа № 160 от 19.10.2021)",
  "url": "https://task.by/upload/iblock/d19/xqbwwqwfezs68m85c6dirklio70yzy2o/Pravila-_-20-DSMR-_Prikaz-_-129-ot-01.10.2021_-Prikaz-_-160-ot-19.10.2021_-versiya-dlya-sayta.pdf",
  "general": ["3.1", "4.1.1", "4.1.50", "4.2"],
@@ -109,26 +109,6 @@
    "service_words": ["профилактический осмотр", "медосмотр", "санитарная книжка", "водительское удостоверение"]},
   {"id": "4.1.52", "kind": "service", "short": "гидроколонотерапия", "service_words": ["гидроколонотерапия", "очистка кишечника"]},
   {"id": "4.1.55", "kind": "program", "short": "лечение зубов и периодонта — только если предусмотрено Программой (стоматологическая помощь «с»)",
-   "codes": ["K00-K08"]},
-  {"id": "4.3.5", "kind": "service", "short": "гипербарическая оксигенация", "service_words": ["гипербарическая оксигенация", "ГБО"]},
-  {"id": "4.3.12", "kind": "service", "short": "иглорефлексотерапия, мануальная терапия", "service_words": ["иглорефлексотерапия", "мануальная терапия"]},
-  {"id": "4.3.13", "kind": "service", "short": "не более пяти биохимических исследований крови за период договора",
-   "service_words": ["биохимический", "БАК"]},
-  {"id": "4.3.14", "kind": "service", "short": "не более пяти гормональных исследований крови за период договора",
-   "service_words": ["гормон", "ТТГ", "Т4", "Т3", "тестостерон", "кортизол", "пролактин", "эстрадиол", "ЛГ", "ФСГ", "инсулин", "паратгормон",
-                     "АКТГ", "прогестерон", "альдостерон", "ДГЭА", "соматотропный"]},
-  {"id": "4.3.15", "kind": "service", "short": "не более одного гистологического, вирусологического, серологического, иммунологического, паразитологического исследования, ПЦР, аллерготестов, онкомаркеров",
-   "service_words": ["гистологическое", "вирусологическое", "серологическое", "иммунологическое", "паразитологическое", "ПЦР",
-                     "полимеразная цепная", "аллерготест", "аллергологическое", "онкомаркер", "антитела"]},
-  {"id": "4.3.16", "kind": "service", "short": "генетические исследования", "service_words": ["генетическое", "кариотип", "молекулярно-генетическое"]},
-  {"id": "4.3.17", "kind": "service", "short": "TORCH-комплекс", "service_words": ["TORCH"]},
-  {"id": "4.3.18", "kind": "service", "short": "МРТ / КТ двух соседних зон — не более одного раза за период договора",
-   "service_words": ["МРТ", "КТ", "томография", "денситометрия"]},
-  {"id": "4.3.19", "kind": "service", "short": "МРТ / КТ одной зоны — не более двух раз за период договора",
-   "service_words": ["МРТ", "КТ", "томография", "денситометрия"]},
-  {"id": "4.3.20", "kind": "service", "short": "радиоизотопное исследование — не более одного раза",
-   "service_words": ["радиоизотопное", "сцинтиграфия", "радионуклидное"]},
-  {"id": "4.3.21", "kind": "service", "short": "снимки 3D и 4D — не более одного раза", "service_words": ["3D", "4D"]},
-  {"id": "4.3.22", "kind": "service", "short": "капсульная эндоскопия", "service_words": ["капсульная эндоскопия"]}
+   "codes": ["K00-K08"]}
  ]
 }
