@@ -15,3 +15,21 @@
 {"question": "Диагноз – артрит, разрешена ли СОЭ", "insurance": "unclear"}
 {"question": "Диагноз – пневмония, разрешена ли рентгенография органов грудной клетки", "insurance": "covered"}
 {"question": "Диагноз – гастрит, разрешена ли ФГДС", "insurance": "covered"}
+{"question": "подбор контактных линз", "insurance": "excluded", "clause": "4.1.60"}
+{"question": "подбор контактных линз разрешено ли", "insurance": "excluded", "clause": "4.1.60"}
+{"question": "страховой ли случай - подбор контактных линз", "insurance": "excluded", "clause": "4.1.60"}
+{"question": "подбор очков — страховой ли случай", "insurance": "excluded", "clause": "4.1.60"}
+{"question": "Является ли страховым случаем слуховой аппарат?", "insurance": "excluded", "clause": "4.1.60"}
+{"question": "страховой ли случай: ЭКО", "insurance": "excluded", "clause": "4.1.36"}
+{"question": "санаторное лечение - страховой ли случай", "insurance": "excluded", "clause": "4.1.58"}
+{"question": "страховой ли случай – приём у диетолога", "insurance": "excluded", "clause": "4.1.46"}
+{"question": "страховой ли случай – ортопедические стельки", "insurance": "excluded", "clause": "4.1.62"}
+{"question": "страховой ли случай – вакцинация", "insurance": "program", "clause": "4.1.47"}
+{"question": "страховой ли случай - аутоиммунный тиреоидит", "insurance": "excluded", "clause": "4.1.23"}
+{"question": "страховой ли случай – острый бронхит", "insurance": "covered"}
+{"question": "страховой ли случай – УЗИ щитовидной железы", "insurance": "needs_diagnosis"}
+{"question": "Диагноз – гастрит, страховой ли случай ФГДС", "insurance": "covered"}
+{"question": "страховой ли случай - гипербарическая оксигенация", "insurance": "needs_diagnosis", "not_clause": "4.3.5"}
+{"question": "Диагноз – гипотиреоз, разрешено ли определение ТТГ", "insurance": "covered", "not_clause": "4.3.14"}
+{"question": "Диагноз – острый панкреатит, разрешена ли КТ", "insurance": "covered", "not_clause": "4.3.18 4.3.19"}
+{"question": "Диагноз – пневмония, разрешено ли ГБО", "insurance": "covered", "not_clause": "4.3.5"}

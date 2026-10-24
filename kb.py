@@ -104,6 +104,42 @@ def split_question(q: str):
     return _clean_dx(d), s
 
 
+# «страховой ли случай – X», «X – страховой ли случай?», «является ли страховым случаем X», «оплачивается ли страховкой X»
+_INS_T = (r"(?:(?:это\s+)?стр[аоеи]х\w*\s+ли\s+(?:это\s+)?(?:случа\w*|событи\w*)"
+          r"|(?:это\s+)?стр[аоеи]х\w*\s+(?:случа\w*|событи\w*)"
+          r"|являет\w*\s+ли\s+(?:это\s+)?(?:стр[аоеи]х\w*\s+случа\w*)"
+          r"|(?:оплачива|покрыва)\w*\s+ли\s+(?:это\s+)?(?:стр[аоеи]х\w*|страховой\s+компани\w*)(?:\s+компани\w*)?"
+          r"|вход\w*\s+ли\s+(?:это\s+)?в\s+стр[аоеи]х\w*)")
+INSURANCE_RES = [
+    re.compile(r"^являет\w*\s+ли\s+(?:это\s+)?(?P<x>.+?)\s+стр[аоеи]х\w*\s+случа\w*$", re.I),
+    re.compile(rf"^{_INS_T}\s*[:,\-–—]?\s*(?P<x>.+)$", re.I),
+    re.compile(rf"^(?P<x>.+?)\s*[:,\-–—]?\s*{_INS_T}$", re.I),
+    re.compile(rf"^(?P<x>.+?)\s*[,;:]\s*{_INS_T}\s*[:,\-–—]?\s*(?P<y>.+)$", re.I),  # «Диагноз – гастрит, страховой ли случай ФГДС»
+]
+CHECK_VERBS = r"(?:разреш\w*|предусмотр\w*|можно|допуст\w*|положен\w*|показан\w*|назнача\w*)"
+
+
+def parse_insurance_question(q: str):
+    """Subject of an «is it an insured event» question, or None (no trigger). «страховой ли случай – подбор
+    контактных линз» → «подбор контактных линз»; «Диагноз – гастрит, страховой ли случай ФГДС» → «Диагноз – гастрит, ФГДС»."""
+    q = WHO_RE.sub("", q.strip()).rstrip("?! .")
+    for rx in INSURANCE_RES:
+        m = rx.match(q)
+        if m:
+            x = m.group("x").strip(" ,.;:–—-")
+            y = (m.groupdict().get("y") or "").strip(" ,.;:?–—-")
+            return f"{x}, {y}" if y else x
+    return None
+
+
+def strip_check_verb(q: str) -> str:
+    """«подбор контактных линз разрешено ли», «можно ли подбирать очки» → the subject without the check verb."""
+    q = WHO_RE.sub("", q.strip()).rstrip("?! .")
+    q = re.sub(rf"^{CHECK_VERBS}\s+(?:ли\s+)?", "", q, flags=re.I)
+    q = re.sub(rf"[\s,;:–—-]+{CHECK_VERBS}\s+ли$", "", q, flags=re.I)
+    return q.strip(" ,.;:–—-")
+
+
 # «перечень лабораторных анализов», «какой вид КТ используется», «какие исследования при …»
 LIST_RE = re.compile(r"(?:^|[\s,.;:–—-])(?:(?:полный\s+)?(?:перечень|перечня|список|списка|объ[её]м)|как(?:ой|ая|ое|ие|их)|что\s+входит)(?=\s|$|[,.?])", re.I)
 CATEGORIES = {  # what a list question asks for → its label and the words that name it
@@ -575,6 +611,57 @@ class Engine:
                    verdict=f"УТОЧНИТЕ ДИАГНОЗ — «{diagnosis.strip()}» может означать разные заболевания. " + "; ".join(parts))
         return ins
 
+    # ---------------------------------------------------------------- insurance questions
+    def service_subject(self, question: str):
+        """A question that is only an excluded service («подбор контактных линз», «… разрешено ли»):
+        the subject, else None. A question with a diagnosis and a service goes the usual way."""
+        if not self.insurance or ICD_CODE_RE.search(question.translate(CYR2LAT)):
+            return None
+        x = strip_check_verb(question)
+        if not x:
+            return None
+        d, sv = split_question(x)
+        if d and sv:
+            return None
+        hits = self.insurance.service_hits(x)
+        return x if hits["excluded"] or hits["program"] else None
+
+    def insurance_answer(self, question: str, x: str, population: str | None = None):
+        """«страховой ли случай – X»: X is a service, a diagnosis, or both."""
+        base = {"question": question, "insurance_question": True}
+        if not self.insurance:
+            return dict(base, error="Правила страхования не загружены (data/insurance/task20.json).")
+        x = x.strip()
+        hint = "Сформулируйте как «страховой ли случай – <диагноз или услуга>» или «Диагноз – …, страховой ли случай <услуга>»."
+        if not x:
+            return dict(base, error="Не указано, что проверить. " + hint)
+        d, sv = split_question(x)
+        if d and sv:  # diagnosis and service: the usual check, the rules tab first
+            a = self.ask(diagnosis=d, service=sv, population=population)
+            return dict(a, question=question, insurance_first=True, insurance_question=True)
+        if ICD_CODE_RE.search(x.translate(CYR2LAT)):
+            return dict(self.list_services(question, x, population=population), diagnosis_only=True, insurance_first=True,
+                        insurance_question=True, subject="diagnosis")
+        sh = self.insurance.service_hits(x)
+        if sh["excluded"] or sh["program"]:
+            return self._service_insurance(base, x)
+        cand = _clean_dx(x)
+        is_service = any(s in GENERIC or s in METHOD or SERVICE_STEM_RE.search(s) for s in self.norm.stems(cand))
+        dx = self.resolve_diagnosis(cand) if cand and not is_service else []
+        if dx and dx[0]["score"] >= (LLM_DX_SCORE if self.llm else MIN_DX_SCORE):
+            return dict(self.list_services(question, cand, population=population), diagnosis_only=True, insurance_first=True,
+                        insurance_question=True, subject="diagnosis")
+        if is_service or self.service_like(x):
+            return self._service_insurance(base, x)
+        hint_dx = "; ".join(f"{c['code']} {c['name']}" for c in dx[:3])
+        return dict(base, error=f"«{x}» не распознано ни как диагноз, ни как услуга"
+                    + (f" (возможно: {hint_dx})" if hint_dx else "") + ". " + hint)
+
+    def _service_insurance(self, base: dict, x: str):
+        ins = self.insurance.service_only(x)
+        return dict(base, mode="insurance", subject="service", service_text=x, service_catalogue=self.resolve_service(x),
+                    verdict_level=ins["verdict_level"], verdict=ins["verdict"], insurance=ins, insurance_first=True)
+
     # ---------------------------------------------------------------- reverse search
     def usable(self, s) -> bool:
         """Table-layout and scanned documents count only through their extracted table rows."""
@@ -758,6 +845,12 @@ class Engine:
             population: str | None = None):
         llm_used = None
         if question and not (diagnosis or service):
+            subject = parse_insurance_question(question)  # «страховой ли случай – …» comes first
+            if subject is not None:
+                return self.insurance_answer(question, subject, population)
+            subject = self.service_subject(question)  # «подбор контактных линз [разрешено ли]»
+            if subject:
+                return self.insurance_answer(question, subject, population)
             # «при каких диагнозах назначают X»; a bare list of services «ТТГ, свободный Т4, АТ к ТПО»
             rev = parse_reverse_question(question)
             if rev:
@@ -1061,6 +1154,9 @@ def render(a: dict) -> str:
         return "Ошибка: " + a["error"]
     if a.get("mode") == "reverse":
         return render_reverse(a)
+    if a.get("mode") == "insurance":
+        head = f"Вопрос: страховой ли случай — услуга «{a['service_text']}»"
+        return head + "\n" + insurance.render(a["insurance"])
     text = render_list(a) if a.get("mode") == "list" else render_check(a)
     return text + ("\n" + insurance.render(a["insurance"]) if a.get("insurance") else "")
 
@@ -1139,8 +1235,9 @@ def run_eval(engine: Engine, path: Path):
             continue
         if c.get("insurance"):  # insurance verdict: level and the excluding clause
             ins = a.get("insurance") or {}
-            got = [m["clause"] for m in ins.get("excluded", [])]
-            good = ins.get("verdict_level") == c["insurance"] and (not c.get("clause") or c["clause"] in got)
+            got = [m["clause"] for m in ins.get("excluded", []) + ins.get("program", [])]
+            good = (ins.get("verdict_level") == c["insurance"] and (not c.get("clause") or c["clause"] in got)
+                    and not (set(c.get("not_clause", "").split()) & set(got)))
             ok += good
             print(f"{'OK  ' if good else 'FAIL'} {c['question']}")
             if not good:

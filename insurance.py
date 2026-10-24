@@ -27,14 +27,17 @@ CUTOFF = (4, 3)  # nothing from п. 4.3 on is used (решение заказч�
 HEADER_RE = re.compile(r"^\s*\d{1,2}\.\s+[А-ЯЁ ,.]{6,}$")  # «4. РАСХОДЫ, НЕПОКРЫВАЕМЫЕ СТРАХОВЩИКОМ»
 
 VERDICTS = {
-    "excluded": "НЕ СТРАХОВОЙ СЛУЧАЙ — заболевание исключено Правилами",
+    "excluded": "НЕ СТРАХОВОЙ СЛУЧАЙ — исключено Правилами страхования",
     "probable": "ВЕРОЯТНО НЕ СТРАХОВОЙ — диагноз входит в исключённую группу заболеваний, проверьте",
+    "program": "НЕ СТРАХОВОЙ, ЕСЛИ ПРОГРАММА СТРАХОВАНИЯ ДОГОВОРА ЭТОГО НЕ ПРЕДУСМАТРИВАЕТ",
     "limited": "СТРАХОВОЙ, С ОГРАНИЧЕНИЯМИ — часть услуг по этому заболеванию не оплачивается",
     "covered": "ИСКЛЮЧЕНИЙ НЕ НАЙДЕНО — страховой случай при внезапном расстройстве здоровья или обострении "
                "хронического заболевания, в объёме Программы страхования",
+    "needs_diagnosis": "ЗАВИСИТ ОТ ДИАГНОЗА — по самой услуге исключений в Правилах нет",
     "unclear": "УТОЧНИТЕ ДИАГНОЗ — формулировка подходит под заболевания с разным страховым решением",
 }
-SHORT = {"excluded": "не страховой", "probable": "вероятно не страховой", "limited": "страховой, с ограничениями",
+SHORT = {"excluded": "не страховой", "probable": "вероятно не страховой", "program": "не страховой, если Программа не предусматривает",
+         "needs_diagnosis": "зависит от диагноза", "limited": "страховой, с ограничениями",
          "covered": "страховой"}
 
 
@@ -173,20 +176,51 @@ class Insurance:
 
     def cite(self, c: dict, how: str) -> dict:
         return {"clause": c["id"].split("#")[0], "short": c["short"], "quote": c["text"], "page": c["page"],
-                "url": f"{self.url}#page={c['page']}", "how": how, "unless": c.get("unless")}
+                "url": f"{self.url}#page={c['page']}", "how": how, "unless": c.get("unless"),
+                "unless_program": bool(c.get("unless_program"))}
 
     def general(self, cid: str) -> dict:
         t = self.rules["texts"][cid]
         return {"clause": cid, "quote": t["text"], "page": t["page"], "url": f"{self.url}#page={t['page']}"}
 
-    def service_limits(self, service: str) -> list:
-        out = []
+    def service_hits(self, text: str | None, code: str | None = None) -> dict:
+        """Service clauses (4.1.x) hit by the words of `text` or by the Z-code `code` that means the same
+        service: excluded outright, excluded unless the Программа страхования provides for it, reminders."""
+        out = {"excluded": [], "program": [], "notes": []}
         for c in self.rules["clauses"]:
-            if c["kind"] == "service":
-                w = self.words_hit(c.get("service_words"), service)
-                if w:
-                    out.append(self.cite(c, f"услуга «{w}»"))
+            if c["kind"] not in ("service", "note"):
+                continue
+            w = self.words_hit(c.get("service_words"), text) if text else None
+            if w and c.get("except_words") and self.words_hit(c["except_words"], text):
+                w = None
+            hit = any_match(code, c.get("codes")) if code else None
+            if hit and hit[0] != "exact":
+                hit = None
+            if not (w or hit):
+                continue
+            cite = self.cite(c, f"услуга «{w}»" if w else f"код {code} ∈ {hit[1]}")
+            out["notes" if c["kind"] == "note" else "program" if c.get("unless_program") else "excluded"].append(cite)
         return out
+
+    def conditions(self) -> list:
+        """Circumstances of getting a service that make it not paid (4.1.64–4.1.68) — reminders."""
+        return [self.cite(c, "условие") for c in self.rules["clauses"] if c["kind"] == "condition"]
+
+    def service_only(self, text: str) -> dict:
+        """«Is the service an insured event?» with no diagnosis: the service clauses it hits, else «depends on
+        the diagnosis» (п. 3.1, п. 4.1.50). Same shape as `check`, plus `conditions` (4.1.64–4.1.68)."""
+        sh = self.service_hits(text)
+        level = "excluded" if sh["excluded"] else "program" if sh["program"] else "needs_diagnosis"
+        notes = [dict(n, why=n["short"]) for n in sh["notes"]]
+        if level == "needs_diagnosis":
+            notes += [dict(self.general("3.1"), why="что считается страховым случаем"),
+                      dict(self.general("4.1.50"), why="услуга оплачивается, если её предусматривает клинический протокол по диагнозу")]
+        refs = sh["excluded"] or sh["program"]
+        return {"rules": self.rules["title"], "url": self.url, "verdict_level": level,
+                "verdict": VERDICTS[level] + (f" (п. {', '.join(m['clause'] for m in refs)})" if refs else ""),
+                "excluded": sh["excluded"], "program": sh["program"], "limited": [], "exceptions": [],
+                "circumstances": [], "person": [], "service_excluded": [], "notes": notes,
+                "conditions": self.conditions()}
 
     def check(self, code: str, name: str = "", dx_text: str = "", service: str | None = None,
               protocol_level: str | None = "-", items: list | None = None) -> dict:
@@ -196,7 +230,7 @@ class Insurance:
         excluded, probable, limited, circumstances, exceptions, person = [], [], [], [], [], []
         for c in self.rules["clauses"]:
             kind = c["kind"]
-            if kind == "service":
+            if kind in ("service", "note", "condition"):
                 continue
             if kind == "person":
                 if any_match(code, c["codes"]) and any_match(code, c["codes"])[0] == "exact":
@@ -225,7 +259,10 @@ class Insurance:
             elif named or cls:
                 spec = (named or cls)[1]
                 probable.append(self.cite(c, f"рубрика {code} включает исключённый {spec}"))
-        level = "excluded" if excluded else "probable" if probable else "limited" if limited else "covered"
+        sh = self.service_hits(service, code)
+        excluded = sh["excluded"] + excluded
+        level = ("excluded" if excluded else "probable" if probable else "program" if sh["program"]
+                 else "limited" if limited else "covered")
         notes = []
         until = [m["clause"] for m in excluded + probable if in_ids(m["clause"], self.rules["until_final_diagnosis"])]
         if until:
@@ -236,18 +273,20 @@ class Insurance:
             notes.append(dict(self.general("3.1"), why="что считается страховым случаем"))
         if protocol_level is None:
             notes.append(dict(self.general("4.1.50"), why="услуга не найдена в протоколе для этого диагноза — не оплачивается"))
-        limits = self.service_limits(service) if service else []
-        if items:
+        notes += [dict(n, why=n["short"]) for n in sh["notes"]]
+        limits = []
+        if items:  # list mode: the verdict stays the diagnosis's, excluded items are listed apart
             seen = {}
             for t in items:
-                for lim in self.service_limits(t):
+                hits = self.service_hits(t)
+                for lim in hits["excluded"] + hits["program"]:
                     seen.setdefault(lim["clause"], dict(lim, examples=[]))["examples"].append(t.rstrip(" ;,."))
             limits = list(seen.values())
         return {
             "rules": self.rules["title"], "url": self.url,
             "verdict_level": level,
-            "verdict": VERDICTS[level] + (f" (п. {', '.join(m['clause'] for m in excluded or probable)})" if excluded or probable else ""),
-            "excluded": excluded + probable, "limited": limited, "exceptions": exceptions,
+            "verdict": VERDICTS[level] + (f" (п. {', '.join(m['clause'] for m in excluded or probable or sh['program'])})" if excluded or probable or sh["program"] else ""),
+            "excluded": excluded + probable, "program": sh["program"], "limited": limited, "exceptions": exceptions,
             "circumstances": circumstances, "person": person, "service_excluded": limits, "notes": notes,
         }
 
@@ -272,6 +311,7 @@ def render(ins: dict) -> str:
 
     block("Исключение:", ins["excluded"])
     block("Не исключено (оговорка пункта):", ins["exceptions"])
+    block("Не оплачивается, если Программа страхования не предусматривает:", ins.get("program"))
     block("Ограничения по услугам для этого заболевания:", ins["limited"])
     block("Услуга не оплачивается:", ins["service_excluded"])
     if ins["circumstances"]:
@@ -280,6 +320,11 @@ def render(ins: dict) -> str:
         out.append(f"Травма не оплачивается, если получена (п. {c[0]['clause']}–{c[-1]['clause']}): " + "; ".join(m["short"].removeprefix("травма ") for m in c))
         out.append(f"    {c[0]['url']}")
     block("Договор не заключается с лицами (п. 1.4):", ins["person"], quote=False)
+    if ins.get("conditions"):
+        c = ins["conditions"]
+        out.append("")
+        out.append(f"Не оплачивается также (п. {c[0]['clause']}–{c[-1]['clause']}): " + "; ".join(m["short"] for m in c))
+        out.append(f"    {c[0]['url']}")
     for n in ins["notes"]:
         out.append("")
         out.append(f"п. {n['clause']}: {n['why']}")
