@@ -30,14 +30,14 @@ ul.lst{margin:4px 0 8px;padding-left:22px}ul.lst li{margin:2px 0}ul.lst:empty{di
 .ins .ev b{color:var(--ins)}.tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:-1px}
 .tab{background:var(--bg);color:var(--fg);border:1px solid var(--bd);border-bottom:none;border-radius:10px 10px 0 0;padding:9px 14px;font-weight:400}
 .tab[aria-selected=true]{background:var(--card);box-shadow:inset 0 3px 0 var(--acc)}
-.ti-excluded b{color:var(--bad)}.ti-unclear b{color:var(--warn)}.ti-probable b{color:var(--warn)}.ti-limited b,.ti-covered b{color:var(--ok)}
-.tab.ti-excluded[aria-selected=true],.tab.ti-unclear[aria-selected=true],.tab.ti-probable[aria-selected=true],.tab.ti-limited[aria-selected=true],.tab.ti-covered[aria-selected=true]{box-shadow:inset 0 3px 0 var(--ins)}
+.ti-excluded b{color:var(--bad)}.ti-program b,.ti-needs_diagnosis b{color:var(--warn)}.ti-unclear b{color:var(--warn)}.ti-probable b{color:var(--warn)}.ti-limited b,.ti-covered b{color:var(--ok)}
+.tab.ti-excluded[aria-selected=true],.tab.ti-program[aria-selected=true],.tab.ti-needs_diagnosis[aria-selected=true],.tab.ti-unclear[aria-selected=true],.tab.ti-probable[aria-selected=true],.tab.ti-limited[aria-selected=true],.tab.ti-covered[aria-selected=true]{box-shadow:inset 0 3px 0 var(--ins)}
 .pane>.card:first-child{border-top-left-radius:0}
 #fb{border:2px solid var(--acc);padding:8px 14px}.fbhead{display:flex;align-items:center;gap:12px}#fb .stars{margin:0;font-size:26px}
 b.bad{color:var(--bad)}b.warn{color:var(--warn)}b.ok{color:var(--ok)}
 h1.top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}#setlink{font-size:14px;font-weight:400;white-space:nowrap}
 #settings label{cursor:pointer}
-.ins-excluded{color:var(--bad);border-color:var(--bad)}.ins-probable{color:var(--warn);border-color:var(--warn)}.ins-covered,.ins-limited{color:var(--ok);border-color:var(--ok)}
+.ins-excluded{color:var(--bad);border-color:var(--bad)}.ins-program,.ins-needs_diagnosis{color:var(--warn);border-color:var(--warn)}.ins-probable{color:var(--warn);border-color:var(--warn)}.ins-covered,.ins-limited{color:var(--ok);border-color:var(--ok)}
 details summary{cursor:pointer;color:var(--mut);font-size:13px}pre{white-space:pre-wrap;font-size:13px}
 </style></head><body><div class="wrap">
 <h1 class="top"><span>Проверка диагностики по клиническим протоколам МЗ РБ и правилам страхования <span class="meta" style="font-weight:400">версия __VERSION__</span></span><a href="#" id="setlink" class="meta">⚙ Настройки</a></h1>
@@ -50,7 +50,7 @@ details summary{cursor:pointer;color:var(--mut);font-size:13px}pre{white-space:p
  </div>
 </div>
 <div class="card">
- <textarea id="q" placeholder="Диагноз – аутоиммунный тиреоидит, разрешён ли анализ мочи по Нечипоренко&#10;или: сахарный диабет, перечень лабораторных анализов&#10;или только диагноз: псориаз&#10;или обратно — услуги без диагноза: ТТГ, свободный Т4, антитела к ТПО"></textarea>
+ <textarea id="q" placeholder="Диагноз – аутоиммунный тиреоидит, разрешён ли анализ мочи по Нечипоренко&#10;или: сахарный диабет, перечень лабораторных анализов&#10;или только диагноз: псориаз&#10;или обратно — услуги без диагноза: ТТГ, свободный Т4, антитела к ТПО&#10;или: страховой ли случай – подбор контактных линз"></textarea>
  <div class="row">
   <button id="go">Проверить</button>
   <select id="pop"><option value="">возраст: определить</option><option value="adult">взрослые</option><option value="child">дети</option></select>
@@ -67,10 +67,10 @@ const $=id=>document.getElementById(id);
 let pdfMode="viewer";try{pdfMode=localStorage.getItem("pdfmode")||"viewer"}catch(e){}
 const view=(u,q)=>{if(pdfMode=="orig")return u;const m=String(u||"").match(/^(https:[^#]*\.pdf)#page=(\d+)/i);return m?`/view?u=${encodeURIComponent(m[1])}&p=${m[2]}&q=${encodeURIComponent((q||"").slice(0,600))}`:u};
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const EX=["Диагноз – аутоиммунный тиреоидит, разрешён ли анализ мочи по Нечипоренко","Диагноз – псориаз, разрешено ли определение СОЭ","Диагноз – болезнь Аддисона, разрешен ли тест с инсулиновой гипогликемией","Диагноз E06.3, ТТГ","Сахарный диабет 2 типа, определение гликированного гемоглобина","Сахарный диабет, перечень лабораторных анализов","Ангиомиолипома, какой вид КТ используется для диагностики","При каких диагнозах назначают метанефрины","ТТГ, свободный Т4, антитела к ТПО","Сахарный диабет 2 типа"];
+const EX=["Страховой ли случай – подбор контактных линз","Диагноз – аутоиммунный тиреоидит, разрешён ли анализ мочи по Нечипоренко","Диагноз – псориаз, разрешено ли определение СОЭ","Диагноз – болезнь Аддисона, разрешен ли тест с инсулиновой гипогликемией","Диагноз E06.3, ТТГ","Сахарный диабет 2 типа, определение гликированного гемоглобина","Сахарный диабет, перечень лабораторных анализов","Ангиомиолипома, какой вид КТ используется для диагностики","При каких диагнозах назначают метанефрины","ТТГ, свободный Т4, антитела к ТПО","Сахарный диабет 2 типа"];
 $("examples").innerHTML=EX.map((e,i)=>`<span class="ex" data-i="${i}">${esc(e.length>48?e.slice(0,48)+"…":e)}</span>`).join("");
 $("examples").onclick=e=>{if(e.target.dataset.i){$("q").value=EX[e.target.dataset.i];ask()}};
-const ilvl={unclear:"v-warn",excluded:"v-bad",probable:"v-warn",limited:"v-warn",covered:"v-ok"};
+const ilvl={unclear:"v-warn",program:"v-warn",needs_diagnosis:"v-warn",excluded:"v-bad",probable:"v-warn",limited:"v-warn",covered:"v-ok"};
 const a0=i=>(i.verdict.match(/«(.*?)»/)||[,""])[1];
 function insurance(i){
  if(!i)return "";
@@ -81,15 +81,17 @@ function insurance(i){
    +(q?`<blockquote>${esc(m.quote)}</blockquote>`:"")+a(view(m.url,m.quote),`Правила, стр. ${m.page}`)+`</div>`).join("")+`</div>`:"";
  let h=`<div class="card ins"><div class="meta">${a(i.url,i.rules)}</div>`;
  if(i.variants){
-  const S={excluded:"не страховой",probable:"вероятно не страховой",limited:"страховой, с ограничениями",covered:"страховой"};
+  const S={program:"не страховой, если Программа не предусматривает",excluded:"не страховой",probable:"вероятно не страховой",limited:"страховой, с ограничениями",covered:"страховой"};
   h+=`<div class="verdict v-warn">Уточните диагноз — «${esc(a0(i))}» может означать разные заболевания с разным страховым решением</div><ul class="lst">`
    +i.variants.map(v=>`<li><b>${esc(v.code)}</b> ${esc(v.name)} — <b class="${v.verdict_level=="excluded"?"bad":v.verdict_level=="probable"?"warn":"ok"}">${S[v.verdict_level]}</b>`
      +v.clauses.map(m=>` ${a(view(m.url,""),"п. "+m.clause)}`).join("")+`</li>`).join("")+`</ul><div class="meta">Задайте вопрос с уточнённым диагнозом или кодом МКБ-10.</div>`;
  }else h+=`<div class="verdict ${ilvl[i.verdict_level]}">${esc(i.verdict)}</div>`;
- h+=rows("Исключение:",i.excluded)+rows("Не исключено (оговорка пункта):",i.exceptions)
+ h+=rows("Исключение:",i.excluded)+rows("Не оплачивается, если Программа страхования не предусматривает:",i.program||[])+rows("Не исключено (оговорка пункта):",i.exceptions)
    +rows("Ограничения по услугам для этого заболевания:",i.limited)+rows("Услуга не оплачивается:",i.service_excluded);
  const c=i.circumstances;
  if(c.length)h+=`<div class="ev meta">Травма не оплачивается, если получена (п. ${esc(c[0].clause)}–${esc(c.at(-1).clause)}): ${esc(c.map(m=>m.short.replace(/^травма /,"")).join("; "))}. ${a(view(c[0].url,c[0].quote),"стр. "+c[0].page)}</div>`;
+ const cd=i.conditions||[];
+ if(cd.length)h+=`<div class="ev meta">Не оплачивается также (п. ${esc(cd[0].clause)}–${esc(cd.at(-1).clause)}): ${esc(cd.map(m=>m.short).join("; "))}. ${a(view(cd[0].url,cd[0].quote),"стр. "+cd[0].page)}</div>`;
  if(i.person.length)h+=`<div class="ev meta">Договор не заключается с лицами этой группы (п. 1.4): ${esc(i.person.map(m=>m.how).join(", "))}. ${a(view(i.person[0].url,i.person[0].quote),"стр. "+i.person[0].page)}</div>`;
  i.notes.forEach(n=>h+=`<div class="ev"><div class="meta"><b>п. ${esc(n.clause)}:</b> ${esc(n.why)}</div><blockquote>${esc(n.quote)}</blockquote>${a(view(n.url,n.quote),"Правила, стр. "+n.page)}</div>`);
  return h+`</div>`;
@@ -150,6 +152,8 @@ function renderReverse(a){
 function render(a){
  if(a.error)return `<div class="card"><div class="verdict v-bad">${esc(a.error)}</div></div>`;
  if(a.mode=="reverse")return feedback(a)+renderReverse(a)+tail(a);
+ if(a.mode=="insurance")return feedback(a)+`<div class="card"><div class="meta"><b>Услуга:</b> «${esc(a.service_text)}»`+((a.service_catalogue||[])[0]?` → пост. №123: ${esc(a.service_catalogue[0].code)} ${esc(a.service_catalogue[0].name)}`:"")
+  +` <span class="tag">вопрос о страховом случае — клинические протоколы не проверялись: диагноза нет</span></div></div>`+insurance(a.insurance)+tail(a);
  if(a.mode=="list")return tabs(a,renderList(a)+tail(a));
  const d=a.diagnosis||{},svc=a.service_catalogue||[];
  let h=`<div class="card"><div class="meta"><b>Диагноз:</b> ${esc(d.code||"")} ${esc(d.name||"")} <span class="tag">из «${esc(a.diagnosis_text)}»</span>`;
@@ -178,11 +182,11 @@ function render(a){
 }
 // two tabs: insurance rules and protocols; the insurance verdict is in the tab title, and a
 // non-insured case opens on the rules tab, an insured one goes straight to the protocols
-const ITAB={unclear:"Уточните диагноз",excluded:"Не страховой случай",probable:"Вероятно не страховой случай",limited:"Страховой случай (с ограничениями)",covered:"Страховой случай"};
+const ITAB={program:"Не страховой, если Программа не предусматривает",needs_diagnosis:"Зависит от диагноза",unclear:"Уточните диагноз",excluded:"Не страховой случай",probable:"Вероятно не страховой случай",limited:"Страховой случай (с ограничениями)",covered:"Страховой случай"};
 function tabs(a,prot){
  const i=a.insurance;
  if(!i)return feedback(a)+prot;
- const insFirst=["excluded","probable","unclear"].includes(i.verdict_level);
+ const insFirst=a.insurance_first||["excluded","probable","program","unclear"].includes(i.verdict_level);
  const pv=a.mode=="list"?(a.diagnosis_only?"диагностические мероприятия":"перечень"):(a.results||[]).length?(a.results[0].verdict_level?"предусмотрено":"не предусмотрено"):"протокол не найден";
  const tab=(t,on,cls,label)=>`<button role="tab" class="tab ${cls}" data-tab="${t}" aria-selected="${on}">${label}</button>`;
  return feedback(a)+`<div class="tabs" role="tablist">`

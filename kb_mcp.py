@@ -6,6 +6,8 @@ Tools:
                                                     verbatim excerpts + <url>#page=N links
   find_diagnosis(text)                             — МКБ-10 candidates for a diagnosis wording
   find_diagnoses(services[], population?) — reverse search: diagnoses whose protocols list the services
+  check_insurance(text)                            — «страховой ли случай»: услуга и/или диагноз по Правилам
+                                                    страхования ТАСК (без диагностики по протоколам)
   list_diagnostics(diagnosis, category?, service?, population?) — diagnostics list items for a
                                                     diagnosis: all, lab / instrumental / consult, or one service
 
@@ -37,6 +39,17 @@ TOOLS = [
             "diagnosis": {"type": "string", "description": "диагноз словами или код МКБ-10 (E06.3)"},
             "service": {"type": "string", "description": "диагностическая услуга, например «анализ мочи по Нечипоренко»"},
             "population": POPULATION}, "required": ["diagnosis", "service"]},
+    },
+    {
+        "name": "check_insurance",
+        "description": "Страховой ли случай по Правилам страхования №20 ЗАСО «ТАСК» (п. 4.1): диагноз («аутоиммунный "
+                       "тиреоидит»), услуга («подбор контактных линз», «ЭКО», «вакцинация») или оба: «Диагноз – гастрит, "
+                       "ФГДС». Возвращает вердикт (не страховой / не страховой, если Программа не предусматривает / "
+                       "зависит от диагноза / исключений не найдено), пункт Правил, цитату и ссылку на страницу. "
+                       "Для вопроса «разрешена ли услуга по протоколу» используй check_service.",
+        "inputSchema": {"type": "object", "properties": {
+            "text": {"type": "string", "description": "диагноз и/или услуга, например «подбор контактных линз»"},
+            "population": POPULATION}, "required": ["text"]},
     },
     {
         "name": "find_diagnosis",
@@ -85,6 +98,9 @@ def call_tool(name: str, args: dict) -> str:
     if name == "check_service":
         a = engine().ask(diagnosis=args["diagnosis"], service=args["service"], population=args.get("population"))
         return render(a) if not a.get("error") else "Ошибка: " + a["error"]
+    if name == "check_insurance":
+        a = engine().ask(f"страховой ли случай – {args['text']}", population=args.get("population"))
+        return render(a)
     if name == "find_diagnosis":
         return json.dumps(engine().resolve_diagnosis(args["text"]), ensure_ascii=False, indent=1)
     if name == "list_diagnostics":

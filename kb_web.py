@@ -23,7 +23,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import kb  # noqa: E402
 from sheet_log import SheetLog, mask  # noqa: E402
 
-VERSION = "2.3"  # shown on the page; bump on user-visible changes
+VERSION = "2.4"  # shown on the page; bump on user-visible changes
 PAGE = (Path(__file__).resolve().parent / "web" / "index.html").read_text(encoding="utf-8").replace("__VERSION__", VERSION)
 VIEWER = (Path(__file__).resolve().parent / "web" / "viewer.html").read_text(encoding="utf-8")
 LOCK = threading.Lock()
@@ -48,7 +48,10 @@ def summary(question, ans):
             "services": [x["text"] for x in ans.get("services", [])],
             "population": ans.get("population"), "verdict_level": ans.get("verdict_level"),
             "verdict": ans.get("verdict"), "evidence": ev, "method": ans.get("method"),
-            "insurance": {k: (ans.get("insurance") or {}).get(k) for k in ("verdict_level", "verdict")}}
+            "mode": ans.get("mode"),
+            "insurance": {k: (ans.get("insurance") or {}).get(k) for k in ("verdict_level", "verdict")}
+                         | {"clauses": [m["clause"] for m in (ans.get("insurance") or {}).get("excluded", [])
+                                        + (ans.get("insurance") or {}).get("program", [])]}}
 
 
 def pdf_key(url: str) -> str:
@@ -173,11 +176,11 @@ def make_handler(engine):
                 sm = summary(question, ans)
                 SHEET.send("Запросы", {
                     "время": SHEET.now(), "answer_id": ans.get("answer_id", ""), "вопрос": sm["question"],
-                    "режим": {"list": "перечень", "reverse": "обратный"}.get(ans.get("mode"), "проверка"), "население": req.get("population") or "",
+                    "режим": {"list": "перечень", "reverse": "обратный", "insurance": "страховой случай"}.get(ans.get("mode"), "проверка"), "население": req.get("population") or "",
                     "диагноз": " ".join(x for x in [sm["diagnosis"], (ans.get("diagnosis") or {}).get("name")] if x)
                                or "; ".join(d["code"] for e in ((ans.get("results") or [{}])[0].get("entries") or [])[:3]
                                             for d in e["diagnoses"][:1]),
-                    "услуга": sm["service_text"], "вердикт протокола": sm["verdict"] or "",
+                    "услуга": sm["service_text"], "вердикт протокола": "" if ans.get("mode") == "insurance" else sm["verdict"] or "",
                     "страховой вердикт": (ans.get("insurance") or {}).get("verdict", ""),
                     "ошибка": mask(ans.get("error", "")), "время ответа, с": round(time.time() - t0, 1), "версия": VERSION})
             except Exception as ex:  # noqa: BLE001 — show the problem in the page

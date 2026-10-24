@@ -297,7 +297,7 @@ python -I kb.py ask "…" --llm                          # LLM fallback for unre
 ## 6. `kb_mcp.py` — MCP server
 
 `claude mcp add minzdrav -- python -I C:/w/minzdrav/kb_mcp.py` (or the same command in Claude
-Desktop's config). Tools: `check_service(diagnosis, service, population?)` (= `kb.py ask`, rendered
+Desktop's config). Tools: `check_insurance(text)` (= «страховой ли случай – …»), `check_service(diagnosis, service, population?)` (= `kb.py ask`, rendered
 text with excerpts and links), `find_diagnosis(text)`, `list_diagnostics(diagnosis, category?, service?, population?)`
 (= list mode; category lab / instrumental / consult), `find_diagnoses(services[], population?)` (= reverse search).
 Hand-written newline-delimited JSON-RPC over stdio (no `mcp` package); KB from `$KB_PATH`, else
@@ -311,7 +311,7 @@ JSON lines into it.
 `text` = `kb.render`). The page shows diagnosis/service recognition, a coloured verdict per
 population, each excerpt with a `url#page=N` link, and the plain-text form for copying; query
 history is in the browser's localStorage. The page header shows `VERSION` from `kb_web.py`
-(substituted for `__VERSION__` in `web/index.html`; 1.1 = list mode, 1.2 = Enter sends / Shift+Enter new line, spinner, 1.3 = insurance block, 1.4 = insurance / protocols tabs, 1.5 = rating panel between the question and the answer, 1.6 = «уточните диагноз», Google Sheet log, 1.7 = diagnosis-only question → all diagnostic measures, compact rating panel, 2.0 = own PDF viewer, 2.1 = ⚙ settings: open PDFs in the viewer or on the original site, 2.2 = PDFs shipped in deploy/pdf, 2.3 = reverse search) — bump it on user-visible changes. Binds to 127.0.0.1 only (no auth). `--llm` needs
+(substituted for `__VERSION__` in `web/index.html`; 1.1 = list mode, 1.2 = Enter sends / Shift+Enter new line, spinner, 1.3 = insurance block, 1.4 = insurance / protocols tabs, 1.5 = rating panel between the question and the answer, 1.6 = «уточните диагноз», Google Sheet log, 1.7 = diagnosis-only question → all diagnostic measures, compact rating panel, 2.0 = own PDF viewer, 2.1 = ⚙ settings: open PDFs in the viewer or on the original site, 2.2 = PDFs shipped in deploy/pdf, 2.3 = reverse search, 2.4 = «страховой ли случай» questions, п. 4.3+ of the rules ignored) — bump it on user-visible changes. Binds to 127.0.0.1 only (no auth). `--llm` needs
 `KB_OPENROUTER_API_KEY` in the environment of the server process.
 
 Feedback: under each answer the page shows a 3-star rating, tags (диагноз/услуга распознаны неверно, вердикт неверный, цитата не по теме, не нашёл) and a comment. `POST /api/feedback` appends one line to `kb/feedback.jsonl` with the rating and a summary of the answer (diagnosis, service, verdict, evidence links) — low-rated lines are candidates for `eval/` cases.
@@ -345,15 +345,31 @@ Clause kinds: `disease` (п. 4.1.x; `named` codes = examples named in the clause
 a parent rubric of an excluded subcode — E06 vs E06.3 — also «вероятно»; `except_codes` = exceptions of
 the exclusion, e.g. маточные кровотечения in 4.1.34; `dx_words` for clauses without codes), `partial`
 (operations not paid: 4.1.39–4.1.44), `program` (teeth 4.1.55), `circumstance` (injuries 4.1.6–4.1.10),
-`person` (п. 1.4, contracts not concluded), `service` (4.1.36/45/46…, Программа «А» limits 4.3.x matched by
-stems of the service or of list items). Notes: п. 4.2 (paid until the final diagnosis), п. 3.1, п. 4.1.1
+`person` (п. 1.4, contracts not concluded), `service` (4.1.2/36/45/46/47/51–63…: a service excluded whatever the diagnosis, matched by `service_words`
+stems of the service or of list items, or by Z-`codes` meaning the same service — «подбор контактных линз» = Z97.3 = 4.1.60;
+`unless_program: true` → «если иное не предусмотрено Программой» → verdict `program` «не страховой, если Программа не
+предусматривает»; `except_words` cancel a hit), `note` (4.1.49, reminder only), `condition` (4.1.64–4.1.68, reminder line in
+service-only answers). **Nothing from п. 4.3 on is used** (`CUTOFF` in `insurance.py`: `parse_clauses` stops there, `build`
+refuses a map with such ids, `Insurance` drops them; решение заказчика 2026-10-24; Приложения 11–13 are not mentioned).
+A hit of a service clause raises the verdict (`excluded` > `probable` > `program` > `limited` > `covered`); list mode keeps the
+diagnosis's verdict and lists excluded items under `service_excluded`. Notes: п. 4.2 (paid until the final diagnosis), п. 3.1, п. 4.1.1
 when the diagnosis says «хронический», п. 4.1.50 when the protocol does not provide for the service.
 `Engine.ask` / `list_services` put the result under `insurance`; `kb.render` appends it, the page shows
 it in two tabs (`Engine.insurance_check`: when the wording fits several МКБ-10 rubrics with a named
 exclusion on one side and insured ones on the other — «сахарный диабет» E10 vs E11, «артрит», «гепатит» — the
 level is `unclear` with `variants`; O/P/Q rubrics only when the question is about them): «Правила страхования: <verdict>» and «Клинические протоколы»; a non-insured
 (excluded / probable) case opens on the rules tab, an insured one on the protocols tab. Appendices 11–13 (program contents) are not in
-the PDF — the answer says to check the contract's program.
+the PDF.
+
+«Страховой ли случай» questions (`kb.parse_insurance_question`, tried first in `Engine.ask`; `INSURANCE_RES`: «страховой ли
+случай – X», «X – страховой ли случай?», «является ли страховым случаем X», «оплачивается / покрывается ли страховкой X»,
+«входит ли в страховку», «Диагноз – …, страховой ли случай <услуга>»): `Engine.insurance_answer` — X = diagnosis + service →
+the usual check with `insurance_first: true`; X hits a service clause → `mode: "insurance"`, `subject: "service"`
+(`Insurance.service_only`, protocols not searched); X is a diagnosis / code → the list answer with `insurance_first`
+(`subject: "diagnosis"`); a service with no clause → level `needs_diagnosis` (п. 3.1, 4.1.50). Without a trigger,
+`Engine.service_subject` catches a question that is only an excluded service («подбор контактных линз [разрешено ли]»,
+verbs stripped by `strip_check_verb`). Eval: `eval/insurance.jsonl` (`insurance` level, `clause`, `not_clause`).
+MCP tool `check_insurance(text)`.
 
 ## 9. `sheet_log.py` + `web/sheet_logger.gs` — question / rating log in a Google Sheet
 
