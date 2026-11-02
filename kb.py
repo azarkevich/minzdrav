@@ -16,6 +16,7 @@ question is split into diagnosis and service by phrasing; diagnosis is matched t
 (typos tolerated), service to stems that must all occur in a protocol list item.
 """
 import argparse
+import copy
 import functools
 import json
 import re
@@ -380,6 +381,7 @@ class Engine:
         self._name_index = None  # name stem → diagnosis names (resolve_diagnosis pre-filter)
         self._known = None  # stems of names and protocol lists (fix_trigger_words)
         self._svc_cache = OrderedDict()  # (service, code) → variants of the LLM (suggest_service), LRU 512
+        self._parse_cache = OrderedDict()  # question → the LLM's reading (parse_question), LRU 512
         self.kb = json.loads(kb_path.read_text(encoding="utf-8"))
         if self.kb.get("packed"):  # kb.idx.json: section items stay on disk (see kb_pack.py)
             blob = kb_path.parent / self.kb["packed"]
@@ -674,12 +676,22 @@ class Engine:
         it for every later step. None when the call failed (the rules' answer stands, the error is in the trace)."""
         t = self._trace()
         if "parsed" not in t.cache:
+            key = " ".join(question.split())
+            if key in self._parse_cache:  # the same question asked again (re-asks, other operators): no LLM wait
+                self._parse_cache.move_to_end(key)
+                t.parse("разбор вопроса LLM взят из кэша")
+                t.cache["parsed"] = copy.deepcopy(self._parse_cache[key])
+                return t.cache["parsed"]
             from kb_llm import parse_question  # needs the anthropic package and credentials
             try:
                 t.cache["parsed"] = parse_question(question)
             except Exception as e:  # noqa: BLE001 — network, quota, refusal: fall back to the rules
                 t.problem(f"LLM parse_question не ответил: {type(e).__name__}: {e}")
-                t.cache["parsed"] = None
+                t.cache["parsed"] = None  # failures are not cached: the next ask tries again
+                return None
+            self._parse_cache[key] = copy.deepcopy(t.cache["parsed"])
+            while len(self._parse_cache) > 512:
+                self._parse_cache.popitem(last=False)
         return t.cache["parsed"]
 
     def _llm_parse(self, question: str):

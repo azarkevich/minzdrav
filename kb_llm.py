@@ -137,13 +137,23 @@ SERVICE_PROMPT = """Сотрудник страховой компании сп�
 «УЗИ молочных желез» нельзя заменять на «УЗИ». Если понять, о какой услуге речь, нельзя — верни пустой список."""
 
 
+_CONN_LOCK = threading.Lock()
+_HTTP = None  # http(): shared requests.Session (OpenRouter)
+_CLIENT = None  # client(): shared Anthropic client
+
+
 def client():
-    try:
-        import anthropic
-    except ImportError:
-        sys.exit("pip install anthropic")
-    key = os.environ.get("KB_ANTHROPIC_API_KEY")
-    return anthropic.Anthropic(api_key=key) if key else anthropic.Anthropic()
+    """One Anthropic client per process: it keeps its HTTP connections open between calls."""
+    global _CLIENT
+    with _CONN_LOCK:
+        if _CLIENT is None:
+            try:
+                import anthropic
+            except ImportError:
+                sys.exit("pip install anthropic")
+            key = os.environ.get("KB_ANTHROPIC_API_KEY")
+            _CLIENT = anthropic.Anthropic(api_key=key) if key else anthropic.Anthropic()
+        return _CLIENT
 
 
 PURPOSE: contextvars.ContextVar = contextvars.ContextVar("kb_llm_purpose", default="")
@@ -236,13 +246,23 @@ def call_claude_cli(prompt: str, schema: dict, model: str, effort: str) -> dict:
     return data if data is not None else json.loads(out["result"])
 
 
+def http():
+    """One requests.Session for every OpenRouter call: the website asks from a new thread per request,
+    and a fresh TLS connection costs ~0.3–1 s; the Session's connection pool is thread-safe."""
+    global _HTTP
+    with _CONN_LOCK:
+        if _HTTP is None:
+            import requests
+            _HTTP = requests.Session()
+        return _HTTP
+
+
 def call_openrouter(prompt: str, schema: dict, model: str, effort: str, max_tokens: int) -> dict:
     """OpenAI-compatible chat completions with a strict JSON schema. Model ids are
     OpenRouter's («anthropic/claude-opus-5.5»); a bare Anthropic id is mapped to it."""
-    import requests
     if "/" not in model:  # claude-opus-5-5 → anthropic/claude-opus-5.5
         model = "anthropic/" + re.sub(r"-(\d+)-(\d+)$", r"-\1.\2", model)
-    r = requests.post(
+    r = http().post(
         OPENROUTER_URL,
         headers={"Authorization": f"Bearer {os.environ['KB_OPENROUTER_API_KEY']}",
                  "X-Title": "minzdrav protocols expert system"},

@@ -267,11 +267,13 @@ async function ask(){
  const q=$("q").value.trim();if(!q||busy)return;
  busy=true;$("go").disabled=true;$("go").innerHTML=`<span class="spin"></span> Проверяю…`;
  const t0=Date.now();
- $("dbg").innerHTML="";$("out").innerHTML=`<div class="card busy" role="status"><span class="spin"></span><div><b>Ищу в протоколах…</b><div class="meta" id="el">0 с</div></div></div>`;
- const tick=setInterval(()=>{const el=$("el");if(el)el.textContent=Math.round((Date.now()-t0)/1000)+" с"},1000);
+ $("dbg").innerHTML="";$("out").innerHTML=`<div class="card busy" role="status"><span class="spin"></span><div><b>Ищу в протоколах…</b><div class="meta" id="el">0 с</div><div class="meta" id="why"></div></div></div>`;
+ // a long wait explained: the LLM rephrasing the question (a few seconds), or the free hosting waking up (up to a minute)
+ const tick=setInterval(()=>{const s=Math.round((Date.now()-t0)/1000),el=$("el"),w=$("why");if(el)el.textContent=s+" с";
+  if(w)w.textContent=s>=20?"Сервер, видимо, просыпается после простоя — первый вопрос после перерыва может занять до минуты.":s>=5?"Разбираю формулировку подробнее (возможно, с помощью ИИ)…":""},1000);
  try{
   const r=await fetch("/api/ask",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({question:q,population:$("pop").value})});
-  const a=await r.json();last=a;$("out").innerHTML=render(a);$("dbg").innerHTML=debugBlock(a);if(!a.error)saveHist(q);
+  const a=await r.json();last=a;$("out").innerHTML=render(a)+`<div class="meta" style="margin-top:6px">Ответ за ${((Date.now()-t0)/1000).toFixed(1)} с</div>`;$("dbg").innerHTML=debugBlock(a);if(!a.error)saveHist(q);
  }catch(e){$("out").innerHTML=render({error:String(e)})}
  clearInterval(tick);busy=false;$("go").disabled=false;$("go").textContent="Проверить";
 }
