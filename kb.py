@@ -1714,12 +1714,13 @@ def run_eval(engine: Engine, path: Path):
         if c.get("route"):  # the kind of question the engine understood, and optionally the diagnosis / list category
             got = route_of(a)
             good = got == c["route"] and (not c.get("icd") or (a.get("diagnosis") or {}).get("code") == c["icd"]) \
-                and (not c.get("category") or a.get("category") == c["category"])
+                and (not c.get("category") or a.get("category") == c["category"]) \
+                and (not c.get("level") or a.get("verdict_level") == c["level"])
             ok += good
             print(f"{'OK  ' if good else 'FAIL'} {c['question']}")
             if not good:
-                print(f"       expected {c['route']} {c.get('icd')} {c.get('category')}; got {got} "
-                      f"{(a.get('diagnosis') or {}).get('code')} {a.get('category')}  {a.get('error', '')}")
+                print(f"       expected {c['route']} {c.get('icd')} {c.get('category')} {c.get('level', '')}; got {got} "
+                      f"{(a.get('diagnosis') or {}).get('code')} {a.get('category')} {a.get('verdict_level')}  {a.get('error', '')}")
             continue
         if c.get("mode") == "reverse":  # a code starting with one of expect_any among the top entries' diagnoses
             entries = (a.get("results") or [{}])[0].get("entries", [])[:c.get("top", 3)]

@@ -1,0 +1,38 @@
+# Real questions of the insurance operator (Google Sheet «Запросы», 2026-10-26 … 11-02, site 2.13), personal data masked by
+# sheet_log. Only what needs no medical judgement: `route` = kind of answer, `level` = "list" (a list was found), `icd` only
+# where the question is the МКБ-10 name itself (or a common spelling of it). Questions whose right code is a medical
+# decision are in operator_pending.md and are not checked here.
+# Guards: answered with a list now
+{"question": "мастопатия", "route": "diagnosis_only", "level": "list"}
+{"question": "фиброаденома", "route": "diagnosis_only", "level": "list"}
+{"question": "цервикалгия", "route": "diagnosis_only", "icd": "M54.2", "level": "list"}
+{"question": "анемия железодефицитная", "route": "diagnosis_only", "icd": "D50", "level": "list"}
+{"question": "анемия железодицитная", "route": "diagnosis_only", "icd": "D50", "level": "list"}
+{"question": "мочекаменная болезнь", "route": "diagnosis_only", "icd": "N20", "level": "list"}
+{"question": "мочекаменая болезнь", "route": "diagnosis_only", "icd": "N20", "level": "list"}
+{"question": "гипотиреоз", "route": "diagnosis_only", "level": "list"}
+{"question": "гипотиреоз перечень", "route": "list", "level": "list"}
+{"question": "узловой зоб", "route": "diagnosis_only", "level": "list"}
+{"question": "артериальная гипертензия перечень", "route": "list", "level": "list"}
+{"question": "кандидоз", "route": "diagnosis_only", "icd": "B37", "level": "list"}
+{"question": "холецистит перечень", "route": "list", "icd": "K81", "level": "list"}
+{"question": "рактивный артрит перечень", "route": "list", "icd": "M02", "level": "list"}
+{"question": "синдром раздраженного кишечника", "route": "diagnosis_only", "icd": "K58", "level": "list"}
+{"question": "синдром раздраженного кишечника перечень", "route": "list", "icd": "K58", "level": "list"}
+{"question": "аутоимунный тиреоидит", "route": "diagnosis_only", "icd": "E06.3", "level": "list"}
+{"question": "атеросклероз бца перечень", "route": "list", "level": "list"}
+{"question": "СТЕНОКАРДИЯ перечень", "route": "list", "level": "list"}
+{"question": "подагра перечень", "route": "list", "icd": "M10", "level": "list"}
+{"question": "алопеция", "route": "diagnosis_only", "level": "list"}
+# Wrong keyboard layout: must be answered as the Russian question
+{"question": "fkjgtwbz", "route": "diagnosis_only", "level": "list"}
+{"question": "ufcnhbn gthtxtym", "route": "list", "level": "list"}
+{"question": "lbcgtgcbz", "route": "diagnosis_only"}
+# A diagnosis alone is a list question, not a reverse search over services
+{"question": "миома", "route": "diagnosis_only"}
+{"question": "мезаденит", "route": "diagnosis_only"}
+{"question": "грыжа диска", "route": "diagnosis_only"}
+{"question": "дислипидемия", "route": "diagnosis_only"}
+# The protocol chapter «Лечение дислипидемии» exists: E78 must find it
+{"question": "дислипидемия перечень", "route": "list", "level": "list"}
+{"question": "гиперхолестеринемия", "route": "diagnosis_only", "level": "list"}
