@@ -23,7 +23,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import kb  # noqa: E402
 from sheet_log import SheetLog, mask  # noqa: E402
 
-VERSION = "2.14" # shown on the page; bump on user-visible changes
+VERSION = "2.16" # shown on the page; bump on user-visible changes
 PAGE = (Path(__file__).resolve().parent / "web" / "index.html").read_text(encoding="utf-8").replace("__VERSION__", VERSION)
 VIEWER = (Path(__file__).resolve().parent / "web" / "viewer.html").read_text(encoding="utf-8")
 LOCK = threading.Lock()
@@ -158,6 +158,9 @@ def make_handler(engine):
             self.wfile.write(data)
 
         def do_POST(self):
+            if self.path == "/healthz":  # the page's keep-alive beacon (sendBeacon can only POST), no password
+                self.rfile.read(min(int(self.headers.get("Content-Length", 0) or 0), 1024))
+                return self._send(200, "ok", "text/plain")
             if not self._authorized():
                 return
             if self.path == "/api/feedback":
@@ -224,6 +227,8 @@ def make_handler(engine):
             self._send(200, json.dumps(out, ensure_ascii=False), "application/json")
 
         def log_message(self, fmt, *a):
+            if self.path == "/healthz":  # keep-alive pings and the host's health checks would flood the log
+                return
             sys.stderr.write("%s %s\n" % (self.address_string(), fmt % a))
 
     return Handler
