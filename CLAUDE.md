@@ -9,9 +9,10 @@ insurance-rules verdict. Design: `EXPERT_SYSTEM_DESIGN.md`. **Full reference (al
 heuristics, eval history): `docs/DETAILS.md`** — section numbers below match it; read the
 section before changing that tool, and keep it up to date.
 
-Standalone Python 3 scripts, stdlib unless noted. Always run Python with `-I` (downloaded files
+Standalone Python 3 scripts, stdlib unless noted (`requests` — scraper, `pdfplumber` —
+`table_extract.py`). Always run Python with `-I` (downloaded files
 are untrusted; scripts that import siblings insert `sys.path` themselves). `pdftotext` on PATH is
-xpdf 4.00 (Git for Windows), not poppler: it can't open non-ASCII paths or stdin — copy the PDF
+xpdf 4.06 (Git for Windows), not poppler: it can't open non-ASCII paths or stdin — copy the PDF
 to a temp `input.pdf`. No test suite: verify with eval sets, `kb_probe.py`, the live site.
 
 ## Tools and data flow
@@ -46,7 +47,7 @@ python minzdrav_protocols_scrapper.py [--dry-run] [--prune] [-w 8] [-v]   # ~2 m
 python -I protocol_chapter_extractor.py "protocols/<Cat>/<file>.pdf" [--chapter 6 | --title ЛЕЧЕНИЕ]
 python -I reference_builder.py [--refresh]
 python -I protocol_parser.py [--only КП12 --force]                        # ~13 s, incremental
-python -I kb_build.py --out kb_all                                        # all docs, ~5 min (also writes kb.idx.json + kb.items.bin)
+python -I kb_build.py --out kb_all                                        # all docs, ~5 min (+ ~15 min on the first run: pdfplumber tables → parsed/tables/ cache; also writes kb.idx.json + kb.items.bin)
 python -I kb_build.py --category Эндокринология                           # one category → kb/, ~10 s
 python -I kb.py ask "Диагноз – аутоиммунный тиреоидит, разрешён ли анализ мочи по Ничипоренко" --kb kb_all/kb.idx.json [--llm] [--json]
 python -I kb.py ask --diagnosis E06.3 --service ТТГ --json
@@ -96,6 +97,10 @@ answer stands and the error is in the trace. Details: `docs/DETAILS.md` §5.
 - Parser: `page` = physical PDF page (for `#page=N`), `pages[].printed` = footer number.
   `stats.kind`: `standard` / `table` (column soup — go through `table_extract.py`) /
   `no_chapters` / `scan` (needs OCR). МКБ-10 codes per paragraph are hints, not "applies to".
+  `columns: true` on a paragraph = multi-column table text read line by line.
+- `table_extract.py` (pdfplumber): tables by ruling lines, column roles from the header incl.
+  merged cells, continuations across pages; cached in `parsed/tables/` — bump `VERSION` when
+  the raw records change. Check a change on all docs, not one: rows per doc old vs new.
 
 ## 5. Expert system — essentials
 
@@ -105,8 +110,9 @@ answer stands and the error is in the trace. Details: `docs/DETAILS.md` §5.
   question → all diagnostic measures), `reverse` (services → diagnoses), `insurance`. Order in
   `Engine.ask`: insurance question → excluded service alone → reverse question → list question →
   bare list of services (reverse) → check.
-- `table` / `scan` docs are used only through extracted table rows, otherwise reported as
-  "requires manual check".
+- `scan` docs are not used; `table` docs through extracted table rows and their chapters with the
+  column soup dropped (`table_free`), and are still listed as partly unparsed (`partial`);
+  nothing found in a group made only of such docs → "requires manual check".
 - Eval sets in `eval/`: golden, holdout*, `lists.jsonl`, `reverse.jsonl`, `insurance.jsonl`,
   `llm_triggers` / `llm_split` / `llm_service.jsonl` (cases with `"llm": true` are skipped without
   `--llm`) — all must stay green; misses are almost always diagnosis recognition, not service matching.

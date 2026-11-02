@@ -13,8 +13,14 @@ What is unfinished or worth doing, roughly by priority. State as of 2026-10-24.
   хронический миелолейкоз, множественная миелома, 3 реабилитационных, эндовенозная лазерная
   коагуляция, гемофилия). Options: Tesseract (rus, local, weak on tables) or a vision model via
   OpenRouter (cheap). Mark such excerpts in answers as "recognized by OCR, check against the scan".
-- [ ] **Narrow-column tables** not extracted by `table_extract.py` (child endocrinology 2019, ЛОР,
-  2005 orders); nephrology rows without blank separators get merged. 55 docs are `kind: table`.
+- [ ] **Tables still not read** by `table_extract.py`: rows without an МКБ-10 code (screening /
+  complication tables, per-service schedules in ТБ, ВИЧ, диализ — could bind to the chapter
+  around the table), box-drawing flowcharts (скорая помощь 2010), unruled narrow tables
+  (child endocrinology 2019). 9 of 68 `kind: table` docs have no usable list items.
+- [ ] `columns` paragraphs (column soup) of `standard` docs are still used where no table rows
+  were extracted (~3 000 paragraphs on non-table pages).
+- [ ] Item splitting in table cells is heuristic: a wrapped line starting with an abbreviation
+  («…определение активности» / «АсАТ, АлАТ») can still start a false item.
 - [ ] **50 parsed documents with no lists found**: other wordings, or lists in appendices
   («согласно приложению N») that are not extracted.
 - [ ] 17 documents without «ГЛАВА N» structure (`no_chapters`) get only partial handling.

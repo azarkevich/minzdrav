@@ -21,6 +21,7 @@ Usage:
     python -I kb_build.py [--category Эндокринология] [--parsed parsed] [--out kb]
 """
 import argparse
+import copy
 import json
 import math
 import re
@@ -222,6 +223,18 @@ def chapter_codes(ch, icd_names):
     return [c for c in dict.fromkeys(codes) if c not in excluded], names
 
 
+TABLE_HEADERS = {"mandatory": "диагностика обязательная", "additional": "диагностика дополнительная (по показаниям)",
+                 "listed": "диагностические мероприятия"}
+
+
+def table_row_name(name: str) -> str:
+    """«D80 Иммунодефициты с преимущественной недостаточностью антител» / «Кардиоспазм (Q39.5)»
+    → the name without МКБ-10 codes."""
+    name = re.sub(r"\s*\([^)]*\)", "", name)
+    name = re.sub(r"^(?:\d+\.?\s+)?[A-ZА-Я]\s?\d{2}(?:\.\d{1,2})?(?:\s*[-–,]\s*[A-ZА-Я]?\d{2}(?:\.\d{1,2})?)*\s+", "", name)
+    return name.strip(" .;:")
+
+
 def build(parsed: Path, ref: Path, category: str | None, protocols_dir: Path | None = Path("protocols")):
     norm = Normalizer()
     cat = Catalogue(ref / "services.json", norm)
@@ -241,182 +254,226 @@ def build(parsed: Path, ref: Path, category: str | None, protocols_dir: Path | N
         dinfo["kind"] = doc["stats"]["kind"]
         documents[doc_id] = dinfo
         n_blocks = n_items = 0
-
-        for pr in doc["protocols"]:
-            pop = pr["population"] or doc["population"]
-            # codes and names declared anywhere in the protocol, for title matching
-            proto_names = {}
-            per_ch = []
-            for ch in pr["chapters"]:
-                codes, names = chapter_codes(ch, icd)
-                proto_names.update(names)
-                per_ch.append(codes)
-            for code in pr["icd10"]:
-                proto_names.setdefault(code, icd.get(code, ""))
-
-            # Codes of the classification chapters (codes but no diagnostics lists) — the
-            # protocol's scope, for chapters that have lists but name no codes
-            # («ДИАГНОСТИКА СД» after «КЛАССИФИКАЦИЯ СД»: E10–E14).
-            # Only chapters before the first one with lists count: in a multi-disease protocol
-            # a later list-less chapter is just another disease.
-            # Codes of the preamble and chapter 1 («Настоящий клинический протокол устанавливает …
-            # пациентам с ревматоидным артритом (шифры по МКБ-10 – M05…)») always count.
-            scope = []
-            for ch, codes in zip(pr["chapters"], per_ch):
-                if (ch["no"] or 0) <= 1:
-                    scope += codes
-                    continue
-                if has_lists(ch):
-                    break
-                scope += codes
-            scope = list(dict.fromkeys(scope))
-
-            if scope:
-                for nm in title_diseases(pr["title"] or meta["title"]):
-                    protocol_names.append({"name": nm, "codes": scope, "doc_id": doc_id})
-
-            for ch, codes in zip(pr["chapters"], per_ch):
-                source = "classification" if codes else None
-                if not codes and ch["title"]:
-                    title = norm.expand(ch["title"]).lower()
-                    scored = sorted(((trigram_sim(title, norm.expand(nm).lower()), c) for c, nm in proto_names.items() if nm),
-                                    reverse=True)
-                    if scored and scored[0][0] >= 0.45:
-                        codes = [c for s, c in scored if s >= scored[0][0] - 0.05][:3]
-                        source = "title"
-                        if scored[0][0] < 0.6 and scope:  # weak title match: keep the protocol scope too
-                            codes = list(dict.fromkeys(codes + scope))
-                if not codes and scope and has_lists(ch):
-                    codes, source = scope, "protocol"
-                # «105. Хронический аутоиммунный тиреоидит (тиреоидит Хашимото, хронический
-                # лимфоцитарный тиреоидит) – воспалительное заболевание…» → names of the diagnosis
-                names = [ch["title"]] if ch["title"] else []
-                for cl in ch["clauses"][:3]:
-                    if not cl["paragraphs"]:
-                        continue
-                    first = cl["paragraphs"][0]["text"]
-                    syn = re.search(r"Синоним\w*(?:\s+термина)?\s*[–—-]\s*([^.]+)", first)
-                    if syn:  # «Синонимы термина – эндокринная офтальмопатия, офтальмопатия Грейвса, …»
-                        names += [n.strip() for n in split_members(syn.group(1)) if len(n.strip()) > 3]
-                    m = DEFINITION_RE.match(first)
-                    if m:
-                        names.append(m.group(1).strip())
-                        if m.group(2):
-                            names += [n.strip() for n in split_members(m.group(2))
-                                      if len(n.strip()) > 3 and not n.strip().startswith("далее")]
-                        break
-                sec = {
-                    "id": f"{doc_id}:{pr['index']}:{ch['no'] if ch['no'] is not None else 0}",
-                    "doc_id": doc_id,
-                    "protocol": pr["title"],
-                    "population": pop,
-                    "chapter": ch["no"],
-                    "chapter_title": ch["title"],
-                    "page": ch["page"],
-                    "icd10": codes,
-                    "icd10_source": source,
-                    "names": names,
-                    "items": [],
-                }
-                block = None  # current list: {"level", "header", "clause", "page"}
-                condition = None
-                for cl in ch["clauses"]:
-                    block, condition, subgroup = None, None, None  # lists never span clauses
-                    clause_level = clause_header = suspended = None
-                    for p in cl["paragraphs"]:
-                        text = p["text"]
-                        level, tail = header_level(text)
-                        if not level and block and block.get("closing"):
-                            first = text.split()[0] if text.split() else ""
-                            if p.get("sub"):
-                                block = {k: v for k, v in block.items() if k != "closing"}  # «12.2. …» goes on
-                            elif not (text[:1].islower() or len(first) > 1 and first.rstrip(",;:").isupper()):
-                                # the list ended with "." — an explanatory paragraph follows; keep the list
-                                # suspended: the next numbered sub-clause of this clause resumes it
-                                suspended = {k: v for k, v in block.items() if k != "closing"}
-                                block, condition = None, None
-                        elif not level and not block and suspended and p.get("sub"):
-                            block = suspended
-                        if level:
-                            block = {"level": level, "header": text, "clause": cl["id"], "page": p["page"]}
-                            condition, subgroup = None, None
-                            clause_level, clause_header, suspended = level, text, None
-                            n_blocks += 1
-                            if OTHER_SERVICES_RE.search(text):
-                                dinfo.setdefault("other_services", {"text": text, "clause": cl["id"], "page": p["page"]})
-                            if not tail:
-                                continue
-                            text = tail  # «Обязательная диагностика: УЗИ …» on one line
-                        elif block and SUBGROUP_RE.match(text):
-                            subgroup = re.sub(r"^[\d.]+\s*", "", text).rstrip(":")
-                            block = {k: v for k, v in block.items() if k != "closing"}
-                            continue
-                        elif not block and SUBGROUP_RE.match(text) and re.search(r"исследовани|обследовани|метод", text, re.I):
-                            # «Лабораторные исследования:» opening a list on its own; within a
-                            # clause that started with «Обязательные …:» it keeps that status
-                            block = {"level": clause_level or "listed", "header": clause_header or text,
-                                     "clause": cl["id"], "page": p["page"]}
-                            subgroup = re.sub(r"^[\d.]+\s*", "", text).rstrip(":") if clause_level else None
-                            condition = None
-                            n_blocks += 1
-                            continue
-                        elif block and CONDITION_RE.match(re.sub(r"^[\d.]+\s*", "", text)):
-                            condition = re.sub(r"^[\d.]+\s*", "", text).rstrip(":")
-                            continue
-                        if OTHER_SERVICES_RE.search(text):
-                            dinfo.setdefault("other_services", {"text": text, "clause": cl["id"], "page": p["page"]})
-                        item = {
-                            "level": block["level"] if block else "text",
-                            "text": text,
-                            "clause": cl["id"],
-                            "sub": p.get("sub"),
-                            "page": p["page"],
-                            "page_end": p["page_end"],
-                            "printed": printed.get(p["page"]),
-                        }
-                        if block:
-                            item["header"] = block["header"]
-                            item["header_page"] = block["page"]
-                            n_items += 1
-                        if condition:
-                            item["condition"] = condition
-                        if block and subgroup:
-                            item["subgroup"] = subgroup
-                        segs = []
-                        for seg in split_segments(text):
-                            full = (seg.get("group", "") + " " + seg["text"]).strip()
-                            st = norm.stems(full, glossary)
-                            seg["stems"] = st
-                            if block:  # catalogue mapping only for list items (cost)
-                                seg["members"] = []
-                                for m in members(seg, norm, glossary):
-                                    ms = norm.stems(m, glossary)
-                                    seg["members"].append({"text": m, "stems": ms, "services": cat.match(ms)})
-                            segs.append(seg)
-                        item["segments"] = segs
-                        sec["items"].append(item)
-                        # a list ends with an item ending in "." unless the next one
-                        # continues it (lowercase start or an abbreviation)
-                        if block and text.rstrip().endswith(".") and not text.rstrip().endswith(" г."):
-                            block = {"level": block["level"], "header": block["header"], "clause": block["clause"],
-                                     "page": block["page"], "closing": True}
-                    # end of clause
-                sections.append(sec)
-        # table-layout pages: one section per table row (nosology) — stage 4
+        # table rows (stage 4), see table_extract.py; added as sections after the chapters
+        rows = []
         if protocols_dir and doc["stats"]["table_pages"] >= 2:
             try:
-                rows = table_extract.extract(protocols_dir / meta["path"], icd)
+                rows = table_extract.extract(protocols_dir / meta["path"], icd, cache=parsed / "tables",
+                                             pages=table_extract.pages_to_read(doc["pages"]))
             except Exception as e:  # a broken table must not stop the build
                 print(f"  table extraction failed: {meta['path']}: {e!r}")
-                rows = []
+        # Column soup: a table read line by line («Язвенный РУ Общий ан. крови 2 Пальцевое…»).
+        # Table-layout document: drop its table pages and every multi-column paragraph; the
+        # chapters left are ordinary text and usable (`table_free` sections). Any document:
+        # drop the multi-column paragraphs of the pages whose table rows were extracted.
+        tpages = {p["page"] for p in doc["pages"] if p.get("table")} if dinfo["kind"] == "table" else set()
+        row_pages = {n for r in rows for n in range(r["page"], r["page_end"] + 1)}
+        skipped = 0
+        soup_doc = {"protocols": copy.deepcopy(doc["protocols"])} if dinfo["kind"] == "table" else None
+        for pr in doc["protocols"]:
+            for ch in pr["chapters"]:
+                for cl in ch["clauses"]:
+                    def soup(p):
+                        span = set(range(p["page"], p.get("page_end", p["page"]) + 1))
+                        return bool(span & tpages) or p.get("columns") and (dinfo["kind"] == "table" or span & row_pages)
+                    keep = [p for p in cl["paragraphs"] if not soup(p)]
+                    skipped += len(cl["paragraphs"]) - len(keep)
+                    cl["paragraphs"] = keep
+                    cl["icd10"] = sorted({c for p in keep for c in p.get("icd10", [])})
+                ch["clauses"] = [cl for cl in ch["clauses"] if cl["paragraphs"]]
+                ch["icd10"] = sorted({c for cl in ch["clauses"] for c in cl["icd10"]})
+            pr["icd10"] = sorted({c for ch in pr["chapters"] for c in ch["icd10"]})
+        if dinfo["kind"] == "table":
+            dinfo["table_pages_skipped"] = skipped
+        first_sec = len(sections)
+        if not skipped:
+            soup_doc = None
+
+        # A table-layout document is built twice: from the full text as before, kept only as
+        # empty `soup` sections (they bind the МКБ-10 codes of its chapters and report the
+        # document as not parsed), and from the cleaned text (usable `table_free` sections).
+        passes = [(soup_doc, True), (doc, False)] if soup_doc else [(doc, False)]
+        for pass_doc, placeholder in passes:
+            pass_start, counts = len(sections), (n_blocks, n_items)
+            for pr in pass_doc["protocols"]:
+                pop = pr["population"] or doc["population"]
+                # codes and names declared anywhere in the protocol, for title matching
+                proto_names = {}
+                per_ch = []
+                for ch in pr["chapters"]:
+                    codes, names = chapter_codes(ch, icd)
+                    proto_names.update(names)
+                    per_ch.append(codes)
+                for code in pr["icd10"]:
+                    proto_names.setdefault(code, icd.get(code, ""))
+
+                # Codes of the classification chapters (codes but no diagnostics lists) — the
+                # protocol's scope, for chapters that have lists but name no codes
+                # («ДИАГНОСТИКА СД» after «КЛАССИФИКАЦИЯ СД»: E10–E14).
+                # Only chapters before the first one with lists count: in a multi-disease protocol
+                # a later list-less chapter is just another disease.
+                # Codes of the preamble and chapter 1 («Настоящий клинический протокол устанавливает …
+                # пациентам с ревматоидным артритом (шифры по МКБ-10 – M05…)») always count.
+                scope = []
+                for ch, codes in zip(pr["chapters"], per_ch):
+                    if (ch["no"] or 0) <= 1:
+                        scope += codes
+                        continue
+                    if has_lists(ch):
+                        break
+                    scope += codes
+                scope = list(dict.fromkeys(scope))
+
+                if scope:
+                    for nm in title_diseases(pr["title"] or meta["title"]):
+                        protocol_names.append({"name": nm, "codes": scope, "doc_id": doc_id})
+
+                for ch, codes in zip(pr["chapters"], per_ch):
+                    source = "classification" if codes else None
+                    if not codes and ch["title"]:
+                        title = norm.expand(ch["title"]).lower()
+                        scored = sorted(((trigram_sim(title, norm.expand(nm).lower()), c) for c, nm in proto_names.items() if nm),
+                                        reverse=True)
+                        if scored and scored[0][0] >= 0.45:
+                            codes = [c for s, c in scored if s >= scored[0][0] - 0.05][:3]
+                            source = "title"
+                            if scored[0][0] < 0.6 and scope:  # weak title match: keep the protocol scope too
+                                codes = list(dict.fromkeys(codes + scope))
+                    if not codes and scope and has_lists(ch):
+                        codes, source = scope, "protocol"
+                    # «105. Хронический аутоиммунный тиреоидит (тиреоидит Хашимото, хронический
+                    # лимфоцитарный тиреоидит) – воспалительное заболевание…» → names of the diagnosis
+                    names = [ch["title"]] if ch["title"] else []
+                    for cl in ch["clauses"][:3]:
+                        if not cl["paragraphs"]:
+                            continue
+                        first = cl["paragraphs"][0]["text"]
+                        syn = re.search(r"Синоним\w*(?:\s+термина)?\s*[–—-]\s*([^.]+)", first)
+                        if syn:  # «Синонимы термина – эндокринная офтальмопатия, офтальмопатия Грейвса, …»
+                            names += [n.strip() for n in split_members(syn.group(1)) if len(n.strip()) > 3]
+                        m = DEFINITION_RE.match(first)
+                        if m:
+                            names.append(m.group(1).strip())
+                            if m.group(2):
+                                names += [n.strip() for n in split_members(m.group(2))
+                                          if len(n.strip()) > 3 and not n.strip().startswith("далее")]
+                            break
+                    sec = {
+                        "id": f"{doc_id}:{pr['index']}:{ch['no'] if ch['no'] is not None else 0}",
+                        "doc_id": doc_id,
+                        "protocol": pr["title"],
+                        "population": pop,
+                        "chapter": ch["no"],
+                        "chapter_title": ch["title"],
+                        "page": ch["page"],
+                        "icd10": codes,
+                        "icd10_source": source,
+                        "names": names,
+                        "items": [],
+                    }
+                    block = None  # current list: {"level", "header", "clause", "page"}
+                    condition = None
+                    for cl in ch["clauses"]:
+                        block, condition, subgroup = None, None, None  # lists never span clauses
+                        clause_level = clause_header = suspended = None
+                        for p in cl["paragraphs"]:
+                            text = p["text"]
+                            level, tail = header_level(text)
+                            if not level and block and block.get("closing"):
+                                first = text.split()[0] if text.split() else ""
+                                if p.get("sub"):
+                                    block = {k: v for k, v in block.items() if k != "closing"}  # «12.2. …» goes on
+                                elif not (text[:1].islower() or len(first) > 1 and first.rstrip(",;:").isupper()):
+                                    # the list ended with "." — an explanatory paragraph follows; keep the list
+                                    # suspended: the next numbered sub-clause of this clause resumes it
+                                    suspended = {k: v for k, v in block.items() if k != "closing"}
+                                    block, condition = None, None
+                            elif not level and not block and suspended and p.get("sub"):
+                                block = suspended
+                            if level:
+                                block = {"level": level, "header": text, "clause": cl["id"], "page": p["page"]}
+                                condition, subgroup = None, None
+                                clause_level, clause_header, suspended = level, text, None
+                                n_blocks += 1
+                                if OTHER_SERVICES_RE.search(text):
+                                    dinfo.setdefault("other_services", {"text": text, "clause": cl["id"], "page": p["page"]})
+                                if not tail:
+                                    continue
+                                text = tail  # «Обязательная диагностика: УЗИ …» on one line
+                            elif block and SUBGROUP_RE.match(text):
+                                subgroup = re.sub(r"^[\d.]+\s*", "", text).rstrip(":")
+                                block = {k: v for k, v in block.items() if k != "closing"}
+                                continue
+                            elif not block and SUBGROUP_RE.match(text) and re.search(r"исследовани|обследовани|метод", text, re.I):
+                                # «Лабораторные исследования:» opening a list on its own; within a
+                                # clause that started with «Обязательные …:» it keeps that status
+                                block = {"level": clause_level or "listed", "header": clause_header or text,
+                                         "clause": cl["id"], "page": p["page"]}
+                                subgroup = re.sub(r"^[\d.]+\s*", "", text).rstrip(":") if clause_level else None
+                                condition = None
+                                n_blocks += 1
+                                continue
+                            elif block and CONDITION_RE.match(re.sub(r"^[\d.]+\s*", "", text)):
+                                condition = re.sub(r"^[\d.]+\s*", "", text).rstrip(":")
+                                continue
+                            if OTHER_SERVICES_RE.search(text):
+                                dinfo.setdefault("other_services", {"text": text, "clause": cl["id"], "page": p["page"]})
+                            item = {
+                                "level": block["level"] if block else "text",
+                                "text": text,
+                                "clause": cl["id"],
+                                "sub": p.get("sub"),
+                                "page": p["page"],
+                                "page_end": p["page_end"],
+                                "printed": printed.get(p["page"]),
+                            }
+                            if block:
+                                item["header"] = block["header"]
+                                item["header_page"] = block["page"]
+                                n_items += 1
+                            if condition:
+                                item["condition"] = condition
+                            if block and subgroup:
+                                item["subgroup"] = subgroup
+                            segs = []
+                            for seg in split_segments(text):
+                                full = (seg.get("group", "") + " " + seg["text"]).strip()
+                                st = norm.stems(full, glossary)
+                                seg["stems"] = st
+                                if block:  # catalogue mapping only for list items (cost)
+                                    seg["members"] = []
+                                    for m in members(seg, norm, glossary):
+                                        ms = norm.stems(m, glossary)
+                                        seg["members"].append({"text": m, "stems": ms, "services": cat.match(ms)})
+                                segs.append(seg)
+                            item["segments"] = segs
+                            sec["items"].append(item)
+                            # a list ends with an item ending in "." unless the next one
+                            # continues it (lowercase start or an abbreviation)
+                            if block and text.rstrip().endswith(".") and not text.rstrip().endswith(" г."):
+                                block = {"level": block["level"], "header": block["header"], "clause": block["clause"],
+                                         "page": block["page"], "closing": True}
+                        # end of clause
+                    sections.append(sec)
+            if placeholder:
+                for sec in sections[pass_start:]:
+                    sec["items"], sec["soup"] = [], True
+                n_blocks, n_items = counts
+                first_sec = len(sections)
+                dinfo.pop("other_services", None)  # taken from the cleaned text only
+        if dinfo["kind"] == "table":
+            for sec in sections[first_sec:]:
+                sec["table_free"] = True  # text pages only, see above
+        # table rows: one section per nosology — stage 4
+        if rows:
             pop = doc["population"]
             title = doc["protocols"][0]["title"] if doc["protocols"] else doc["title"]
             for k, row in enumerate(rows):
                 sec = {"id": f"{doc_id}:t:{k}", "doc_id": doc_id, "protocol": title, "population": pop,
                        "chapter": None, "chapter_title": f"Таблица: {row['name']}", "page": row["page"],
                        "icd10": row["icd10"], "icd10_source": "table",
-                       "names": [re.sub(r"\s*\([^)]*\)", "", row["name"]).strip()], "items": []}
-                for level in ("mandatory", "additional"):
+                       "names": [table_row_name(row["name"])], "items": []}
+                for level in ("mandatory", "additional", "listed"):
                     for text in row[level]:
                         segs = []
                         for seg in split_segments(text):
@@ -429,8 +486,7 @@ def build(parsed: Path, ref: Path, category: str | None, protocols_dir: Path | N
                         sec["items"].append({
                             "level": level, "text": text, "clause": None, "sub": None,
                             "page": row["page"], "page_end": row["page_end"], "printed": printed.get(row["page"]),
-                            "header": f"Таблица, «{row['name']}», диагностика "
-                                      + ("обязательная" if level == "mandatory" else "дополнительная (по показаниям)") + ":",
+                            "header": f"Таблица, «{row['name']}», " + TABLE_HEADERS[level] + ":",
                             "header_page": row["page"], "segments": segs})
                         n_items += 1
                 sections.append(sec)
@@ -438,7 +494,8 @@ def build(parsed: Path, ref: Path, category: str | None, protocols_dir: Path | N
         report.append({"doc_id": doc_id, "path": dinfo["path"], "kind": dinfo["kind"],
                        "blocks": n_blocks, "items": n_items})
     return {"version": KB_VERSION, "built": time.strftime("%Y-%m-%dT%H:%M:%S"), "category": category,
-            "documents": documents, "sections": sections, "protocol_names": protocol_names}, report
+            "documents": documents, "sections": sections,
+            "protocol_names": list({json.dumps(x, ensure_ascii=False, sort_keys=True): x for x in protocol_names}.values())}, report
 
 
 def main():

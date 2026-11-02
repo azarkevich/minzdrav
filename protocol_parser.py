@@ -39,6 +39,7 @@ PAGE_NO_RE = re.compile(r"^\s*(\d{1,4})\s*$")
 HEADER_RE = re.compile(r"^\s*\(?Национальный правовой Интернет-портал.*$")
 PROTOCOL_RE = re.compile(r"^\s*КЛИНИЧЕСКИ[ЙЕ]\s+ПРОТОКОЛ[Ы]?\b")
 HEADING_INDENT = 15  # centered headings (chapter titles) are indented further than this
+GAPPY_RE = re.compile(r"\S\s{3,}\S")  # a wide gap inside a line: the text of several columns
 
 # МКБ-10 code as printed: Latin or look-alike Cyrillic letter, "E06", "E06.3", "O90.5*".
 ICD_RE = re.compile(r"(?<![\wА-ЯЁа-яё])([A-ZАВЕКМНОРСТХ])(\d{2})(?:\.(\d{1,2}))?[*+]?(?![\wА-ЯЁа-яё])")
@@ -156,10 +157,13 @@ def paragraphs(lines, flat: set[int] = frozenset()):
         if cur is not None and cur["heading"] and heading and not CHAPTER_RE.match(cur["text"]) \
                 and not CHAPTER_RE.match(line):
             starts = False  # multi-line centered title
+        gappy = bool(GAPPY_RE.search(text))  # text runs of several table columns on one line
         if starts:
-            cur = {"page": page, "page_end": page, "text": text, "heading": heading}
+            cur = {"page": page, "page_end": page, "text": text, "heading": heading, "lines": 1, "gappy": int(gappy)}
             paras.append(cur)
             continue
+        cur["lines"] += 1
+        cur["gappy"] += gappy
         cur["page_end"] = page
         if cur["text"].endswith("-") and not cur["text"].endswith(" -"):
             cur["text"] += text  # "врачей-" + "специалистов"
@@ -221,6 +225,8 @@ def build_chapters(paras, icd: Icd):
             ch["clauses"].append(clause)
         clause["page_end"] = p["page_end"]
         para = {"page": p["page"], "page_end": p["page_end"], "text": p["text"]}
+        if p.get("gappy") and p["gappy"] >= 0.4 * p["lines"]:
+            para["columns"] = True  # most lines hold several columns: table text, read row by row
         if cm and "." in cm.group(1):
             para["sub"] = cm.group(1)
         if p["heading"]:

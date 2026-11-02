@@ -196,10 +196,12 @@ icd10) → paragraphs[] (page, page_end, text, sub "73.1", heading, icd10, dx ma
 Reuses `pdf_to_pages`, `build_glossary`, regexes from `protocol_chapter_extractor.py`
 (`sys.path` insert because `python -I` drops the script dir).
 
-`stats.kind`: `standard` (319, «ГЛАВА N» + numbered clauses), `table` (55, >30% of pages are
-multi-column tables — old 2005–2012 protocols and big consolidated ones; their paragraph
-text is column soup, re-extract tables by column positions or from page images),
-`no_chapters` (17), `scan` (9: image pages, only the cover order has text — need OCR).
+`stats.kind`: `standard` (308, «ГЛАВА N» + numbered clauses), `table` (68, >30% of pages are
+multi-column tables — old 2005–2012 protocols and big consolidated ones; their table text
+is column soup, the tables are read by `table_extract.py`), `no_chapters` (16), `scan` (9:
+image pages, only the cover order has text — need OCR). (Counts with pdftotext 4.06, 401 docs.)
+A paragraph most of whose lines (≥ 40%) have a wide gap inside (`GAPPY_RE`, `\S\s{3,}\S`) is
+marked `columns: true` — the text of several table columns read line by line.
 МКБ-10 detection: Latin or look-alike Cyrillic letter, validated against the dictionary,
 ranges expanded; drops "CD B20" and V–Y codes outside МКБ context (ATC codes, doses).
 Codes per paragraph are hints, not "applies to" — differential diagnosis lists codes too.
@@ -209,7 +211,7 @@ wording varies a lot («Для постановки или подтвержде�
 ## 5. Expert system (stages 2–4): `kb_build.py`, `kb.py`, `kb_text.py`, `table_extract.py`, `kb_llm.py`
 
 ```
-python -I kb_build.py --out kb_all                     # all 400 docs → kb_all/kb.json (~5 min)
+python -I kb_build.py --out kb_all                     # all docs → kb_all/kb.json (~5 min; first run + ~15 min for the tables cache)
 python -I kb_build.py --category Эндокринология        # one category → kb/kb.json (~10 s)
 python -I kb.py ask "Диагноз – аутоиммунный тиреоидит, разрешён ли анализ мочи по Ничипоренко" --kb kb_all/kb.json
 python -I kb.py ask --diagnosis E06.3 --service ТТГ --json
@@ -234,19 +236,52 @@ python -I kb.py ask "…" --llm                          # LLM fallback for unre
   stated), also found after a clause number glued to a chapter title on flat pages; sub-headers
   «Лабораторные исследования:» (inherit the clause's status); condition sub-headers «при …:»;
   a list ending with "." is suspended, not closed — the next numbered sub-clause resumes it.
-  Table pages (≥2) go through `table_extract.py`: one section per table row, `icd10_source="table"`.
-- `table_extract.py` — column cuts at blank channels between the «1 2 3 4 5» numbers row,
-  column roles from header words (обязательн / дополнительн / наименование), rows separated by
-  blank lines, cell lines → items. Works on the urology / STI / skin / nephrology tables
-  (320 rows from 12 docs); narrow-column tables (child endocrinology 2019, ЛОР, 2005 orders)
-  are not extracted; nephrology rows without blank separators get merged.
+  Table pages (≥2) go through `table_extract.py`: one section per table row, `icd10_source="table"`,
+  levels mandatory / additional / listed (a diagnostics column with no status).
+  Column soup is dropped before the chapters are built: in a `table` document its table
+  pages and every `columns` paragraph; in any document the `columns` paragraphs of the pages
+  whose table rows were extracted. The cleaned chapters of a `table` document are sections
+  with `table_free: true` (usable); the document also keeps its chapters built from the full
+  text as before, emptied (`soup: true`, not usable) — they bind its МКБ-10 codes so that the
+  document is still reported as not parsed. `documents[].table_pages_skipped` = paragraphs dropped.
+- `table_extract.py` (pdfplumber, cached per PDF sha256 + `VERSION` in `parsed/tables/`; the
+  build reads the parser's table pages + the page before each run of them, `pages_to_read`) —
+  tables found by their ruling lines (`find_tables`); 1510 of the 1730 table pages have them.
+  Column spans = the narrowest cell starting in a column (`table.columns` is widened by merged
+  cells). Header = rows up to the «1 2 3 …» numbers row, else leading rows with header words;
+  a column's header text includes the merged cells above it («Объемы … / Диагностика /
+  обязательная»). Roles: name (нозолог / наименование … / диагноз / шифр / осложнение);
+  mandatory / additional = «обязательн» / «дополнительн» under a diagnostics word; listed = a
+  diagnostics column (диагност / обследова / исследова) that is not лечение / кратность / уровень…
+  A table with no header continues the last diagnostics table when its left/right edges match;
+  roles are re-mapped by x overlap (the grid of a continuation may differ: urology 8 → 5 columns).
+  A table with a header of its own that is not diagnostics ends it. Rows: a name cell starting in
+  upper case / a digit / a code opens a nosology; an empty or lower-case one continues it
+  (Районный / Областной sub-rows, page breaks). Only the header ruled (2007 orders): the body
+  words are put into the header's columns by x, rows split by vertical gaps (> 1.6 × the line
+  step), full-width lines «Диагностика и лечение при оказании …» end a row. Items: a new item
+  at an upper-case letter or «1.», not after «-», «,», «:», «–», a preposition or an open bracket;
+  in punctuated cells (items end with «.» / «;») only after them; a cell border always breaks.
+  МКБ-10 codes from the name cell: «N11 8», «D130», «I 12 0» read as N11.8, D13.0, I12.0; rows
+  without a code are dropped. The v1 layout-text extractor (number-row column cuts on
+  `pdftotext -layout`) still runs; its rows are kept for codes the ruled tables do not give.
+  Result (2026-11): 1319 rows from 39 docs (v1: 255 from 10); usable list items of `table`
+  documents 2840 → ~11 000 + ~960 from their cleaned chapters; 59 of 68 `table` documents
+  have usable list items (was 10). All eval sets as before (reverse 20 → 21/22: B86 found);
+  kb_probe the same except icd_name 399 → 397/400 (uncovered rubrics losing to a close covered
+  candidate, as before). Not read: flowcharts in box-drawing characters (скорая
+  помощь 2010), tables whose rows carry no МКБ-10 code (screening / complication tables,
+  per-service schedules — ТБ, ВИЧ, диализ), unruled narrow tables (child endocrinology 2019).
 - `kb.py` — question split by regex; diagnosis → МКБ-10 over МКБ names + chapter/table/protocol
   names (score < 0.6 → asks to clarify; a close candidate covered by protocols beats an uncovered
   one). Sections tiered: 0 = names the code or a broader one; 1 = bound only by the scope of a
   protocol about another disease (protocol title doesn't name the diagnosis); 2 = only narrower
   codes (complications). Match = all non-generic service stems occur in a list member/segment.
-  Verdict per population; `table`/`scan` docs are used only through their table rows, otherwise
-  reported as "requires manual check".
+  Verdict per population; `scan` docs are not used, `table` docs only through their table rows
+  and cleaned chapters (`Engine.usable`, `split_usable`). A `table` doc with dropped paragraphs
+  stays in `unparsed` with `partial: true` («Таблицы протокола не разобраны автоматически
+  (использован только текст)»); a population group whose protocols are all such docs and that
+  finds nothing gets `manual`, not «не предусмотрено».
 - List mode (`Engine.list_services`, answer `mode: "list"`): questions with «перечень / список /
   какой / какие / что входит» (`parse_list_question`, tried before the check split) — «сахарный диабет
   перечень лабораторных анализов», «ангиомиолипома, какой вид КТ используется». Category lab /
@@ -357,7 +392,7 @@ JSON lines into it.
 `text` = `kb.render`). The page shows diagnosis/service recognition, a coloured verdict per
 population, each excerpt with a `url#page=N` link, and the plain-text form for copying; query
 history is in the browser's localStorage. The page header shows `VERSION` from `kb_web.py`
-(substituted for `__VERSION__` in `web/index.html`; 1.1 = list mode, 1.2 = Enter sends / Shift+Enter new line, spinner, 1.3 = insurance block, 1.4 = insurance / protocols tabs, 1.5 = rating panel between the question and the answer, 1.6 = «уточните диагноз», Google Sheet log, 1.7 = diagnosis-only question → all diagnostic measures, compact rating panel, 2.0 = own PDF viewer, 2.1 = ⚙ settings: open PDFs in the viewer or on the original site, 2.2 = PDFs shipped in deploy/pdf, 2.3 = reverse search, 2.4 = «страховой ли случай» questions, п. 4.3+ of the rules ignored, 2.5 = «Отладка» block, «услуга уточнена LLM», hint about extra text, 2.7 = the rules title link in the insurance block opens in the viewer, 2.8 = collapsed «Примеры запросов и подсказки» panel: query kinds with a short explanation and sample queries, 2.9 = settings link right after the version, 2.10 = only the ⚙ icon, in line with the version, 2.11 = question box 20% taller, 2.12 = ⚙ always on the version line (smaller title, version + ⚙ never wrap apart), 2.13 = one-line placeholder in the question box) — bump it on user-visible changes. Binds to 127.0.0.1 only (no auth). `--llm` needs
+(substituted for `__VERSION__` in `web/index.html`; 1.1 = list mode, 1.2 = Enter sends / Shift+Enter new line, spinner, 1.3 = insurance block, 1.4 = insurance / protocols tabs, 1.5 = rating panel between the question and the answer, 1.6 = «уточните диагноз», Google Sheet log, 1.7 = diagnosis-only question → all diagnostic measures, compact rating panel, 2.0 = own PDF viewer, 2.1 = ⚙ settings: open PDFs in the viewer or on the original site, 2.2 = PDFs shipped in deploy/pdf, 2.3 = reverse search, 2.4 = «страховой ли случай» questions, п. 4.3+ of the rules ignored, 2.5 = «Отладка» block, «услуга уточнена LLM», hint about extra text, 2.7 = the rules title link in the insurance block opens in the viewer, 2.8 = collapsed «Примеры запросов и подсказки» panel: query kinds with a short explanation and sample queries, 2.9 = settings link right after the version, 2.10 = only the ⚙ icon, in line with the version, 2.11 = question box 20% taller, 2.12 = ⚙ always on the version line (smaller title, version + ⚙ never wrap apart), 2.13 = one-line placeholder in the question box, 2.14 = «таблицы протокола не разобраны (использован только текст)» note) — bump it on user-visible changes. Binds to 127.0.0.1 only (no auth). `--llm` needs
 `KB_OPENROUTER_API_KEY` in the environment of the server process.
 
 «Отладка» (2.5): a collapsed `<details class="card debug">` at the very bottom, below the history (2.6: moved there; «Метод: …» is shown only when the answer has one — insurance / list answers have none) (the `debugopen` flag in

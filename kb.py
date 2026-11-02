@@ -321,6 +321,12 @@ def _read_items(blob: Path, offset: int, size: int):
         return json.loads(zlib.decompress(f.read(size)))
 
 
+def unparsed_label(u: dict) -> str:
+    if u.get("partial"):
+        return "Таблицы протокола не разобраны автоматически (использован только текст)"
+    return f"Не разобран автоматически ({'таблицы' if u['kind'] == 'table' else 'скан'})"
+
+
 class LazySection(dict):
     """Section whose `items` are read from the packed blob on first access."""
 
@@ -857,8 +863,21 @@ class Engine:
 
     # ---------------------------------------------------------------- reverse search
     def usable(self, s) -> bool:
-        """Table-layout and scanned documents count only through their extracted table rows."""
-        return self.kb["documents"][s["doc_id"]]["kind"] not in ("table", "scan") or s["icd10_source"] == "table"
+        """Scanned documents are not used; table-layout ones only through their extracted table
+        rows and the chapters of their text pages (`table_free`: table pages dropped at build)."""
+        kind = self.kb["documents"][s["doc_id"]]["kind"]
+        return kind not in ("table", "scan") or s["icd10_source"] == "table" or bool(s.get("table_free"))
+
+    def split_usable(self, sections) -> tuple[list, list]:
+        """(usable sections, unparsed docs). A table-layout document whose table pages were
+        dropped stays «unparsed» (`partial`) even when its text chapters are used: what the
+        tables say is unknown."""
+        usable = [s for s in sections if self.usable(s)]
+        docs = self.kb["documents"]
+        partial = {s["doc_id"] for s in usable if s.get("table_free") and docs[s["doc_id"]].get("table_pages_skipped")}
+        unparsed = sorted({s["doc_id"] for s in sections} - {s["doc_id"] for s in usable} | partial)
+        return usable, [{"protocol": docs[d]["title"], "url": docs[d]["url"], "kind": docs[d]["kind"],
+                         **({"partial": True} if d in partial else {})} for d in unparsed]
 
     def stem_index(self) -> dict:
         """stem → indexes of usable sections having a list item with that stem. Read from kb.stems.json
@@ -1259,19 +1278,17 @@ class Engine:
         sections = self.sections_for(chosen["code"], population, diagnosis)
         # Table-layout and scanned documents are not parsed into lists yet (stage 4):
         # their "text" is column soup, so they are only reported, never used for a verdict.
-        usable = [s for s in sections if self.kb["documents"][s["doc_id"]]["kind"] not in ("table", "scan")
-                  or s["icd10_source"] == "table"]
-        unparsed = sorted({s["doc_id"] for s in sections} - {s["doc_id"] for s in usable})
+        usable, unparsed = self.split_usable(sections)
         required = self.required_stems(service)
         self._trace_service(service, required, {lbl: sum(1 for s in usable if pop_label(s["population"]) == lbl)
                                                 for lbl in {pop_label(s["population"]) for s in usable}})
 
         results = self._check_groups(usable, required, service)
         service_llm = None
-        if results and service and not any(r["verdict_level"] not in (None, "text") for r in results):
+        if results and service and not any(r["verdict_level"] not in (None, "text", "manual") for r in results):
             retry = self._llm_service_retry(
                 service, chosen, usable, run=lambda v: self._check_groups(usable, self.required_stems(v), v),
-                ok=lambda res: any(r["verdict_level"] not in (None, "text") for r in res))
+                ok=lambda res: any(r["verdict_level"] not in (None, "text", "manual") for r in res))
             if retry:
                 variant, results, variants = retry
                 service_llm = {"variant": variant, "variants": variants}
@@ -1297,8 +1314,7 @@ class Engine:
             "verdict": main["verdict"] if main else "ПРОТОКОЛ НЕ НАЙДЕН для этого диагноза",
             "evidence": main["evidence"] if main else [],
             "results": results,
-            "unparsed": [{"protocol": self.kb["documents"][d]["title"], "url": self.kb["documents"][d]["url"],
-                          "kind": self.kb["documents"][d]["kind"]} for d in unparsed],
+            "unparsed": unparsed,
             "method": ("правила + перекрёстная проверка LLM" if self.crosscheck else "правила (без перекрёстной проверки LLM)")
                       + (f"; {llm_used}" if llm_used else ""),
             # «not provided for» only when a protocol was checked: п. 4.1.50 of the insurance rules
@@ -1323,6 +1339,8 @@ class Engine:
                 level = main_tier[0][1]["level"] if main_tier else level
             evidence = listed[:6] + texts[:2 if listed else 4]
             docs = list(dict.fromkeys(s["doc_id"] for s in secs))
+            if level is None and docs and all(self.kb["documents"][d].get("table_pages_skipped") for d in docs):
+                level = "manual"  # not in the text, and the tables of every protocol here were not read
             res = {
                 "population": label,
                 "verdict_level": level,
@@ -1397,9 +1415,7 @@ class Engine:
             if not ICD_CODE_RE.fullmatch(diagnosis.strip()) else []
         dx_stems = dx_stems or [x for x in self.norm.stems(chosen["name"]) if x not in GENERIC and x not in DX_NEUTRAL]
         sections = self.sections_for(chosen["code"], population, diagnosis)
-        usable = [s for s in sections if self.kb["documents"][s["doc_id"]]["kind"] not in ("table", "scan")
-                  or s["icd10_source"] == "table"]
-        unparsed = sorted({s["doc_id"] for s in sections} - {s["doc_id"] for s in usable})
+        usable, unparsed = self.split_usable(sections)
         required = self.required_stems(service) if service else None
         if service:
             self._trace_service(service, required)
@@ -1482,8 +1498,7 @@ class Engine:
             evidence=results[0]["evidence"] if results else [], results=results, text_only=text_only,
             insurance=self.insurance_check(chosen, diagnosis, service,
                                            items=list(dict.fromkeys(e["text"] for r in results for e in r["evidence"]))),
-            unparsed=[{"protocol": self.kb["documents"][d]["title"], "url": self.kb["documents"][d]["url"],
-                       "kind": self.kb["documents"][d]["kind"]} for d in unparsed],
+            unparsed=unparsed,
             method=("правила + перекрёстная проверка LLM" if self.crosscheck else "правила (без перекрёстной проверки LLM)")
                    + "; вид исследования (лабораторное / инструментальное) определён по словам и коду услуги пост. №123"
                    + (f"; {llm_used}" if llm_used else ""))
@@ -1528,7 +1543,7 @@ def render_list(a: dict) -> str:
         out.append(f"    {t['url']}")
     for u in a["unparsed"]:
         out.append("")
-        out.append(f"Не разобран автоматически ({'таблицы' if u['kind'] == 'table' else 'скан'}), проверьте вручную: {u['protocol']}")
+        out.append(f"{unparsed_label(u)}, проверьте вручную: {u['protocol']}")
         out.append(f"    {u['url']}")
     out.append("")
     out.append(f"Метод: {a['method']}.")
@@ -1668,7 +1683,7 @@ def render_check(a: dict) -> str:
             out.append(f"    {n['url']}")
     for u in a["unparsed"]:
         out.append("")
-        out.append(f"Не разобран автоматически ({'таблицы' if u['kind'] == 'table' else 'скан'}), проверьте вручную: {u['protocol']}")
+        out.append(f"{unparsed_label(u)}, проверьте вручную: {u['protocol']}")
         out.append(f"    {u['url']}")
     out.append("")
     out.append(f"Метод: {a['method']}.")
