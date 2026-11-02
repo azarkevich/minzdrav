@@ -308,4 +308,13 @@ document.querySelectorAll("[name=pdfmode]").forEach(r=>{r.checked=r.value==pdfMo
  }
 }});
 drawHist();
+// keep-alive: the free host sleeps after 15 min without requests (the first question then waits up to a minute).
+// Every 5 min while the tab lives (browsers slow background timers and may freeze the tab), at once when the
+// operator comes back (the server wakes while the question is typed), and a beacon when the tab is hidden
+const ping=()=>fetch("/healthz",{cache:"no-store"}).catch(()=>{});
+setInterval(ping,5*60*1000);
+document.addEventListener("visibilitychange",()=>{
+ if(document.visibilityState==="visible")ping();
+ else try{navigator.sendBeacon("/healthz")}catch(e){}
+});
 </script></body></html>

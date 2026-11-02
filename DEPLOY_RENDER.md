@@ -42,7 +42,7 @@ can't be sent is printed to the log as `SHEET_FAIL {json}`.
 
 ## Behaviour of the free plan
 
-- The service sleeps after 15 minutes without requests; the first request after that waits up to ~1 minute.
+- The service sleeps after 15 minutes without requests; the first request after that waits up to ~1 minute. An open page (2.15+) pings `/healthz` every 5 min and on return to the tab, so it stays awake while the operator has the tab open (a frozen background tab or a closed one stops the pings).
 - The disk is throwaway: `kb/feedback.jsonl` and `kb/llm_usage.jsonl` vanish on restart. Ratings are
   also printed as `FEEDBACK {json}` lines: Dashboard → the service → Logs → search `FEEDBACK`
   (the log retention is limited — copy the lines out regularly).
