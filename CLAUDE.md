@@ -127,7 +127,8 @@ answer stands and the error is in the trace. Details: `docs/DETAILS.md` §5.
 
 - `VERSION` in `kb_web.py` (shown in the page header) — **bump on every user-visible change**;
   history in `docs/DETAILS.md` §7.
-- Binds 127.0.0.1 unless `--host`; `$PORT`, basic auth `$KB_WEB_PASSWORD`, `/healthz`.
+- Binds 127.0.0.1 unless `--host`; `$PORT`, basic auth `$KB_WEB_PASSWORD`, `/healthz`. Test account `test`/`test`
+  (`$KB_WEB_TEST_LOGIN`) → sheets «Запросы (тест)» / «Оценки (тест)».
   `POST /api/ask`, `POST /api/feedback` → `kb/feedback.jsonl` (+ `FEEDBACK {json}` on stdout).
 - PDF viewer `/view` (PDF.js) + `/pdf?u=` proxy, served from `deploy/pdf/` (`pdf_key` = sha1[:16])
   because minzdrav.gov.by doesn't answer Render's data centres. Text answers and MCP keep the

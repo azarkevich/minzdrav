@@ -23,7 +23,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import kb  # noqa: E402
 from sheet_log import SheetLog, mask  # noqa: E402
 
-VERSION = "2.17" # shown on the page; bump on user-visible changes
+VERSION = "2.18" # shown on the page; bump on user-visible changes
 PAGE = (Path(__file__).resolve().parent / "web" / "index.html").read_text(encoding="utf-8").replace("__VERSION__", VERSION)
 VIEWER = (Path(__file__).resolve().parent / "web" / "viewer.html").read_text(encoding="utf-8")
 LOCK = threading.Lock()
@@ -36,6 +36,9 @@ PDF_LOCKS: dict = {}
 FEEDBACK_LOG = Path(__file__).resolve().parent / "kb" / "feedback.jsonl"
 ANSWERS: dict = {}  # recent answers by id, so a rating is stored together with what was answered
 SHEET = SheetLog()  # $KB_SHEET_URL: questions and ratings → Google Sheet (personal data masked)
+# test account (login:password, "" = none): its questions / ratings go to separate sheets, so trials don't mix with real work
+TEST_LOGIN = os.environ.get("KB_WEB_TEST_LOGIN", "test:test")
+TEST_SUFFIX = " (тест)"
 
 
 def debug_brief(ans):
@@ -97,16 +100,28 @@ def make_handler(engine):
             self.end_headers()
             self.wfile.write(data)
 
-        def _authorized(self):
-            """Optional basic auth: any user name, password from $KB_WEB_PASSWORD (unset = open)."""
-            pw = os.environ.get("KB_WEB_PASSWORD")
-            if not pw:
-                return True
+        def _login(self):
+            """(user, password) from the basic auth header, ("", "") if none."""
             try:
-                given = base64.b64decode(self.headers.get("Authorization", "")[6:]).decode("utf-8").partition(":")[2]
+                user, _, pw = base64.b64decode(self.headers.get("Authorization", "")[6:]).decode("utf-8").partition(":")
             except Exception:  # noqa: BLE001
-                given = ""
-            if hmac.compare_digest(given.encode(), pw.encode()):
+                user, pw = "", ""
+            return user, pw
+
+        def _is_test(self):
+            """Logged in as the test account (TEST_LOGIN)."""
+            return bool(TEST_LOGIN) and hmac.compare_digest(":".join(self._login()).encode(), TEST_LOGIN.encode())
+
+        def _sheet(self, name):
+            return name + TEST_SUFFIX if self._is_test() else name
+
+        def _authorized(self):
+            """Optional basic auth: any user name, password from $KB_WEB_PASSWORD (unset = open);
+            also the test account TEST_LOGIN."""
+            pw = os.environ.get("KB_WEB_PASSWORD")
+            if not pw or self._is_test():
+                return True
+            if hmac.compare_digest(self._login()[1].encode(), pw.encode()):
                 return True
             self.send_response(401)
             self.send_header("WWW-Authenticate", 'Basic realm="minzdrav", charset="UTF-8"')
@@ -121,7 +136,7 @@ def make_handler(engine):
                 return
             path, _, query = self.path.partition("?")
             if path in ("/", "/index.html"):
-                self._send(200, PAGE, "text/html")
+                self._send(200, PAGE.replace("<!--TEST-->", '<span class="testbadge" title="Тестовый пользователь: запросы и оценки пишутся на отдельные листы">тест</span>' if self._is_test() else ""), "text/html")
             elif path == "/view":
                 self._send(200, VIEWER, "text/html")
             elif path == "/pdf":
@@ -186,7 +201,7 @@ def make_handler(engine):
                         while len(ANSWERS) > 500:
                             ANSWERS.pop(next(iter(ANSWERS)))
                 sm = summary(question, ans)
-                SHEET.send("Запросы", {
+                SHEET.send(self._sheet("Запросы"), {
                     "время": SHEET.now(), "answer_id": ans.get("answer_id", ""), "вопрос": sm["question"],
                     "режим": {"list": "перечень", "reverse": "обратный", "insurance": "страховой случай"}.get(ans.get("mode"), "проверка"), "население": req.get("population") or "",
                     "диагноз": " ".join(x for x in [sm["diagnosis"], (ans.get("diagnosis") or {}).get("name")] if x)
@@ -209,12 +224,14 @@ def make_handler(engine):
                        "tags": [str(t)[:40] for t in (req.get("tags") or [])][:10],
                        "comment": mask(str(req.get("comment") or "")[:2000]),
                        "answer": ANSWERS.get(req.get("answer_id"))}
+                if self._is_test():
+                    rec["test"] = True
                 FEEDBACK_LOG.parent.mkdir(parents=True, exist_ok=True)
                 with LOCK, FEEDBACK_LOG.open("a", encoding="utf-8") as f:
                     f.write(json.dumps(rec, ensure_ascii=False) + "\n")
                 print("FEEDBACK " + json.dumps(rec, ensure_ascii=False), flush=True)  # hosts with a throwaway disk keep stdout logs
                 a = rec["answer"] or {}
-                SHEET.send("Оценки", {
+                SHEET.send(self._sheet("Оценки"), {
                     "время": SHEET.now(), "answer_id": rec["answer_id"] or "", "оценка": stars, "теги": "; ".join(rec["tags"]),
                     "комментарий": rec["comment"], "вопрос": a.get("question", ""), "диагноз": a.get("diagnosis") or "",
                     "услуга": a.get("service_text") or "", "вердикт протокола": a.get("verdict") or "",

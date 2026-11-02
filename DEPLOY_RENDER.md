@@ -19,6 +19,9 @@ Files involved: `render.yaml` (blueprint), `requirements.txt`, `deploy/` (the ru
      not an exact name — «болезнь Аддисона» — is not recognized; every answer then shows an error for
      the LLM step only when it was needed);
    - `KB_WEB_PASSWORD` — the site password; the browser asks for a login (any) and this password.
+     Login `test`, password `test` is the test account: its questions and ratings go to the separate
+     sheets «Запросы (тест)» / «Оценки (тест)». Change it with `KB_WEB_TEST_LOGIN=user:password`
+     (empty = no test account).
 4. **Apply.** The first build takes a few minutes. The address is `https://minzdrav-<id>.onrender.com`.
 
 ## Questions and ratings → Google Sheet
