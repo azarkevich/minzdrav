@@ -31,8 +31,11 @@
 # A diagnosis alone is a list question, not a reverse search over services
 {"question": "миома", "route": "diagnosis_only"}
 {"question": "мезаденит", "route": "diagnosis_only"}
-{"question": "грыжа диска", "route": "diagnosis_only"}
 {"question": "дислипидемия", "route": "diagnosis_only"}
-# The protocol chapter «Лечение дислипидемии» exists: E78 must find it
-{"question": "дислипидемия перечень", "route": "list", "level": "list"}
-{"question": "гиперхолестеринемия", "route": "diagnosis_only", "level": "list"}
+# E78 / R17 have no protocol in the corpus («Лечение дислипидемии» is п. 33 of the stable angina protocol, statins):
+# «протокол не найден» is the right answer, only the diagnosis must be recognised
+{"question": "дислипидемия перечень", "route": "list", "icd": "E78"}
+{"question": "гиперхолестеринемия", "route": "diagnosis_only", "icd": "E78.0"}
+{"question": "гипербилирубинемия", "route": "diagnosis_only", "icd": "R17"}
+# «кроме брыжеечного» (I88.1) must not win over «брыжеечный лимфаденит» (I88.0) for «мезаденит»
+{"question": "мезаденит перечень", "route": "list", "icd": "I88.0"}

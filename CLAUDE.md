@@ -113,7 +113,8 @@ answer stands and the error is in the trace. Details: `docs/DETAILS.md` §5.
 - `scan` docs are not used; `table` docs through extracted table rows and their chapters with the
   column soup dropped (`table_free`), and are still listed as partly unparsed (`partial`);
   nothing found in a group made only of such docs → "requires manual check".
-- Eval sets in `eval/`: golden, holdout*, `lists.jsonl`, `reverse.jsonl`, `insurance.jsonl`,
+- Eval sets in `eval/`: golden, holdout*, `operator.jsonl` (real questions of the operator; experts' open
+  questions in `operator_pending.md`), `lists.jsonl`, `reverse.jsonl`, `insurance.jsonl`,
   `llm_triggers` / `llm_split` / `llm_service.jsonl` (cases with `"llm": true` are skipped without
   `--llm`) — all must stay green; misses are almost always diagnosis recognition, not service matching.
 - Debug trace (`kb_trace.Trace`, a ContextVar, answer key `debug`): route, parse, diagnosis

@@ -52,6 +52,9 @@ VERDICTS = {
 }
 ICD_CODE_RE = re.compile(r"\b([A-ZА-Я])(\d{2})(?:\.(\d{1,2}))?\b")
 CYR2LAT = str.maketrans("АВЕКМНОРСТХ", "ABEKMHOPCTX")
+# the same keys of the English and the Russian (ЙЦУКЕН) layouts (Engine.fix_layout)
+LAYOUT_EN_RU = str.maketrans("`qwertyuiop[]asdfghjkl;'zxcvbnm,.~QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>",
+                             "ёйцукенгшщзхъфывапролджэячсмитьбюЁЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ")
 SPLIT_RES = [
     # «Диагноз – X, разрешён ли Y», «X: можно ли Y»
     re.compile(r"^(?:диагноз\w*\s*[:\-–—]?\s*)?(?P<d>.+?)\s*[,.;:]?\s*(?:разреш\w*|предусмотр\w*|можно|допуст\w*|положен\w*|показан\w*|входит)\s+(?:ли\s+)?(?P<s>.+?)\??$", re.I),
@@ -485,6 +488,19 @@ class Engine:
         if self._known is None:
             self._known = {x for ns in self.name_stems.values() for x in ns} | set(self.stem_index())
         return any(st in self._known for st in self.norm.stems(word))
+
+    def fix_layout(self, q: str) -> str | None:
+        """A question typed with the English keyboard layout («fkjgtwbz» = «алопеция», «ufcnhbn gthtxtym» =
+        «гастрит перечень») → the Russian text, or None. Only a question of Latin letters without digits
+        (not «E06.3», «HbA1c») whose converted words are known: a diagnosis / list stem or a trigger word."""
+        if re.search(r"[А-Яа-яЁё\d]", q) or not re.search(r"[A-Za-z]{3,}", q):
+            return None
+        ru = q.translate(LAYOUT_EN_RU)
+        words = re.findall(r"[А-Яа-яЁё]{3,}", ru)
+        if not words or any(self.known_stem(w) for w in re.findall(r"[A-Za-z]{3,}", q)):
+            return None
+        known = [w for w in words if w.lower() in TRIGGER_WORDS or self.known_stem(w)]
+        return ru if len(known) * 2 >= len(words) else None
 
     def fix_trigger_words(self, q: str):
         """Misspelt service words of the question patterns → the right ones: «преечень лаборатонрых анализов» →
@@ -1084,7 +1100,13 @@ class Engine:
                                                          for c in self.covered):
             # «хламидийная инфекция» → A74.9 (no protocol) vs A56.x (STI protocol) scored alike:
             # take the close candidate the protocols cover
+            # … unless it excludes what the top one is: I88.1 «лимфаденит, кроме брыжеечного» is not I88.0
+            # «брыжеечный лимфаденит»
+            top = set(self.norm.stems(chosen["name"]))
             for d in dx[1:]:
+                m = re.search(r"\bкроме\b(.*)", d["name"], re.I)
+                if m and top & set(self.norm.stems(m.group(1))):
+                    continue
                 if d["score"] >= chosen["score"] - 0.1 and d["code"] in self.covered:
                     return d
         return chosen
@@ -1200,8 +1222,16 @@ class Engine:
             # not a case history: «Направлен эндокринологом после обращения: тиреотоксикоз, нужна ли консультация…»
             if parts and not any(ANAMNESIS_RE.search(x) or len(x.split()) > 8 for x in parts) \
                     and all(self.service_like(x) for x in parts):
+                rev = self.reverse_search(question, parts, population=population)
+                # one term that neither a protocol list nor пост. №123 has («миома», «мезаденит»): not a service —
+                # go on as a diagnosis
+                svc = self.cat.match(self.norm.stems(parts[0]), top=1, min_score=0.25, query=True) if len(parts) == 1 else []
+                if len(parts) == 1 and not any(x.get("found") for x in rev.get("services", [])) \
+                        and not (svc and svc[0]["score"] >= 0.6):
+                    t.route(f"«{parts[0]}» нет в перечнях протоколов как услуги → разбор как диагноза")
+                    return None
                 t.route(f"обратный поиск: вопрос — список услуг {parts}")
-                return self.reverse_search(question, parts, population=population)
+                return rev
         return None
 
     def _ask(self, question: str | None, diagnosis: str | None, service: str | None, population: str | None):
@@ -1213,6 +1243,10 @@ class Engine:
             if removed:
                 t.parse("вырезано из вопроса перед разбором (персональные данные): " + "; ".join(removed))
                 t.set("service", cleaned_question=question)
+            ru = self.fix_layout(question)
+            if ru:
+                t.parse(f"вопрос набран в английской раскладке: «{question}» → «{ru}»")
+                question = ru
         if question and not (diagnosis and service):
             routed = self._route_patterns(question, diagnosis, service, population)
             if routed is None and not (diagnosis or service):
@@ -1238,6 +1272,10 @@ class Engine:
                 dx = self.resolve_diagnosis(cand) if cand and not is_service else []
                 if dx and dx[0]["score"] >= (LLM_DX_SCORE if self.llm else MIN_DX_SCORE):
                     t.route(f"только диагноз «{cand}» → перечень всех диагностических мероприятий")
+                    return dict(self.list_services(question, cand, population=population), diagnosis_only=True)
+                if cand and not is_service and not self.llm and len(cand.split()) <= 4:
+                    # «грыжа диска»: a diagnosis the rules don't know — «не распознан, возможно: …», not «не удалось выделить»
+                    t.route(f"только диагноз «{cand}», не распознан → уточнить диагноз")
                     return dict(self.list_services(question, cand, population=population), diagnosis_only=True)
                 t.route("вопрос не разделился на диагноз и услугу, диагноз не распознан")
             diagnosis, service = diagnosis or d, service or s

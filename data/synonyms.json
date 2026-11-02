@@ -1,5 +1,8 @@
 {
  "_comment": "Word-level synonyms: a word (any form) → canonical phrase. Applied to protocol text, service names and questions alike. Abbreviations go to abbreviations.json.",
+ "миома": "лейомиома",
+ "мезаденит": "брыжеечный лимфаденит",
+ "дислипидемия": "нарушения обмена липопротеидов липидемия",
  "паратгормон": "паратиреоидный гормон",
  "паратирин": "паратиреоидный гормон",
  "тиреотропин": "тиреотропный гормон",
