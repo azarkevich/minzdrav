@@ -1,5 +1,7 @@
 {
  "_comment": "Word-level synonyms: a word (any form) → canonical phrase. Applied to protocol text, service names and questions alike. Abbreviations go to abbreviations.json.",
+ "рак": "злокачественное новообразование",
+ "жопа": "задний проход",
  "миома": "лейомиома",
  "мезаденит": "брыжеечный лимфаденит",
  "дислипидемия": "нарушения обмена липопротеидов липидемия",

@@ -39,3 +39,9 @@
 {"question": "гипербилирубинемия", "route": "diagnosis_only", "icd": "R17"}
 # «кроме брыжеечного» (I88.1) must not win over «брыжеечный лимфаденит» (I88.0) for «мезаденит»
 {"question": "мезаденит перечень", "route": "list", "icd": "I88.0"}
+# Owner's wording checks (2026-11-02): «диагноз X» without a dash is a diagnosis, never a reverse search;
+# «рак» = «злокачественное новообразование» (the МКБ wording), «жопа» = «задний проход»
+{"question": "диагноз рак жопы", "route": "diagnosis_only", "icd": "C21", "level": "list"}
+{"question": "Диагноз рак прямой кишки", "route": "diagnosis_only", "icd": "C20", "level": "list"}
+{"question": "пациент, диагноз рак желудка", "route": "diagnosis_only", "icd": "C16", "level": "list"}
+{"question": "диагноз гипотиреоз", "route": "diagnosis_only", "level": "list"}

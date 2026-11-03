@@ -91,6 +91,7 @@ def _clean_dx(d: str) -> str:
     return re.sub(r"^диагноз\w*\s*[:\-–—]?\s*", "", d.strip(" ,.;:–-"), flags=re.I).strip(" ,.;:–-")
 
 
+DX_MARK_RE = re.compile(r"(?:у\s+)?(?:пациент\w*|ребен\w*|ребён\w*)?[\s,:–—-]*диагноз\w*\b", re.I)
 WHO_RE = re.compile(r"^(?:у\s+)?(?:пациент(?:а|ка|ки|у)?|ребенка?|ребёнка?|застрахованн\w*)\s*[,:–—-]\s*", re.I)
 
 
@@ -1217,7 +1218,9 @@ class Engine:
         if lst:
             t.route(f"перечень (шаблон «перечень / какие …»): диагноз «{lst[0]}», категория {lst[1]}, фильтр услуги {lst[2]}")
             return self.list_services(question, *lst, population=population)
-        if not (diagnosis or service) and not any(rx.match(question.strip()) for rx in SPLIT_RES):
+        # «диагноз рак …» (no dash): the word «диагноз» marks a diagnosis — never a list of services
+        if not (diagnosis or service) and not any(rx.match(question.strip()) for rx in SPLIT_RES) \
+                and not DX_MARK_RE.match(WHO_RE.sub("", question.strip())):
             parts = split_services(WHO_RE.sub("", question))
             # not a case history: «Направлен эндокринологом после обращения: тиреотоксикоз, нужна ли консультация…»
             if parts and not any(ANAMNESIS_RE.search(x) or len(x.split()) > 8 for x in parts) \
